@@ -14,7 +14,11 @@
   const runButton = document.getElementById("runBtn");
   const stopButton = document.getElementById("stopBtn");
   const homeLink = document.querySelector(".console-home-link");
+  const missionColumn = document.querySelector(".console-column--mission");
+  const moduleColumn = document.querySelector(".console-column--modules");
+  const dockLayer = document.querySelector(".bottom-console");
   const scrollLayers = [];
+  const hudReactiveTargets = [];
   const watchedValueIds = [
     "hudThreat",
     "hudSignal",
@@ -71,6 +75,48 @@
 
   function queryAll(selector, context = document) {
     return Array.from(context.querySelectorAll(selector));
+  }
+
+  function collectHudTargets() {
+    hudReactiveTargets.length = 0;
+    queryAll(
+      ".hud-top, .console-panel, .control-zone, .support-card, #moduleConfigStage, .terminal-wrap, .results-wrap, .hud-card, .metric-card, .port-scan-master"
+    ).forEach((element) => {
+      hudReactiveTargets.push(element);
+    });
+  }
+
+  function updateHudRelations(currentY) {
+    const primaryBand = window.innerHeight * 0.34 + Math.sin(currentY * 0.0032) * 18;
+    const secondaryBand = window.innerHeight * 0.8 + Math.cos(currentY * 0.0022) * 14;
+
+    hudReactiveTargets.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.bottom < -80 || rect.top > window.innerHeight + 80) {
+        element.style.setProperty("--hud-react", "0");
+        element.classList.remove("is-hud-active");
+        return;
+      }
+
+      const center = rect.top + rect.height / 2;
+      const primary = Math.max(0, 1 - Math.abs(center - primaryBand) / Math.max(180, rect.height * 0.72));
+      const secondary = Math.max(0, 1 - Math.abs(center - secondaryBand) / Math.max(220, rect.height * 0.9));
+      const intensity = Math.max(primary, secondary * 0.72);
+
+      element.style.setProperty("--hud-react", intensity.toFixed(3));
+      element.classList.toggle("is-hud-active", intensity > 0.16);
+    });
+
+    const scrollFactor = Math.min(1, currentY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight));
+    if (missionColumn) {
+      missionColumn.style.setProperty("--approach-x", `${(10 + scrollFactor * 12).toFixed(2)}px`);
+    }
+    if (moduleColumn) {
+      moduleColumn.style.setProperty("--approach-x", `${(-10 - scrollFactor * 12).toFixed(2)}px`);
+    }
+    if (dockLayer) {
+      dockLayer.style.setProperty("--dock-rise", `${(-16 - scrollFactor * 20).toFixed(2)}px`);
+    }
   }
 
   function addScrollLayer(selector, factor) {
@@ -157,6 +203,8 @@
     scrollLayers.forEach(({ element, factor }) => {
       element.style.setProperty("--scroll-lift", `${(currentY * factor).toFixed(2)}px`);
     });
+
+    updateHudRelations(currentY);
 
     if (delta > 70) {
       triggerConsoleSweep();
@@ -671,6 +719,7 @@
   }
 
   prepareDecodeTargets();
+  collectHudTargets();
   initPointerTracking();
   startEnergyLoop();
   addScrollLayer(".hud-top", -0.016);

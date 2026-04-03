@@ -11,6 +11,7 @@ const landingScrollState = {
 };
 
 const landingScrollLayers = [];
+const landingHudReactiveTargets = [];
 
 function addLandingScrollLayer(selector, factor) {
   document.querySelectorAll(selector).forEach((element) => {
@@ -20,6 +21,37 @@ function addLandingScrollLayer(selector, factor) {
 
 function setLandingRootVar(name, value) {
   landingRoot.style.setProperty(name, value);
+}
+
+function collectLandingHudTargets() {
+  landingHudReactiveTargets.length = 0;
+  document
+    .querySelectorAll(".hero-copy, .hero-core, .hero-floating, .intel-card, .status-panel, .system-log-panel, .ticker-shell")
+    .forEach((element) => {
+      landingHudReactiveTargets.push(element);
+    });
+}
+
+function updateLandingHudRelations() {
+  const primaryBand = window.innerHeight * 0.34 + Math.sin(window.scrollY * 0.0032) * 20;
+  const secondaryBand = window.innerHeight * 0.72 + Math.cos(window.scrollY * 0.0024) * 16;
+
+  landingHudReactiveTargets.forEach((element) => {
+    const rect = element.getBoundingClientRect();
+    if (rect.bottom < -80 || rect.top > window.innerHeight + 80) {
+      element.style.setProperty("--hud-react", "0");
+      element.classList.remove("is-hud-active");
+      return;
+    }
+
+    const center = rect.top + rect.height / 2;
+    const primary = Math.max(0, 1 - Math.abs(center - primaryBand) / Math.max(180, rect.height * 0.72));
+    const secondary = Math.max(0, 1 - Math.abs(center - secondaryBand) / Math.max(220, rect.height * 0.82));
+    const intensity = Math.max(primary, secondary * 0.76);
+
+    element.style.setProperty("--hud-react", intensity.toFixed(3));
+    element.classList.toggle("is-hud-active", intensity > 0.16);
+  });
 }
 
 function triggerLandingSweep(force = false) {
@@ -74,6 +106,8 @@ function updateLandingScrollEffects() {
   landingScrollLayers.forEach(({ element, factor }) => {
     element.style.setProperty("--scroll-lift", `${currentY * factor}px`);
   });
+
+  updateLandingHudRelations();
 
   if (Math.abs(delta) > 86) {
     triggerLandingSweep();
@@ -321,6 +355,7 @@ function initLandingEnhancements() {
   addLandingScrollLayer(".ticker-shell", -0.006);
 
   prepareLandingDecodeTargets();
+  collectLandingHudTargets();
   initLandingPointerTracking();
   updateLandingScrollEffects();
   window.addEventListener("scroll", updateLandingScrollEffects, { passive: true });

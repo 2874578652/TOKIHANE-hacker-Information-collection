@@ -38,7 +38,8 @@
     <div class="ambient-glow ambient-glow--magenta" aria-hidden="true"></div>
 
     <main class="landing-shell">
-      <section class="landing-theater">
+      <div class="landing-content-layer">
+        <section class="landing-theater">
         <div class="theater-ornament theater-ornament--left" aria-hidden="true"></div>
         <div class="theater-ornament theater-ornament--right" aria-hidden="true"></div>
         <div class="theater-ornament theater-ornament--floor" aria-hidden="true"></div>
@@ -233,91 +234,106 @@
             </div>
           </aside>
         </section>
-      </section>
-
-      <section class="landing-operations-band">
-        <section class="dashboard-grid">
-          <article class="status-panel frame">
-            <header class="status-panel__head">
-              <span>SECTOR OVERWATCH</span>
-              <strong>SYSTEM ONLINE</strong>
-            </header>
-
-            <div class="status-panel__grid">
-              <div class="status-box">
-                <span>NODE STABILITY</span>
-                <strong id="nodeStability">99.982%</strong>
-              </div>
-              <div class="status-box">
-                <span>ENCRYPTED TUNNELS</span>
-                <strong id="encryptedTunnels">42</strong>
-              </div>
-              <div class="status-box">
-                <span>PACKET INTEGRITY</span>
-                <strong id="packetIntegrity">96.4%</strong>
-              </div>
-              <div class="status-box">
-                <span>RECON WINDOWS</span>
-                <strong id="reconWindows">08</strong>
-              </div>
-            </div>
-          </article>
-
-          <article class="status-panel frame frame--transparent">
-            <header class="status-panel__head">
-              <span>COORDINATE STREAM</span>
-              <strong>DIGITAL CITY CHANNEL</strong>
-            </header>
-
-            <div class="signal-deck">
-              <div class="signal-bars" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-
-              <div class="coordinate-panel">
-                <div>
-                  <span>SECTOR</span>
-                  <strong id="sectorReadout">NEON-17 / SHD-ARC</strong>
-                </div>
-                <div>
-                  <span>VECTOR</span>
-                  <strong id="vectorReadout">024.110 / 121.470 / ALT 212</strong>
-                </div>
-                <div>
-                  <span>TIMESTAMP</span>
-                  <strong id="timestampReadout">--</strong>
-                </div>
-              </div>
-            </div>
-          </article>
         </section>
 
-        <section class="system-log-panel frame frame--ghost">
-          <header class="status-panel__head">
-            <span>TERMINAL LOG</span>
-            <strong id="systemLogState" class="status-word status-word--alert">ANOMALY WATCH</strong>
-          </header>
-          <div id="systemLog" class="system-log" aria-live="polite"></div>
-        </section>
-      </section>
+        <section class="landing-operations-band">
+          <section class="dashboard-grid">
+            <article class="status-panel frame">
+              <header class="status-panel__head">
+                <span>SECTOR OVERWATCH</span>
+                <strong>SYSTEM ONLINE</strong>
+              </header>
 
-      <footer class="ticker-shell frame frame--ghost">
-        <div class="ticker-track">
-          <span>ENCRYPTED CHANNEL OPEN</span>
-          <span>THREAT MONITOR LIVE</span>
-          <span>DIGITAL SKYLINE SYNCED</span>
-          <span>RECON CONSOLE READY</span>
-          <span>QUANTUM ACCESS STABLE</span>
-          <span>PACKET FLOW NOMINAL</span>
-          <span>INITIATE RECON WHEN READY</span>
-          <span>ENCRYPTED CHANNEL OPEN</span>
-          <span>THREAT MONITOR LIVE</span>
-          <span>DIGITAL SKYLINE SYNCED</span>
-          <span>RECON CONSOLE READY</span>
-          <span>QUANTUM ACCESS STABLE</span>
+              <div class="status-panel__grid">
+                <div class="status-box">
+                  <span>NODE STABILITY</span>
+                  <strong id="nodeStability">99.982%</strong>
+                </div>
+                <div class="status-box">
+                  <span>ENCRYPTED TUNNELS</span>
+                  <strong id="encryptedTunnels">42</strong>
+                </div>
+                <div class="status-box">
+                  <span>PACKET INTEGRITY</span>
+                  <strong id="packetIntegrity">96.4%</strong>
+                </div>
+                <div class="status-box">
+                  <span>RECON WINDOWS</span>
+                  <strong id="reconWindows">08</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="status-panel frame frame--transparent">
+              <header class="status-panel__head">
+                <span>COORDINATE STREAM</span>
+                <strong>DIGITAL CITY CHANNEL</strong>
+              </header>
+
+              <div class="signal-deck">
+                <div class="signal-bars" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="coordinate-panel">
+                  <div>
+                    <span>SECTOR</span>
+                    <strong id="sectorReadout">NEON-17 / SHD-ARC</strong>
+                  </div>
+                  <div>
+                    <span>VECTOR</span>
+                    <strong id="vectorReadout">024.110 / 121.470 / ALT 212</strong>
+                  </div>
+                  <div>
+                    <span>TIMESTAMP</span>
+                    <strong id="timestampReadout">--</strong>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section class="system-log-panel frame frame--ghost">
+            <header class="status-panel__head">
+              <span>TERMINAL LOG</span>
+              <strong id="systemLogState" class="status-word status-word--alert">ANOMALY WATCH</strong>
+            </header>
+            <div id="systemLog" class="system-log" aria-live="polite"></div>
+          </section>
+        </section>
+
+        <footer class="ticker-shell frame frame--ghost">
+          <div class="ticker-track">
+            <span>ENCRYPTED CHANNEL OPEN</span>
+            <span>THREAT MONITOR LIVE</span>
+            <span>DIGITAL SKYLINE SYNCED</span>
+            <span>RECON CONSOLE READY</span>
+            <span>QUANTUM ACCESS STABLE</span>
+            <span>PACKET FLOW NOMINAL</span>
+            <span>INITIATE RECON WHEN READY</span>
+            <span>ENCRYPTED CHANNEL OPEN</span>
+            <span>THREAT MONITOR LIVE</span>
+            <span>DIGITAL SKYLINE SYNCED</span>
+            <span>RECON CONSOLE READY</span>
+            <span>QUANTUM ACCESS STABLE</span>
+          </div>
+        </footer>
+      </div>
+
+      <div class="landing-hud-layer" aria-hidden="true">
+        <div class="landing-hud-wordmark">
+          <span>TOKIHANE</span>
         </div>
-      </footer>
+        <div class="landing-hud-track landing-hud-track--alpha"></div>
+        <div class="landing-hud-track landing-hud-track--beta"></div>
+        <div class="landing-hud-bracket landing-hud-bracket--core">
+          <span>CORE LOCK / RECON</span>
+        </div>
+        <div class="landing-hud-bracket landing-hud-bracket--side">
+          <span>WATCH / THREAT</span>
+        </div>
+      </div>
     </main>
 
     <script src="./landing.js" defer></script>

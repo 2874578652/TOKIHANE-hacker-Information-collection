@@ -19,14 +19,15 @@
     <div class="bg-noise"></div>
 
     <main class="console-shell">
-      <div class="console-stage-markers" aria-hidden="true">
-        <span class="console-stage-markers__corner console-stage-markers__corner--tl"></span>
-        <span class="console-stage-markers__corner console-stage-markers__corner--tr"></span>
-        <span class="console-stage-markers__corner console-stage-markers__corner--bl"></span>
-        <span class="console-stage-markers__corner console-stage-markers__corner--br"></span>
-      </div>
+      <div class="console-content-layer">
+        <div class="console-stage-markers" aria-hidden="true">
+          <span class="console-stage-markers__corner console-stage-markers__corner--tl"></span>
+          <span class="console-stage-markers__corner console-stage-markers__corner--tr"></span>
+          <span class="console-stage-markers__corner console-stage-markers__corner--bl"></span>
+          <span class="console-stage-markers__corner console-stage-markers__corner--br"></span>
+        </div>
 
-      <header class="hud-top reveal">
+        <header class="hud-top reveal">
         <div class="brand-block">
           <div class="logo-mark" aria-hidden="true">
             <svg viewBox="0 0 120 120" role="img">
@@ -80,10 +81,10 @@
             <strong>ONLINE</strong>
           </article>
         </div>
-      </header>
+        </header>
 
-      <section class="panel console-panel reveal delay-1">
-        <form id="scanForm" class="controls">
+        <section class="panel console-panel reveal delay-1">
+          <form id="scanForm" class="controls">
           <div class="console-grid console-grid--stage">
             <div class="console-column console-column--mission">
               <aside class="control-zone mission-bay">
@@ -428,21 +429,37 @@
               </section>
             </div>
           </div>
-        </form>
-      </section>
-
-      <section class="bottom-console reveal delay-2">
-        <section class="panel terminal-wrap">
-          <h2>TERMINAL FEED</h2>
-          <div id="terminal" class="terminal"></div>
+        </section>
+          </form>
         </section>
 
-        <section class="panel results-wrap">
-          <h2>RESULT SNAPSHOT</h2>
-          <div id="summary" class="summary">No data loaded.</div>
-          <pre id="rawOutput" class="raw-output"></pre>
+        <section class="bottom-console reveal delay-2">
+          <section class="panel terminal-wrap">
+            <h2>TERMINAL FEED</h2>
+            <div id="terminal" class="terminal"></div>
+          </section>
+
+          <section class="panel results-wrap">
+            <h2>RESULT SNAPSHOT</h2>
+            <div id="summary" class="summary">No data loaded.</div>
+            <pre id="rawOutput" class="raw-output"></pre>
+          </section>
         </section>
-      </section>
+      </div>
+
+      <div class="console-hud-layer" aria-hidden="true">
+        <div class="console-hud-wordmark">
+          <span>TOKIHANE</span>
+        </div>
+        <div class="console-hud-track console-hud-track--alpha"></div>
+        <div class="console-hud-track console-hud-track--beta"></div>
+        <div class="console-hud-bracket console-hud-bracket--core">
+          <span>RECON CORE / LOCK</span>
+        </div>
+        <div class="console-hud-bracket console-hud-bracket--dock">
+          <span>TERMINAL DOCK / LIVE</span>
+        </div>
+      </div>
     </main>
 
     <script src="./app.js" defer></script>
