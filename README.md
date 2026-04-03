@@ -3,7 +3,12 @@
 这个仓库现在是前后端同仓结构：
 
 - `backend/`：信息收集与扫描核心（Python + nmap）
-- `frontend/`：图形界面前端（已支持模块化开关控制）
+- `frontend/`：图形界面前端（含赛博朋克 Landing Page 与扫描控制台）
+
+前端入口：
+
+- 首页：`frontend/index.html`
+- 扫描控制台：`frontend/console.html`
 
 ## 先跑后端
 

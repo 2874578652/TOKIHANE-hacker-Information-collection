@@ -3,372 +3,233 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKIHANE // RECON CONSOLE</title>
+    <title>TOKIHANE // SYSTEM GATE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Share+Tech+Mono&family=ZCOOL+QingKe+HuangYou&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Oxanium:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./landing.css" />
   </head>
   <body>
-    <canvas id="matrixRain" class="matrix-rain"></canvas>
-    <div class="bg-grid"></div>
-    <div class="bg-noise"></div>
+    <div id="bootOverlay" class="boot-overlay">
+      <div class="boot-overlay__grid"></div>
+      <div class="boot-overlay__content">
+        <p class="boot-overlay__eyebrow">TOKIHANE / QUANTUM ACCESS</p>
+        <h1>INITIALIZING CITY-SCALE RECON GATE</h1>
+        <div id="bootFeed" class="boot-feed">
+          <span>[boot] calibrating skyline pulse array...</span>
+          <span>[boot] binding encrypted uplink channels...</span>
+          <span>[boot] synchronizing visual cortex overlays...</span>
+        </div>
+      </div>
+    </div>
 
-    <main class="console-shell">
-      <header class="hud-top reveal">
-        <div class="brand-block">
-          <div class="logo-mark" aria-hidden="true">
-            <svg viewBox="0 0 120 120" role="img">
-              <defs>
-                <linearGradient id="logoNeonA" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#00f0ff" />
-                  <stop offset="100%" stop-color="#00ff66" />
-                </linearGradient>
-                <linearGradient id="logoNeonB" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#7dff70" />
-                  <stop offset="100%" stop-color="#00e5ff" />
-                </linearGradient>
-              </defs>
-              <polygon points="60,6 108,34 108,86 60,114 12,86 12,34" fill="none" stroke="url(#logoNeonA)" stroke-width="5" />
-              <polygon
-                points="60,16 99,38.5 99,81.5 60,104 21,81.5 21,38.5"
-                fill="none"
-                stroke="url(#logoNeonB)"
-                stroke-opacity="0.72"
-                stroke-width="2.5"
-              />
-              <path d="M30 34h60v11h-18l-3 4h-18l-3-4H30z" fill="url(#logoNeonA)" />
-              <path d="M52 49h16v34h-16z" fill="url(#logoNeonB)" opacity="0.95" />
-              <path d="M43 61h34v7H61v15h-7V68H43z" fill="#00ffa6" opacity="0.92" />
-              <path d="M46 84h28v8H46z" fill="url(#logoNeonA)" opacity="0.9" />
-              <path d="M58 54h4v6h-4z" fill="#001a12" opacity="0.75" />
-            </svg>
-          </div>
-          <div class="brand-copy">
-            <h1>TOKIHANE RECON INTERFACE</h1>
-            <p class="logo-sub">TOKI // CYBER INTEL CONSOLE</p>
-          </div>
+    <canvas id="laserRain" class="fx-canvas laser-rain"></canvas>
+    <canvas id="particleField" class="fx-canvas particle-field"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="horizon-grid" aria-hidden="true"></div>
+    <div class="ambient-glow ambient-glow--cyan" aria-hidden="true"></div>
+    <div class="ambient-glow ambient-glow--magenta" aria-hidden="true"></div>
+
+    <main class="landing-shell">
+      <header class="topbar">
+        <div class="topbar__brand">
+          <span class="topbar__kicker">TOKIHANE / ACCESS NODE</span>
+          <strong>RECON NEXUS ENTRY</strong>
         </div>
 
-        <div class="hud-cards">
-          <article class="hud-card">
-            <span>THREAT LEVEL</span>
-            <strong id="hudThreat">LOW</strong>
-          </article>
-          <article class="hud-card">
-            <span>SIGNAL QUALITY</span>
-            <strong id="hudSignal">98%</strong>
-          </article>
-          <article class="hud-card">
-            <span>UTC+8 CLOCK</span>
-            <strong id="hudClock">--:--:--</strong>
-          </article>
-          <article class="hud-card online">
-            <span>SYSTEM STATUS</span>
-            <strong>ONLINE</strong>
-          </article>
+        <div class="topbar__cluster">
+          <div class="topbar-chip">
+            <span>CHANNEL</span>
+            <strong>ENCRYPTED</strong>
+          </div>
+          <div class="topbar-chip">
+            <span>SIGNAL</span>
+            <strong id="signalQuality">99.2%</strong>
+          </div>
+          <div class="topbar-chip topbar-chip--live">
+            <span>UTC+8</span>
+            <strong id="gateClock">--:--:--</strong>
+          </div>
         </div>
       </header>
 
-      <section class="panel console-panel reveal delay-1">
-        <form id="scanForm" class="controls">
-          <div class="console-grid">
-            <aside class="control-zone mission-bay">
-              <header class="zone-head">
-                <h2>MISSION CONFIG</h2>
-                <p>Target Lock & Task Parameters</p>
-              </header>
+      <section class="hero-grid">
+        <section class="hero-copy frame" data-parallax="18">
+          <p class="eyebrow">FUTURE HACKER SYSTEM ENTRY / DIGITAL CITY TERMINAL</p>
+          <h1 class="glitch-title" data-text="DIGITAL CITY RECON NEXUS">DIGITAL CITY RECON NEXUS</h1>
+          <p class="hero-copy__lead">
+            进入高能侦察中枢，接入赛博扫描控制台、威胁关联矩阵与实时信号通道。这里不是普通首页，而是你的未来攻防主终端入口。
+          </p>
 
-              <label class="input-block focus-target">
-                <span>Target</span>
-                <input id="target" type="text" placeholder="example.com / https://example.com / 1.1.1.1" required />
-              </label>
-
-              <div class="cyber-divider" aria-hidden="true"></div>
-
-              <div class="row row-single">
-                <label class="input-block">
-                  <span>Timeout(s)</span>
-                  <div class="number-cyber-wrap">
-                    <input id="timeout" type="number" min="1" step="1" value="10" />
-                    <div class="number-cyber-stepper" aria-hidden="true">
-                      <button class="number-step-btn up" type="button" data-target="timeout" data-dir="up">▲</button>
-                      <button class="number-step-btn down" type="button" data-target="timeout" data-dir="down">▼</button>
-                    </div>
-                  </div>
-                </label>
-              </div>
-
-              <div class="cyber-divider" aria-hidden="true"></div>
-
-              <label class="input-block">
-                <span>Backend API (optional)</span>
-                <input id="apiUrl" type="text" placeholder="http://localhost:8000/api/scan" />
-              </label>
-
-              <div class="action-rack">
-                <button type="submit" id="runBtn" class="glow-btn primary-action">开始扫描</button>
-                <button type="button" id="stopBtn" class="glow-btn">停止扫描</button>
-                <button type="button" id="downloadBtn" class="glow-btn">下载结果</button>
-                <button type="button" id="clearBtn" class="glow-btn">一键清空</button>
-                <label class="file-btn glow-btn">
-                  加载 REPORT.JSON
-                  <input id="reportFile" type="file" accept=".json,application/json" />
-                </label>
-              </div>
-
-              <div class="progress-wrap">
-                <div id="progressText" class="progress-text">扫描进度：0%</div>
-                <div class="progress-track">
-                  <div id="progressBar" class="progress-bar"></div>
-                </div>
-              </div>
-
-              <div class="mini-spectrum" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-            </aside>
-
-            <section class="control-zone core-bay">
-              <header class="zone-head">
-                <h2>RECON CORE</h2>
-                <p>Live Scan Radar & Data Pulse</p>
-              </header>
-
-              <div class="cyber-void-art" aria-hidden="true">
-                <div class="radar-rings"></div>
-                <div class="radar-sweep"></div>
-                <div class="radar-cross"></div>
-                <canvas id="voidRainPanel" class="void-rain-canvas"></canvas>
-                <div class="target-lock">
-                  <span class="lock-label">TARGET LOCK</span>
-                  <span class="lock-value" id="hudTargetLock">WAITING...</span>
-                </div>
-              </div>
-
-              <div class="core-metrics">
-                <article class="metric-card">
-                  <span>PACKET FLOW</span>
-                  <strong id="hudPacketFlow">0 kb/s</strong>
-                </article>
-                <article class="metric-card">
-                  <span>LATENCY</span>
-                  <strong id="hudLatency">-- ms</strong>
-                </article>
-                <article class="metric-card">
-                  <span>MODULE ACTIVE</span>
-                  <strong id="hudModuleActive">0</strong>
-                </article>
-                <article class="metric-card">
-                  <span>TASK STATE</span>
-                  <strong id="hudTaskState">IDLE</strong>
-                </article>
-              </div>
-            </section>
-
-            <aside class="control-zone module-bay control-zone-side">
-              <header class="zone-head">
-                <h2>MODULE MATRIX</h2>
-                <p>Recon Feature Controls</p>
-              </header>
-
-              <div class="switch-rail">
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>VirusTotal 扫描</span>
-                    <div class="port-scan-switch">
-                      <input id="vtScan" type="checkbox" />
-                      <span id="vtScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>端口扫描模块</span>
-                    <div class="port-scan-switch">
-                      <input id="enablePortScan" type="checkbox" />
-                      <span id="portScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>证书透明度日志</span>
-                    <div class="port-scan-switch">
-                      <input id="ctScan" type="checkbox" />
-                      <span id="ctScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>被动/历史 DNS</span>
-                    <div class="port-scan-switch">
-                      <input id="passiveDnsScan" type="checkbox" />
-                      <span id="passiveDnsScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>ASN/C 段扩展</span>
-                    <div class="port-scan-switch">
-                      <input id="asnScan" type="checkbox" />
-                      <span id="asnScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>Web 资产枚举</span>
-                    <div class="port-scan-switch">
-                      <input id="webAssetScan" type="checkbox" />
-                      <span id="webAssetScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>服务风险关联</span>
-                    <div class="port-scan-switch">
-                      <input id="serviceRiskScan" type="checkbox" />
-                      <span id="serviceRiskScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>内网 IP 扫描</span>
-                    <div class="port-scan-switch">
-                      <input id="allowPrivateIp" type="checkbox" />
-                      <span id="allowPrivateIpStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </aside>
+          <div class="cta-rack">
+            <a class="enter-button" href="./console.html">
+              <span class="enter-button__label">ENTER SYSTEM</span>
+              <span class="enter-button__meta">ACCESS CONSOLE / INITIATE RECON</span>
+            </a>
+            <a class="ghost-button" href="./console.html">ACCESS CONSOLE</a>
           </div>
-        </form>
+
+          <div class="hero-terminal">
+            <div class="hero-terminal__head">
+              <span>BOOTSTREAM</span>
+              <span class="hero-terminal__status">LIVE</span>
+            </div>
+            <div id="heroFeed" class="hero-terminal__body">
+              <div>SYNCING perimeter nodes...</div>
+              <div>LOCKING quantum packet traces...</div>
+              <div>THREAT monitor ready for operator handshake...</div>
+              <div>AWAITING console authorization...</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="hero-core frame frame--transparent" data-parallax="-14">
+          <div class="core-stage">
+            <div class="core-stage__rings"></div>
+            <div class="core-stage__beam"></div>
+            <div class="core-stage__cityline">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="core-stage__orb">
+              <div class="core-stage__orb-core"></div>
+            </div>
+            <div class="core-stage__target core-stage__target--a"></div>
+            <div class="core-stage__target core-stage__target--b"></div>
+            <div class="core-stage__axis core-stage__axis--x"></div>
+            <div class="core-stage__axis core-stage__axis--y"></div>
+            <div class="core-stage__labels">
+              <span>SKYLINE SYNC / 128 NODES</span>
+              <span id="vectorLock">VECTOR LOCK / 24.11N 121.47E</span>
+            </div>
+            <div class="core-stage__readout">
+              <div>
+                <span>PACKET FLOW</span>
+                <strong id="packetFlow">684 KB/S</strong>
+              </div>
+              <div>
+                <span>NODE SYNC</span>
+                <strong id="nodeSync">128/128</strong>
+              </div>
+              <div>
+                <span>THREAT PULSE</span>
+                <strong id="threatPulse">ELEVATED</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="intel-column" data-parallax="10">
+          <article class="intel-card frame">
+            <header class="intel-card__head">
+              <span>THREAT MONITOR</span>
+              <strong id="threatIndex">73</strong>
+            </header>
+            <div class="threat-meter">
+              <div class="threat-meter__bar">
+                <span id="threatBar"></span>
+              </div>
+              <p id="threatState">SPECTRUM STABLE / WATCHING EDGE ANOMALIES</p>
+            </div>
+          </article>
+
+          <article class="intel-card frame">
+            <header class="intel-card__head">
+              <span>LIVE TELEMETRY</span>
+              <strong id="latencyPulse">18 MS</strong>
+            </header>
+            <div id="telemetryList" class="intel-list"></div>
+          </article>
+
+          <article class="intel-card frame">
+            <header class="intel-card__head">
+              <span>ENCRYPTED CHANNELS</span>
+              <strong id="channelCount">06</strong>
+            </header>
+            <div id="channelList" class="intel-list intel-list--compact"></div>
+          </article>
+        </aside>
       </section>
 
-      <section id="moduleConfigStage" class="panel module-config-stage reveal delay-2">
-        <header class="module-config-head">
-          <h2>MODULE CONFIG SPACE</h2>
-          <p>Switch details are loaded here</p>
-        </header>
+      <section class="dashboard-grid">
+        <article class="status-panel frame">
+          <header class="status-panel__head">
+            <span>SECTOR OVERWATCH</span>
+            <strong>SYSTEM ONLINE</strong>
+          </header>
 
-        <div id="moduleConfigEmpty" class="module-config-empty">当前未启用可配置模块。打开右侧开关后，配置会在这里显示。</div>
-
-        <div class="module-config-grid">
-          <div id="vtOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">VirusTotal 配置</h3>
-            <label>
-              <span>VirusTotal API Key</span>
-              <input id="vtApiKey" type="password" placeholder="请输入你自己的 VT API Key" autocomplete="off" />
-            </label>
+          <div class="status-panel__grid">
+            <div class="status-box">
+              <span>NODE STABILITY</span>
+              <strong id="nodeStability">99.982%</strong>
+            </div>
+            <div class="status-box">
+              <span>ENCRYPTED TUNNELS</span>
+              <strong id="encryptedTunnels">42</strong>
+            </div>
+            <div class="status-box">
+              <span>PACKET INTEGRITY</span>
+              <strong id="packetIntegrity">96.4%</strong>
+            </div>
+            <div class="status-box">
+              <span>RECON WINDOWS</span>
+              <strong id="reconWindows">08</strong>
+            </div>
           </div>
+        </article>
 
-          <div id="portScanOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">端口扫描配置</h3>
-            <label>
-              <span>端口扫描引擎</span>
-              <select id="portScanner">
-                <option value="auto" selected>Auto（检测到 nmap 才执行）</option>
-                <option value="nmap">Nmap</option>
-              </select>
-            </label>
-            <label>
-              <span>Port Timeout(s)</span>
-              <div class="number-cyber-wrap">
-                <input id="portTimeout" type="number" min="0.1" step="0.1" value="0.8" />
-                <div class="number-cyber-stepper" aria-hidden="true">
-                  <button class="number-step-btn up" type="button" data-target="portTimeout" data-dir="up">▲</button>
-                  <button class="number-step-btn down" type="button" data-target="portTimeout" data-dir="down">▼</button>
-                </div>
+        <article class="status-panel frame frame--transparent">
+          <header class="status-panel__head">
+            <span>COORDINATE STREAM</span>
+            <strong>DIGITAL CITY CHANNEL</strong>
+          </header>
+
+          <div class="signal-deck">
+            <div class="signal-bars" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="coordinate-panel">
+              <div>
+                <span>SECTOR</span>
+                <strong id="sectorReadout">NEON-17 / SHD-ARC</strong>
               </div>
-            </label>
-
-            <div class="scan-mode-group">
-              <span class="scan-mode-title">端口扫描模式</span>
-              <div class="scan-mode-options">
-                <label class="toggle"><input type="radio" name="scanMode" value="common" checked /> 常用端口</label>
-                <label class="toggle"><input type="radio" name="scanMode" value="full" /> 全量端口</label>
-                <label class="toggle"><input type="radio" name="scanMode" value="custom" /> 自定义端口</label>
+              <div>
+                <span>VECTOR</span>
+                <strong id="vectorReadout">024.110 / 121.470 / ALT 212</strong>
+              </div>
+              <div>
+                <span>TIMESTAMP</span>
+                <strong id="timestampReadout">--</strong>
               </div>
             </div>
-
-            <label id="customPortsWrap" class="hidden">
-              <span>自定义端口范围</span>
-              <input id="customPorts" type="text" placeholder="例如：22,80,443,3306 或 1-1024" />
-            </label>
-
-            <div class="toggles">
-              <label class="toggle"><input id="tcpScan" type="checkbox" checked /> TCP 扫描</label>
-              <label class="toggle"><input id="udpScan" type="checkbox" /> UDP 扫描</label>
-            </div>
           </div>
+        </article>
+      </section>
 
-          <div id="asnOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">ASN/C 段扩展配置</h3>
-            <div class="toggles">
-              <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
-            </div>
-          </div>
-
-          <div id="webAssetOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">Web 资产枚举配置</h3>
-            <div class="toggles">
-              <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
-              <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
-              <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
-              <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
-              <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
-            </div>
-          </div>
-
-          <div id="serviceRiskOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">服务风险关联配置</h3>
-            <div class="toggles">
-              <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
-              <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
-            </div>
-          </div>
-
-          <div id="networkOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">内网扫描配置</h3>
-            <label>
-              <span>CIDR 目标(可选)</span>
-              <input id="cidrTargets" type="text" placeholder="例如：192.168.1.0/24,10.0.0.0/24" />
-            </label>
-          </div>
+      <footer class="ticker-shell frame frame--ghost">
+        <div class="ticker-track">
+          <span>ENCRYPTED CHANNEL OPEN</span>
+          <span>THREAT MONITOR LIVE</span>
+          <span>DIGITAL SKYLINE SYNCED</span>
+          <span>RECON CONSOLE READY</span>
+          <span>QUANTUM ACCESS STABLE</span>
+          <span>PACKET FLOW NOMINAL</span>
+          <span>INITIATE RECON WHEN READY</span>
+          <span>ENCRYPTED CHANNEL OPEN</span>
+          <span>THREAT MONITOR LIVE</span>
+          <span>DIGITAL SKYLINE SYNCED</span>
+          <span>RECON CONSOLE READY</span>
+          <span>QUANTUM ACCESS STABLE</span>
         </div>
-      </section>
-
-      <section class="bottom-console reveal delay-2">
-        <section class="panel terminal-wrap">
-          <h2>TERMINAL FEED</h2>
-          <div id="terminal" class="terminal"></div>
-        </section>
-
-        <section class="panel results-wrap">
-          <h2>RESULT SNAPSHOT</h2>
-          <div id="summary" class="summary">No data loaded.</div>
-          <pre id="rawOutput" class="raw-output"></pre>
-        </section>
-      </section>
+      </footer>
     </main>
 
-    <script src="./app.js" defer></script>
+    <script src="./landing.js" defer></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 # Frontend
 
-赛博朋克风格的前端控制台（零依赖静态页面）。
+赛博朋克风格的前端入口与扫描控制台（零依赖静态页面）。
 
 ## 启动
 
@@ -14,6 +14,11 @@ python3 -m http.server 5173
 ```text
 http://localhost:5173
 ```
+
+页面入口：
+
+- `http://localhost:5173/`：新增 Landing Page 首页
+- `http://localhost:5173/console.html`：现有扫描控制台页面
 
 ## 当前能力
 
