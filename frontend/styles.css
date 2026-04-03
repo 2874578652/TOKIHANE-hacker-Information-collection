@@ -215,6 +215,50 @@ body::before {
   opacity: 0.88;
 }
 
+.console-home-link {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(26, 240, 255, 0.3);
+  background:
+    linear-gradient(135deg, rgba(6, 32, 26, 0.84), rgba(4, 20, 16, 0.72)),
+    rgba(4, 18, 14, 0.72);
+  color: #d7fff3;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(110, 255, 206, 0.08),
+    0 0 18px rgba(26, 240, 255, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.console-home-link::before {
+  content: "<";
+  margin-right: 10px;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(26, 240, 255, 0.46);
+}
+
+.console-home-link:hover {
+  transform: translateY(-2px);
+  border-color: rgba(26, 240, 255, 0.56);
+  color: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgba(110, 255, 206, 0.12),
+    0 0 26px rgba(26, 240, 255, 0.22);
+}
+
 .hud-cards {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1396,6 +1440,15 @@ body.scan-active .hud-card strong {
 
   .hud-cards {
     grid-template-columns: 1fr;
+  }
+
+  .brand-block {
+    flex-wrap: wrap;
+  }
+
+  .console-home-link {
+    width: 100%;
+    margin-left: 0;
   }
 
   .action-rack {

@@ -11,6 +11,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./landing.css" />
+    <link rel="stylesheet" href="./landing-effects.css" />
   </head>
   <body>
     <div id="bootOverlay" class="boot-overlay">
@@ -28,6 +29,8 @@
 
     <canvas id="laserRain" class="fx-canvas laser-rain"></canvas>
     <canvas id="particleField" class="fx-canvas particle-field"></canvas>
+    <div id="pageSweep" class="page-sweep" aria-hidden="true"></div>
+    <div id="transitionFlash" class="transition-flash" aria-hidden="true"></div>
     <div class="scanlines" aria-hidden="true"></div>
     <div class="noise" aria-hidden="true"></div>
     <div class="horizon-grid" aria-hidden="true"></div>
@@ -44,7 +47,7 @@
         <div class="topbar__cluster">
           <div class="topbar-chip">
             <span>CHANNEL</span>
-            <strong>ENCRYPTED</strong>
+            <strong id="channelState" class="status-word status-word--ok">ENCRYPTED</strong>
           </div>
           <div class="topbar-chip">
             <span>SIGNAL</span>
@@ -52,7 +55,7 @@
           </div>
           <div class="topbar-chip topbar-chip--live">
             <span>UTC+8</span>
-            <strong id="gateClock">--:--:--</strong>
+            <strong id="gateClock" class="status-word status-word--ok">--:--:--</strong>
           </div>
         </div>
       </header>
@@ -66,7 +69,7 @@
           </p>
 
           <div class="cta-rack">
-            <a class="enter-button" href="./console.html">
+            <a id="enterButton" class="enter-button" href="./console.html">
               <span class="enter-button__label">ENTER SYSTEM</span>
               <span class="enter-button__meta">ACCESS CONSOLE / INITIATE RECON</span>
             </a>
@@ -76,7 +79,7 @@
           <div class="hero-terminal">
             <div class="hero-terminal__head">
               <span>BOOTSTREAM</span>
-              <span class="hero-terminal__status">LIVE</span>
+              <span class="hero-terminal__status status-word status-word--ok">LIVE</span>
             </div>
             <div id="heroFeed" class="hero-terminal__body">
               <div>SYNCING perimeter nodes...</div>
@@ -124,23 +127,23 @@
         </section>
 
         <aside class="intel-column" data-parallax="10">
-          <article class="intel-card frame">
+          <article class="intel-card frame intel-card--threat">
             <header class="intel-card__head">
               <span>THREAT MONITOR</span>
-              <strong id="threatIndex">73</strong>
+              <strong id="threatIndex" class="status-word status-word--alert">73</strong>
             </header>
             <div class="threat-meter">
               <div class="threat-meter__bar">
                 <span id="threatBar"></span>
               </div>
-              <p id="threatState">SPECTRUM STABLE / WATCHING EDGE ANOMALIES</p>
+              <p id="threatState" class="threat-state">SPECTRUM STABLE / WATCHING EDGE ANOMALIES</p>
             </div>
           </article>
 
           <article class="intel-card frame">
             <header class="intel-card__head">
               <span>LIVE TELEMETRY</span>
-              <strong id="latencyPulse">18 MS</strong>
+              <strong id="latencyPulse" class="status-word status-word--ok">18 MS</strong>
             </header>
             <div id="telemetryList" class="intel-list"></div>
           </article>
@@ -148,7 +151,7 @@
           <article class="intel-card frame">
             <header class="intel-card__head">
               <span>ENCRYPTED CHANNELS</span>
-              <strong id="channelCount">06</strong>
+              <strong id="channelCount" class="status-word status-word--ok">06</strong>
             </header>
             <div id="channelList" class="intel-list intel-list--compact"></div>
           </article>
@@ -212,6 +215,14 @@
         </article>
       </section>
 
+      <section class="system-log-panel frame frame--ghost">
+        <header class="status-panel__head">
+          <span>TERMINAL LOG</span>
+          <strong id="systemLogState" class="status-word status-word--alert">ANOMALY WATCH</strong>
+        </header>
+        <div id="systemLog" class="system-log" aria-live="polite"></div>
+      </section>
+
       <footer class="ticker-shell frame frame--ghost">
         <div class="ticker-track">
           <span>ENCRYPTED CHANNEL OPEN</span>
@@ -231,5 +242,6 @@
     </main>
 
     <script src="./landing.js" defer></script>
+    <script src="./landing-effects.js" defer></script>
   </body>
 </html>

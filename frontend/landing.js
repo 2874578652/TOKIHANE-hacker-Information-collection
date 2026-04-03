@@ -14,6 +14,7 @@ const threatBar = document.getElementById("threatBar");
 const threatState = document.getElementById("threatState");
 const latencyPulse = document.getElementById("latencyPulse");
 const channelCount = document.getElementById("channelCount");
+const channelState = document.getElementById("channelState");
 const nodeStability = document.getElementById("nodeStability");
 const encryptedTunnels = document.getElementById("encryptedTunnels");
 const packetIntegrity = document.getElementById("packetIntegrity");
@@ -21,6 +22,11 @@ const reconWindows = document.getElementById("reconWindows");
 const sectorReadout = document.getElementById("sectorReadout");
 const vectorReadout = document.getElementById("vectorReadout");
 const vectorLock = document.getElementById("vectorLock");
+const systemLog = document.getElementById("systemLog");
+const systemLogState = document.getElementById("systemLogState");
+const enterButton = document.getElementById("enterButton");
+const threatCard = document.querySelector(".intel-card--threat");
+const topbarLiveChip = document.querySelector(".topbar-chip--live");
 
 const bootMessages = [
   "[boot] calibrating skyline pulse array...",
@@ -28,6 +34,7 @@ const bootMessages = [
   "[boot] syncing threat lattice watchers...",
   "[boot] priming neon city telemetry mesh...",
   "[boot] confirming recon console handoff...",
+  "[boot] verifying anomaly countermeasures...",
 ];
 
 const heroMessages = [
@@ -36,33 +43,14 @@ const heroMessages = [
   "Quantum packet filters are tracking hostile bloom signatures.",
   "City-grid pulse array is alive and waiting for operator intent.",
   "Console bridge prepared for recon, scan, and threat correlation.",
-];
-
-const telemetryMessages = [
-  { label: "PACKET BURST", value: "684 KB/S" },
-  { label: "NODE MIRROR", value: "128 ACTIVE" },
-  { label: "SIGMA GATE", value: "STABLE" },
-  { label: "THREAT BLOOM", value: "LOW VOLUME" },
-  { label: "SKYLINE LINK", value: "SYNCED" },
-  { label: "TRACE DEPTH", value: "11 LAYERS" },
-  { label: "NEURAL CACHE", value: "READY" },
-  { label: "SCAN WINDOW", value: "OPEN" },
-];
-
-const channelMessages = [
-  { label: "BLACK ICE", value: "ONLINE" },
-  { label: "NODE 17", value: "SEALED" },
-  { label: "ARC-LINK", value: "LOCKED" },
-  { label: "SIGINT", value: "UPLINK" },
-  { label: "REDLINE", value: "SYNCHED" },
-  { label: "VOIDBUS", value: "GHOSTED" },
+  "Anomaly watchdogs are shadowing redline interference.",
 ];
 
 const threatModes = [
-  { label: "WATCHFUL", meter: 46, tone: "SPECTRUM STABLE / EDGE NOISE CONTAINED" },
-  { label: "ELEVATED", meter: 73, tone: "ANOMALY CLUSTERS MOVING THROUGH OUTER CITY GRID" },
-  { label: "FOCUSED", meter: 61, tone: "INTEL LOCKED / HIGH-VALUE SIGNALS UNDER OBSERVATION" },
-  { label: "VOLATILE", meter: 85, tone: "CRITICAL HEAT BLOOMS TRACKED ACROSS CORE ROUTES" },
+  { label: "WATCHFUL", meter: 46, tone: "ok", channel: "ENCRYPTED", summary: "SPECTRUM STABLE / EDGE NOISE CONTAINED" },
+  { label: "ELEVATED", meter: 73, tone: "alert", channel: "FILTERING", summary: "ANOMALY CLUSTERS MOVING THROUGH OUTER CITY GRID" },
+  { label: "FOCUSED", meter: 61, tone: "ok", channel: "TRACKED", summary: "INTEL LOCKED / HIGH-VALUE SIGNALS UNDER OBSERVATION" },
+  { label: "VOLATILE", meter: 85, tone: "alert", channel: "LOCKDOWN", summary: "CRITICAL HEAT BLOOMS TRACKED ACROSS CORE ROUTES" },
 ];
 
 const sectors = [
@@ -70,11 +58,71 @@ const sectors = [
   "GRID-09 / TOKI-RING",
   "ZONE-44 / SKY-VAULT",
   "SIGMA-12 / CITY-CORE",
+  "GHOST-31 / RED-VAULT",
 ];
+
+const channelInventory = [
+  { label: "BLACK ICE", state: "ONLINE", tone: "ok" },
+  { label: "NODE 17", state: "SEALED", tone: "ok" },
+  { label: "ARC-LINK", state: "LOCKED", tone: "ok" },
+  { label: "SIGINT", state: "UPLINK", tone: "ok" },
+  { label: "REDLINE", state: "SYNCHED", tone: "ok" },
+  { label: "VOIDBUS", state: "GHOSTED", tone: "ok" },
+];
+
+const channelStatePool = [
+  { state: "ONLINE", tone: "ok" },
+  { state: "SYNCED", tone: "ok" },
+  { state: "SEALED", tone: "ok" },
+  { state: "TRACE", tone: "ok" },
+  { state: "FILTER", tone: "ok" },
+  { state: "WARNING", tone: "alert" },
+  { state: "SPIKE", tone: "alert" },
+  { state: "JAMMED", tone: "alert" },
+];
+
+const logTemplates = [
+  { tone: "ok", text: "node sync reaffirmed across skyline lattice" },
+  { tone: "ok", text: "encrypted channel cascade remains stable" },
+  { tone: "ok", text: "packet mirrors aligned with recon nucleus" },
+  { tone: "ok", text: "city-grid telemetry refreshed from cold relay" },
+  { tone: "ok", text: "operator entry corridor is standing by" },
+  { tone: "alert", text: "anomaly detected on shadow relay / rerouting trace" },
+  { tone: "alert", text: "threat bloom spiking near outer sector ingress" },
+  { tone: "alert", text: "redline packet turbulence breaching threshold" },
+  { tone: "alert", text: "hostile signal shimmer identified in transit mesh" },
+  { tone: "alert", text: "warning: channel interference rising on node ring" },
+];
+
+const liveState = {
+  signal: 99.2,
+  packet: 684,
+  latency: 18,
+  nodes: 128,
+  stability: 99.982,
+  integrity: 96.4,
+  tunnels: 42,
+  windows: 8,
+  vectorLat: 24.11,
+  vectorLon: 121.47,
+  altitude: 212,
+  sector: sectors[0],
+  threat: threatModes[1],
+};
 
 let heroMessageIndex = 0;
 let telemetryOffset = 0;
-let threatModeIndex = 0;
+let threatModeIndex = 1;
+let sweepTimerId = null;
+let isEntering = false;
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function randomChoice(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
 
 function shouldUsePerfLite() {
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -89,7 +137,16 @@ function applyPerformancePreset() {
   return perfLite;
 }
 
-function appendTerminalLine(container, text, limit = 5) {
+function setStatusWord(element, value, tone = "ok") {
+  if (!element) {
+    return;
+  }
+  element.textContent = value;
+  element.classList.remove("status-word--ok", "status-word--alert");
+  element.classList.add(tone === "alert" ? "status-word--alert" : "status-word--ok");
+}
+
+function appendTerminalLine(container, text, limit = 6) {
   if (!container) {
     return;
   }
@@ -106,136 +163,269 @@ function renderIntelList(container, items) {
     return;
   }
   container.innerHTML = "";
+
   items.forEach((item) => {
     const row = document.createElement("div");
     row.className = "intel-item";
+    row.dataset.tone = item.tone || "ok";
+    if (item.flash) {
+      row.dataset.flash = "true";
+    }
+
     const label = document.createElement("span");
     label.textContent = item.label;
+
     const value = document.createElement("strong");
     value.textContent = item.value;
+    if (item.emphasis === "status") {
+      value.classList.add("status-word", item.tone === "alert" ? "status-word--alert" : "status-word--ok");
+    }
+
     row.append(label, value);
     container.appendChild(row);
   });
 }
 
+function formatClockStamp(date) {
+  return date.toLocaleString("zh-CN", {
+    hour12: false,
+    timeZone: "Asia/Shanghai",
+  });
+}
+
+function formatShortTime(date) {
+  return date.toLocaleTimeString("zh-CN", {
+    hour12: false,
+    timeZone: "Asia/Shanghai",
+  });
+}
+
 function updateClock() {
   const now = new Date();
-  const time = now.toLocaleTimeString("zh-CN", {
-    hour12: false,
-    timeZone: "Asia/Shanghai",
-  });
-  const stamp = now.toLocaleString("zh-CN", {
-    hour12: false,
-    timeZone: "Asia/Shanghai",
-  });
-  if (gateClock) {
-    gateClock.textContent = time;
-  }
+  setStatusWord(gateClock, formatShortTime(now), "ok");
   if (timestampReadout) {
-    timestampReadout.textContent = stamp;
+    timestampReadout.textContent = formatClockStamp(now);
   }
 }
 
+function pushSystemLog(template) {
+  if (!systemLog) {
+    return;
+  }
+
+  const entry = document.createElement("div");
+  entry.className = "system-log__entry";
+  entry.dataset.tone = template.tone || "ok";
+  entry.dataset.typing = "true";
+
+  const time = document.createElement("span");
+  time.className = "system-log__time";
+  time.textContent = `[${formatShortTime(new Date())}]`;
+
+  const message = document.createElement("span");
+  message.className = "system-log__message";
+
+  entry.append(time, message);
+  systemLog.appendChild(entry);
+
+  while (systemLog.children.length > 16) {
+    systemLog.removeChild(systemLog.firstElementChild);
+  }
+
+  let charIndex = 0;
+  const fullText = template.text;
+  const typingDelay = template.tone === "alert" ? 14 : 18;
+
+  const intervalId = window.setInterval(() => {
+    message.textContent = `${fullText.slice(0, charIndex)}${charIndex < fullText.length ? "_" : ""}`;
+    charIndex += 1;
+    if (charIndex > fullText.length) {
+      window.clearInterval(intervalId);
+      message.textContent = fullText;
+      entry.dataset.typing = "false";
+      entry.removeAttribute("data-typing");
+    }
+    systemLog.scrollTop = systemLog.scrollHeight;
+  }, typingDelay);
+}
+
 function updateLiveMetrics() {
-  const signal = (98 + Math.random() * 1.8).toFixed(1);
-  const packet = 540 + Math.floor(Math.random() * 220);
-  const latency = 12 + Math.floor(Math.random() * 14);
-  const nodeNumerator = 124 + Math.floor(Math.random() * 5);
-  const stability = (99.82 + Math.random() * 0.17).toFixed(3);
-  const integrity = (95.8 + Math.random() * 2.4).toFixed(1);
-  const tunnels = 38 + Math.floor(Math.random() * 9);
-  const windows = 6 + Math.floor(Math.random() * 5);
-  const vectorLat = (24.05 + Math.random() * 0.12).toFixed(3);
-  const vectorLon = (121.42 + Math.random() * 0.09).toFixed(3);
-  const altitude = 180 + Math.floor(Math.random() * 70);
+  liveState.signal = clamp(liveState.signal + (Math.random() * 0.72 - 0.36), 96.9, 99.9);
+  liveState.packet = clamp(liveState.packet + Math.floor(Math.random() * 60 - 30), 520, 860);
+  liveState.latency = clamp(liveState.latency + Math.floor(Math.random() * 5 - 2), 11, 34);
+  liveState.nodes = clamp(liveState.nodes + Math.floor(Math.random() * 3 - 1), 124, 128);
+  liveState.stability = clamp(liveState.stability + (Math.random() * 0.024 - 0.012), 99.821, 99.998);
+  liveState.integrity = clamp(liveState.integrity + (Math.random() * 0.8 - 0.4), 94.8, 98.4);
+  liveState.tunnels = clamp(liveState.tunnels + Math.floor(Math.random() * 3 - 1), 37, 49);
+  liveState.windows = clamp(liveState.windows + Math.floor(Math.random() * 3 - 1), 6, 12);
+  liveState.vectorLat = clamp(liveState.vectorLat + (Math.random() * 0.018 - 0.009), 24.05, 24.19);
+  liveState.vectorLon = clamp(liveState.vectorLon + (Math.random() * 0.018 - 0.009), 121.41, 121.53);
+  liveState.altitude = clamp(liveState.altitude + Math.floor(Math.random() * 9 - 4), 186, 268);
 
   if (signalQuality) {
-    signalQuality.textContent = `${signal}%`;
+    signalQuality.textContent = `${liveState.signal.toFixed(1)}%`;
   }
   if (packetFlow) {
-    packetFlow.textContent = `${packet} KB/S`;
+    packetFlow.textContent = `${liveState.packet} KB/S`;
   }
   if (latencyPulse) {
-    latencyPulse.textContent = `${latency} MS`;
+    setStatusWord(latencyPulse, `${liveState.latency} MS`, liveState.latency >= 24 ? "alert" : "ok");
   }
   if (nodeSync) {
-    nodeSync.textContent = `${nodeNumerator}/128`;
+    nodeSync.textContent = `${liveState.nodes}/128`;
   }
   if (nodeStability) {
-    nodeStability.textContent = `${stability}%`;
+    nodeStability.textContent = `${liveState.stability.toFixed(3)}%`;
   }
   if (packetIntegrity) {
-    packetIntegrity.textContent = `${integrity}%`;
+    packetIntegrity.textContent = `${liveState.integrity.toFixed(1)}%`;
   }
   if (encryptedTunnels) {
-    encryptedTunnels.textContent = String(tunnels);
+    encryptedTunnels.textContent = String(liveState.tunnels);
   }
   if (reconWindows) {
-    reconWindows.textContent = String(windows).padStart(2, "0");
+    reconWindows.textContent = String(liveState.windows).padStart(2, "0");
   }
   if (vectorReadout) {
-    vectorReadout.textContent = `${vectorLat} / ${vectorLon} / ALT ${altitude}`;
+    vectorReadout.textContent = `${liveState.vectorLat.toFixed(3)} / ${liveState.vectorLon.toFixed(3)} / ALT ${liveState.altitude}`;
   }
   if (vectorLock) {
-    vectorLock.textContent = `VECTOR LOCK / ${vectorLat}N ${vectorLon}E`;
+    vectorLock.textContent = `VECTOR LOCK / ${liveState.vectorLat.toFixed(3)}N ${liveState.vectorLon.toFixed(3)}E`;
+  }
+}
+
+function applyThreatVisualState(mode) {
+  const isAlert = mode.tone === "alert";
+  if (threatCard) {
+    threatCard.classList.toggle("is-alert", isAlert);
+  }
+  if (topbarLiveChip) {
+    topbarLiveChip.classList.toggle("is-alert", isAlert);
+  }
+  setStatusWord(threatPulse, mode.label, isAlert ? "alert" : "ok");
+  setStatusWord(channelState, mode.channel, isAlert ? "alert" : "ok");
+  setStatusWord(systemLogState, isAlert ? "ANOMALY WATCH" : "SYSTEM READY", isAlert ? "alert" : "ok");
+  if (threatIndex) {
+    setStatusWord(threatIndex, String(mode.meter), isAlert ? "alert" : "ok");
   }
 }
 
 function rotateThreatMode() {
   const mode = threatModes[threatModeIndex % threatModes.length];
   threatModeIndex += 1;
+  liveState.threat = mode;
 
-  if (threatPulse) {
-    threatPulse.textContent = mode.label;
-  }
-  if (threatIndex) {
-    threatIndex.textContent = String(mode.meter);
-  }
+  applyThreatVisualState(mode);
+
   if (threatBar) {
     threatBar.style.width = `${mode.meter}%`;
   }
   if (threatState) {
-    threatState.textContent = mode.tone;
+    threatState.textContent = mode.summary;
   }
 }
 
 function rotateSector() {
-  const sector = sectors[Math.floor(Math.random() * sectors.length)];
+  liveState.sector = randomChoice(sectors);
   if (sectorReadout) {
-    sectorReadout.textContent = sector;
+    sectorReadout.textContent = liveState.sector;
   }
 }
 
 function cycleHeroFeed() {
-  const message = heroMessages[heroMessageIndex % heroMessages.length];
+  const baseMessage = heroMessages[heroMessageIndex % heroMessages.length];
   heroMessageIndex += 1;
-  appendTerminalLine(heroFeed, message, 5);
+  const prefix = liveState.threat.tone === "alert" && Math.random() < 0.45 ? "[ALERT]" : "[LIVE]";
+  appendTerminalLine(heroFeed, `${prefix} ${baseMessage}`, 6);
+}
+
+function buildTelemetryItems() {
+  return [
+    { label: "PACKET BURST", value: `${liveState.packet} KB/S`, tone: "ok" },
+    { label: "NODE MIRROR", value: `${liveState.nodes} ACTIVE`, tone: liveState.nodes < 126 ? "alert" : "ok" },
+    { label: "SIGMA GATE", value: liveState.signal > 98.5 ? "READY" : "HOLD", tone: liveState.signal > 98.5 ? "ok" : "alert", emphasis: "status" },
+    { label: "THREAT BLOOM", value: liveState.threat.label, tone: liveState.threat.tone, emphasis: "status" },
+    { label: "TRACE DEPTH", value: `${7 + Math.floor(liveState.packet / 80)} LAYERS`, tone: "ok" },
+    { label: "RELAY DRIFT", value: `${liveState.latency} MS`, tone: liveState.latency > 23 ? "alert" : "ok" },
+    { label: "NEURAL CACHE", value: liveState.integrity > 95.6 ? "READY" : "REBUILD", tone: liveState.integrity > 95.6 ? "ok" : "alert", emphasis: "status" },
+    { label: "SCAN WINDOW", value: liveState.windows > 7 ? "OPEN" : "NARROW", tone: liveState.windows > 7 ? "ok" : "alert", emphasis: "status" },
+  ];
 }
 
 function rotateTelemetry() {
+  const source = buildTelemetryItems();
   const items = [];
   for (let index = 0; index < 4; index += 1) {
-    const entry = telemetryMessages[(telemetryOffset + index) % telemetryMessages.length];
-    items.push(entry);
+    items.push(source[(telemetryOffset + index) % source.length]);
   }
-  telemetryOffset = (telemetryOffset + 1) % telemetryMessages.length;
+  telemetryOffset = (telemetryOffset + 1) % source.length;
   renderIntelList(telemetryList, items);
 }
 
-function initChannels() {
-  renderIntelList(channelList, channelMessages);
-  if (channelCount) {
-    channelCount.textContent = String(channelMessages.length).padStart(2, "0");
+function mutateChannels() {
+  const flashLabels = new Set();
+  const mutationCount = liveState.threat.tone === "alert" ? 2 : 1;
+  for (let index = 0; index < mutationCount; index += 1) {
+    const channel = randomChoice(channelInventory);
+    const nextState = randomChoice(channelStatePool);
+    channel.state = nextState.state;
+    channel.tone = nextState.tone;
+    flashLabels.add(channel.label);
   }
+
+  const activeCount = channelInventory.filter((channel) => channel.tone !== "alert").length;
+  if (channelCount) {
+    setStatusWord(channelCount, String(activeCount).padStart(2, "0"), activeCount < 5 ? "alert" : "ok");
+  }
+
+  renderIntelList(
+    channelList,
+    channelInventory.map((channel) => ({
+      label: channel.label,
+      value: channel.state,
+      tone: channel.tone,
+      emphasis: "status",
+      flash: flashLabels.has(channel.label),
+    })),
+  );
+}
+
+function initChannels() {
+  mutateChannels();
+}
+
+function triggerPageSweep() {
+  document.body.classList.remove("sweep-active");
+  window.requestAnimationFrame(() => {
+    document.body.classList.add("sweep-active");
+  });
+  window.clearTimeout(sweepTimerId);
+  sweepTimerId = window.setTimeout(() => {
+    document.body.classList.remove("sweep-active");
+  }, 1450);
+}
+
+function schedulePageSweeps(perfLite) {
+  const minDelay = perfLite ? 6800 : 4200;
+  const maxJitter = perfLite ? 2200 : 1800;
+
+  function loop() {
+    const delay = minDelay + Math.floor(Math.random() * maxJitter);
+    window.setTimeout(() => {
+      triggerPageSweep();
+      loop();
+    }, delay);
+  }
+
+  loop();
 }
 
 function initBootOverlay() {
   let bootIndex = 0;
   const intervalId = window.setInterval(() => {
-    const message = bootMessages[bootIndex % bootMessages.length];
-    appendTerminalLine(bootFeed, message, 5);
+    appendTerminalLine(bootFeed, bootMessages[bootIndex % bootMessages.length], 6);
     bootIndex += 1;
-  }, 240);
+  }, 220);
 
   window.setTimeout(() => {
     window.clearInterval(intervalId);
@@ -243,7 +433,7 @@ function initBootOverlay() {
     if (bootOverlay) {
       bootOverlay.setAttribute("aria-hidden", "true");
     }
-  }, 1700);
+  }, 1750);
 }
 
 function initParallax() {
@@ -272,6 +462,48 @@ function initParallax() {
   window.addEventListener("mouseleave", reset);
 }
 
+function initEnterTransition() {
+  const links = Array.from(document.querySelectorAll('a[href="./console.html"]'));
+  links.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || isEntering) {
+        return;
+      }
+      event.preventDefault();
+      isEntering = true;
+      pushSystemLog({ tone: "ok", text: "operator handshake confirmed / initiating console bridge" });
+      triggerPageSweep();
+      document.body.classList.add("is-entering");
+      window.setTimeout(() => {
+        window.location.href = link.href;
+      }, 430);
+    });
+  });
+
+  if (enterButton) {
+    enterButton.addEventListener("mouseenter", () => {
+      if (Math.random() < 0.56) {
+        triggerPageSweep();
+      }
+    });
+  }
+}
+
+function initSystemLogs() {
+  const initialEntries = [
+    { tone: "ok", text: "quantum access gate online / awaiting operator intent" },
+    { tone: "ok", text: "node sync revalidated against skyline relay mesh" },
+    { tone: "alert", text: "warning: anomaly residue persists in lower city channel" },
+  ];
+  initialEntries.forEach((entry) => pushSystemLog(entry));
+}
+
+function feedSystemLogs() {
+  const prefersAlert = liveState.threat.tone === "alert" || Math.random() < 0.32;
+  const candidates = logTemplates.filter((entry) => (prefersAlert ? entry.tone === "alert" : entry.tone === "ok"));
+  pushSystemLog(randomChoice(candidates));
+}
+
 function initLaserRain(perfLite) {
   const canvas = document.getElementById("laserRain");
   if (!canvas) {
@@ -286,8 +518,8 @@ function initLaserRain(perfLite) {
   let height = 0;
   let dpr = 1;
   const streaks = [];
-  const glyphs = "01ZXTOKI+-<>[]{}";
-  const streakCount = perfLite ? 48 : 96;
+  const glyphs = "01ZXTOKI<>[]{}#%";
+  const streakCount = perfLite ? 58 : 124;
 
   function resize() {
     dpr = perfLite ? 1 : Math.min(1.6, window.devicePixelRatio || 1);
@@ -301,59 +533,67 @@ function initLaserRain(perfLite) {
 
     streaks.length = 0;
     for (let index = 0; index < streakCount; index += 1) {
+      const anomaly = Math.random() < 0.18;
+      const depth = 0.45 + Math.random() * 0.9;
       streaks.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        len: 40 + Math.random() * 180,
-        speed: 2.4 + Math.random() * 4.8,
-        drift: -0.5 + Math.random(),
-        alpha: 0.12 + Math.random() * 0.38,
-        hue: Math.random() < 0.8 ? 185 : 322,
+        len: (30 + Math.random() * 220) * depth,
+        speed: (1.8 + Math.random() * 4.8) * depth,
+        drift: -0.35 + Math.random() * 0.7,
+        alpha: 0.12 + Math.random() * 0.36,
+        hue: anomaly ? 354 + Math.random() * 4 : 122 + Math.random() * 14,
+        width: anomaly ? 1.8 : 1.1 + Math.random() * 0.4,
+        anomaly,
       });
     }
   }
 
-  function drawGlyph(x, y, hue) {
+  function drawGlyph(x, y, hue, anomaly) {
     ctx.save();
-    ctx.fillStyle = `hsla(${hue}, 96%, 72%, 0.9)`;
-    ctx.font = "12px Share Tech Mono";
+    ctx.fillStyle = `hsla(${hue}, 96%, ${anomaly ? 68 : 74}%, 0.92)`;
+    ctx.font = anomaly ? "700 13px Share Tech Mono" : "12px Share Tech Mono";
     ctx.fillText(glyphs[Math.floor(Math.random() * glyphs.length)], x + 4, y + 10);
     ctx.restore();
   }
 
-  const targetFps = perfLite ? 22 : 34;
+  const targetFps = perfLite ? 24 : 38;
   const frameLength = 1000 / targetFps;
   let lastTime = 0;
 
   function draw() {
-    ctx.fillStyle = "rgba(2, 6, 10, 0.24)";
+    ctx.fillStyle = "rgba(1, 4, 3, 0.2)";
     ctx.fillRect(0, 0, width, height);
     ctx.lineCap = "round";
 
     streaks.forEach((streak) => {
       const gradient = ctx.createLinearGradient(streak.x, streak.y, streak.x + streak.drift * streak.len, streak.y + streak.len);
-      gradient.addColorStop(0, `hsla(${streak.hue}, 100%, 68%, 0)`);
-      gradient.addColorStop(0.22, `hsla(${streak.hue}, 100%, 68%, ${streak.alpha})`);
-      gradient.addColorStop(1, `hsla(${streak.hue}, 100%, 68%, 0)`);
+      gradient.addColorStop(0, `hsla(${streak.hue}, 100%, 62%, 0)`);
+      gradient.addColorStop(0.24, `hsla(${streak.hue}, 100%, 62%, ${streak.alpha})`);
+      gradient.addColorStop(1, `hsla(${streak.hue}, 100%, 62%, 0)`);
 
       ctx.strokeStyle = gradient;
-      ctx.lineWidth = streak.hue === 322 ? 1.8 : 1.2;
+      ctx.lineWidth = streak.width;
+      ctx.shadowBlur = streak.anomaly ? 16 : 10;
+      ctx.shadowColor = `hsla(${streak.hue}, 100%, 62%, ${streak.anomaly ? 0.34 : 0.22})`;
       ctx.beginPath();
       ctx.moveTo(streak.x, streak.y);
       ctx.lineTo(streak.x + streak.drift * streak.len, streak.y + streak.len);
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
-      if (!perfLite && Math.random() < 0.18) {
-        drawGlyph(streak.x, streak.y + streak.len * 0.24, streak.hue);
+      if (!perfLite && Math.random() < (streak.anomaly ? 0.24 : 0.12)) {
+        drawGlyph(streak.x, streak.y + streak.len * 0.22, streak.hue, streak.anomaly);
       }
 
       streak.y += streak.speed;
-      streak.x += streak.drift * 0.12;
+      streak.x += streak.drift * 0.18;
+
       if (streak.y - streak.len > height) {
         streak.x = Math.random() * width;
         streak.y = -streak.len;
       }
-      if (streak.x < -80 || streak.x > width + 80) {
+      if (streak.x < -100 || streak.x > width + 100) {
         streak.x = Math.random() * width;
       }
     });
@@ -386,7 +626,7 @@ function initParticleField(perfLite) {
   let height = 0;
   let dpr = 1;
   const particles = [];
-  const count = perfLite ? 22 : 52;
+  const count = perfLite ? 28 : 66;
 
   function resize() {
     dpr = perfLite ? 1 : Math.min(1.6, window.devicePixelRatio || 1);
@@ -400,18 +640,24 @@ function initParticleField(perfLite) {
 
     particles.length = 0;
     for (let index = 0; index < count; index += 1) {
+      const depth = 0.28 + Math.random() * 1.18;
+      const anomaly = Math.random() < 0.14;
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        size: 0.8 + Math.random() * 2.8,
-        vx: -0.25 + Math.random() * 0.5,
-        vy: -0.2 + Math.random() * 0.42,
-        hue: Math.random() < 0.75 ? 188 : 328,
+        px: Math.random() * width,
+        py: Math.random() * height,
+        size: 0.8 + depth * 2.1,
+        depth,
+        vx: (-0.12 + Math.random() * 0.24) * depth,
+        vy: (0.08 + Math.random() * 0.32) * depth,
+        hue: anomaly ? 352 + Math.random() * 6 : 120 + Math.random() * 16,
+        anomaly,
       });
     }
   }
 
-  const targetFps = perfLite ? 18 : 30;
+  const targetFps = perfLite ? 20 : 32;
   const frameLength = 1000 / targetFps;
   let lastTime = 0;
 
@@ -426,10 +672,12 @@ function initParticleField(perfLite) {
         const dx = a.x - b.x;
         const dy = a.y - b.y;
         const distance = Math.hypot(dx, dy);
-        if (distance > 140) {
+        if (distance > 150 || Math.abs(a.depth - b.depth) > 0.45) {
           continue;
         }
-        ctx.strokeStyle = `rgba(87, 245, 255, ${0.08 * (1 - distance / 140)})`;
+        const alpha = 0.075 * (1 - distance / 150);
+        const hue = a.anomaly || b.anomaly ? 354 : 128;
+        ctx.strokeStyle = `hsla(${hue}, 96%, 66%, ${alpha})`;
         ctx.lineWidth = 0.6;
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
@@ -444,18 +692,27 @@ function initParticleField(perfLite) {
     drawConnections();
 
     particles.forEach((particle) => {
+      particle.px = particle.x;
+      particle.py = particle.y;
       particle.x += particle.vx;
       particle.y += particle.vy;
 
-      if (particle.x < -20) particle.x = width + 20;
-      if (particle.x > width + 20) particle.x = -20;
-      if (particle.y < -20) particle.y = height + 20;
-      if (particle.y > height + 20) particle.y = -20;
+      if (particle.x < -40) particle.x = width + 40;
+      if (particle.x > width + 40) particle.x = -40;
+      if (particle.y < -40) particle.y = height + 40;
+      if (particle.y > height + 40) particle.y = -40;
+
+      ctx.strokeStyle = `hsla(${particle.hue}, 96%, ${particle.anomaly ? 66 : 72}%, ${0.08 + particle.depth * 0.08})`;
+      ctx.lineWidth = particle.anomaly ? 1.2 : 0.9;
+      ctx.beginPath();
+      ctx.moveTo(particle.px, particle.py);
+      ctx.lineTo(particle.x, particle.y);
+      ctx.stroke();
 
       ctx.beginPath();
-      ctx.fillStyle = `hsla(${particle.hue}, 96%, 72%, 0.72)`;
-      ctx.shadowBlur = 14;
-      ctx.shadowColor = `hsla(${particle.hue}, 96%, 72%, 0.42)`;
+      ctx.fillStyle = `hsla(${particle.hue}, 96%, ${particle.anomaly ? 66 : 72}%, ${0.22 + particle.depth * 0.26})`;
+      ctx.shadowBlur = 10 + particle.depth * 6;
+      ctx.shadowColor = `hsla(${particle.hue}, 96%, 68%, ${0.18 + particle.depth * 0.18})`;
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
@@ -485,12 +742,17 @@ cycleHeroFeed();
 initChannels();
 initBootOverlay();
 initParallax();
+initEnterTransition();
+initSystemLogs();
 initLaserRain(perfLite);
 initParticleField(perfLite);
+schedulePageSweeps(perfLite);
 
 window.setInterval(updateClock, 1000);
-window.setInterval(updateLiveMetrics, 1200);
+window.setInterval(updateLiveMetrics, 960);
 window.setInterval(rotateThreatMode, 2600);
 window.setInterval(rotateSector, 3200);
-window.setInterval(cycleHeroFeed, 2200);
-window.setInterval(rotateTelemetry, 1800);
+window.setInterval(cycleHeroFeed, 2000);
+window.setInterval(rotateTelemetry, 1500);
+window.setInterval(mutateChannels, 2100);
+window.setInterval(feedSystemLogs, 1700);
