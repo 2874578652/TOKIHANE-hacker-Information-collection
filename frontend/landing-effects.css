@@ -158,6 +158,7 @@ body.is-pointer-idle::after {
 
 .topbar-chip.surface-fx,
 .hero-terminal.surface-fx,
+.hero-floating.surface-fx,
 .intel-card.surface-fx,
 .status-box.surface-fx,
 .coordinate-panel > div.surface-fx,

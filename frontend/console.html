@@ -19,6 +19,13 @@
     <div class="bg-noise"></div>
 
     <main class="console-shell">
+      <div class="console-stage-markers" aria-hidden="true">
+        <span class="console-stage-markers__corner console-stage-markers__corner--tl"></span>
+        <span class="console-stage-markers__corner console-stage-markers__corner--tr"></span>
+        <span class="console-stage-markers__corner console-stage-markers__corner--bl"></span>
+        <span class="console-stage-markers__corner console-stage-markers__corner--br"></span>
+      </div>
+
       <header class="hud-top reveal">
         <div class="brand-block">
           <div class="logo-mark" aria-hidden="true">
@@ -77,284 +84,351 @@
 
       <section class="panel console-panel reveal delay-1">
         <form id="scanForm" class="controls">
-          <div class="console-grid">
-            <aside class="control-zone mission-bay">
-              <header class="zone-head">
-                <h2>MISSION CONFIG</h2>
-                <p>Target Lock & Task Parameters</p>
-              </header>
+          <div class="console-grid console-grid--stage">
+            <div class="console-column console-column--mission">
+              <aside class="control-zone mission-bay">
+                <header class="zone-head">
+                  <h2>MISSION CONFIG</h2>
+                  <p>Target Lock & Task Parameters</p>
+                </header>
 
-              <label class="input-block focus-target">
-                <span>Target</span>
-                <input id="target" type="text" placeholder="example.com / https://example.com / 1.1.1.1" required />
-              </label>
+                <label class="input-block focus-target">
+                  <span>Target</span>
+                  <input id="target" type="text" placeholder="example.com / https://example.com / 1.1.1.1" required />
+                </label>
 
-              <div class="cyber-divider" aria-hidden="true"></div>
+                <div class="cyber-divider" aria-hidden="true"></div>
 
-              <div class="row row-single">
+                <div class="row row-single">
+                  <label class="input-block">
+                    <span>Timeout(s)</span>
+                    <div class="number-cyber-wrap">
+                      <input id="timeout" type="number" min="1" step="1" value="10" />
+                      <div class="number-cyber-stepper" aria-hidden="true">
+                        <button class="number-step-btn up" type="button" data-target="timeout" data-dir="up">▲</button>
+                        <button class="number-step-btn down" type="button" data-target="timeout" data-dir="down">▼</button>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                <div class="cyber-divider" aria-hidden="true"></div>
+
                 <label class="input-block">
-                  <span>Timeout(s)</span>
-                  <div class="number-cyber-wrap">
-                    <input id="timeout" type="number" min="1" step="1" value="10" />
-                    <div class="number-cyber-stepper" aria-hidden="true">
-                      <button class="number-step-btn up" type="button" data-target="timeout" data-dir="up">▲</button>
-                      <button class="number-step-btn down" type="button" data-target="timeout" data-dir="down">▼</button>
+                  <span>Backend API (optional)</span>
+                  <input id="apiUrl" type="text" placeholder="http://localhost:8000/api/scan" />
+                </label>
+
+                <div class="action-rack">
+                  <button type="submit" id="runBtn" class="glow-btn primary-action">开始扫描</button>
+                  <button type="button" id="stopBtn" class="glow-btn">停止扫描</button>
+                  <button type="button" id="downloadBtn" class="glow-btn">下载结果</button>
+                  <button type="button" id="clearBtn" class="glow-btn">一键清空</button>
+                  <label class="file-btn glow-btn">
+                    加载 REPORT.JSON
+                    <input id="reportFile" type="file" accept=".json,application/json" />
+                  </label>
+                </div>
+
+                <div class="progress-wrap">
+                  <div id="progressText" class="progress-text">扫描进度：0%</div>
+                  <div class="progress-track">
+                    <div id="progressBar" class="progress-bar"></div>
+                  </div>
+                </div>
+
+                <div class="mini-spectrum" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+              </aside>
+
+              <article class="support-card support-card--mission">
+                <header class="support-card__head">
+                  <span>LOCK ROUTE</span>
+                  <strong>MISSION INJECT</strong>
+                </header>
+                <div class="support-card__grid">
+                  <div>
+                    <span>ENTRY LAYER</span>
+                    <strong>MANUAL</strong>
+                  </div>
+                  <div>
+                    <span>FENCE STATE</span>
+                    <strong>SEALED</strong>
+                  </div>
+                  <div>
+                    <span>TRACE BUFFER</span>
+                    <strong>WARM</strong>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="console-column console-column--core">
+              <section class="control-zone core-bay">
+                <header class="zone-head">
+                  <h2>RECON CORE</h2>
+                  <p>Live Scan Radar & Data Pulse</p>
+                </header>
+
+                <div class="core-ribbon">
+                  <div class="core-ribbon__cell">
+                    <span>VECTOR GRID</span>
+                    <strong>LOCKED</strong>
+                  </div>
+                  <div class="core-ribbon__cell">
+                    <span>THREAT LENS</span>
+                    <strong>HOT</strong>
+                  </div>
+                  <div class="core-ribbon__cell">
+                    <span>NEURAL CACHE</span>
+                    <strong>READY</strong>
+                  </div>
+                </div>
+
+                <div class="cyber-void-art" aria-hidden="true">
+                  <div class="radar-rings"></div>
+                  <div class="radar-sweep"></div>
+                  <div class="radar-cross"></div>
+                  <canvas id="voidRainPanel" class="void-rain-canvas"></canvas>
+                  <div class="target-lock">
+                    <span class="lock-label">TARGET LOCK</span>
+                    <span class="lock-value" id="hudTargetLock">WAITING...</span>
+                  </div>
+                </div>
+
+                <div class="core-metrics">
+                  <article class="metric-card">
+                    <span>PACKET FLOW</span>
+                    <strong id="hudPacketFlow">0 kb/s</strong>
+                  </article>
+                  <article class="metric-card">
+                    <span>LATENCY</span>
+                    <strong id="hudLatency">-- ms</strong>
+                  </article>
+                  <article class="metric-card">
+                    <span>MODULE ACTIVE</span>
+                    <strong id="hudModuleActive">0</strong>
+                  </article>
+                  <article class="metric-card">
+                    <span>TASK STATE</span>
+                    <strong id="hudTaskState">IDLE</strong>
+                  </article>
+                </div>
+              </section>
+
+              <article class="support-card support-card--core">
+                <header class="support-card__head">
+                  <span>OPERATIONAL LATTICE</span>
+                  <strong>SURVEILLANCE CORE</strong>
+                </header>
+                <div class="support-card__grid support-card__grid--long">
+                  <div>
+                    <span>PULSE</span>
+                    <strong>TRACKING</strong>
+                  </div>
+                  <div>
+                    <span>HOSTILE BLOOM</span>
+                    <strong>WATCHED</strong>
+                  </div>
+                  <div>
+                    <span>LOCK STATE</span>
+                    <strong>SYNCED</strong>
+                  </div>
+                  <div>
+                    <span>RUNTIME</span>
+                    <strong>STANDBY</strong>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="console-column console-column--modules">
+              <aside class="control-zone module-bay control-zone-side">
+                <header class="zone-head">
+                  <h2>MODULE MATRIX</h2>
+                  <p>Recon Feature Controls</p>
+                </header>
+
+                <div class="switch-rail">
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>VirusTotal 扫描</span>
+                      <div class="port-scan-switch">
+                        <input id="vtScan" type="checkbox" />
+                        <span id="vtScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>端口扫描模块</span>
+                      <div class="port-scan-switch">
+                        <input id="enablePortScan" type="checkbox" />
+                        <span id="portScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>证书透明度日志</span>
+                      <div class="port-scan-switch">
+                        <input id="ctScan" type="checkbox" />
+                        <span id="ctScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>被动/历史 DNS</span>
+                      <div class="port-scan-switch">
+                        <input id="passiveDnsScan" type="checkbox" />
+                        <span id="passiveDnsScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>ASN/C 段扩展</span>
+                      <div class="port-scan-switch">
+                        <input id="asnScan" type="checkbox" />
+                        <span id="asnScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>Web 资产枚举</span>
+                      <div class="port-scan-switch">
+                        <input id="webAssetScan" type="checkbox" />
+                        <span id="webAssetScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>服务风险关联</span>
+                      <div class="port-scan-switch">
+                        <input id="serviceRiskScan" type="checkbox" />
+                        <span id="serviceRiskScanStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="feature-block">
+                    <label class="port-scan-master">
+                      <span>内网 IP 扫描</span>
+                      <div class="port-scan-switch">
+                        <input id="allowPrivateIp" type="checkbox" />
+                        <span id="allowPrivateIpStateText">OFF</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </aside>
+
+              <section id="moduleConfigStage" class="panel module-config-stage reveal delay-2">
+                <header class="module-config-head">
+                  <h2>MODULE CONFIG SPACE</h2>
+                  <p>Switch details are loaded here</p>
+                </header>
+
+                <div id="moduleConfigEmpty" class="module-config-empty">当前未启用可配置模块。打开右侧开关后，配置会在这里显示。</div>
+
+                <div class="module-config-grid">
+                  <div id="vtOptions" class="port-options-panel is-closed">
+                    <h3 class="module-config-title">VirusTotal 配置</h3>
+                    <label>
+                      <span>VirusTotal API Key</span>
+                      <input id="vtApiKey" type="password" placeholder="请输入你自己的 VT API Key" autocomplete="off" />
+                    </label>
+                  </div>
+
+                  <div id="portScanOptions" class="port-options-panel is-closed">
+                    <h3 class="module-config-title">端口扫描配置</h3>
+                    <label>
+                      <span>端口扫描引擎</span>
+                      <select id="portScanner">
+                        <option value="auto" selected>Auto（检测到 nmap 才执行）</option>
+                        <option value="nmap">Nmap</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Port Timeout(s)</span>
+                      <div class="number-cyber-wrap">
+                        <input id="portTimeout" type="number" min="0.1" step="0.1" value="0.8" />
+                        <div class="number-cyber-stepper" aria-hidden="true">
+                          <button class="number-step-btn up" type="button" data-target="portTimeout" data-dir="up">▲</button>
+                          <button class="number-step-btn down" type="button" data-target="portTimeout" data-dir="down">▼</button>
+                        </div>
+                      </div>
+                    </label>
+
+                    <div class="scan-mode-group">
+                      <span class="scan-mode-title">端口扫描模式</span>
+                      <div class="scan-mode-options">
+                        <label class="toggle"><input type="radio" name="scanMode" value="common" checked /> 常用端口</label>
+                        <label class="toggle"><input type="radio" name="scanMode" value="full" /> 全量端口</label>
+                        <label class="toggle"><input type="radio" name="scanMode" value="custom" /> 自定义端口</label>
+                      </div>
+                    </div>
+
+                    <label id="customPortsWrap" class="hidden">
+                      <span>自定义端口范围</span>
+                      <input id="customPorts" type="text" placeholder="例如：22,80,443,3306 或 1-1024" />
+                    </label>
+
+                    <div class="toggles">
+                      <label class="toggle"><input id="tcpScan" type="checkbox" checked /> TCP 扫描</label>
+                      <label class="toggle"><input id="udpScan" type="checkbox" /> UDP 扫描</label>
                     </div>
                   </div>
-                </label>
-              </div>
 
-              <div class="cyber-divider" aria-hidden="true"></div>
-
-              <label class="input-block">
-                <span>Backend API (optional)</span>
-                <input id="apiUrl" type="text" placeholder="http://localhost:8000/api/scan" />
-              </label>
-
-              <div class="action-rack">
-                <button type="submit" id="runBtn" class="glow-btn primary-action">开始扫描</button>
-                <button type="button" id="stopBtn" class="glow-btn">停止扫描</button>
-                <button type="button" id="downloadBtn" class="glow-btn">下载结果</button>
-                <button type="button" id="clearBtn" class="glow-btn">一键清空</button>
-                <label class="file-btn glow-btn">
-                  加载 REPORT.JSON
-                  <input id="reportFile" type="file" accept=".json,application/json" />
-                </label>
-              </div>
-
-              <div class="progress-wrap">
-                <div id="progressText" class="progress-text">扫描进度：0%</div>
-                <div class="progress-track">
-                  <div id="progressBar" class="progress-bar"></div>
-                </div>
-              </div>
-
-              <div class="mini-spectrum" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-            </aside>
-
-            <section class="control-zone core-bay">
-              <header class="zone-head">
-                <h2>RECON CORE</h2>
-                <p>Live Scan Radar & Data Pulse</p>
-              </header>
-
-              <div class="cyber-void-art" aria-hidden="true">
-                <div class="radar-rings"></div>
-                <div class="radar-sweep"></div>
-                <div class="radar-cross"></div>
-                <canvas id="voidRainPanel" class="void-rain-canvas"></canvas>
-                <div class="target-lock">
-                  <span class="lock-label">TARGET LOCK</span>
-                  <span class="lock-value" id="hudTargetLock">WAITING...</span>
-                </div>
-              </div>
-
-              <div class="core-metrics">
-                <article class="metric-card">
-                  <span>PACKET FLOW</span>
-                  <strong id="hudPacketFlow">0 kb/s</strong>
-                </article>
-                <article class="metric-card">
-                  <span>LATENCY</span>
-                  <strong id="hudLatency">-- ms</strong>
-                </article>
-                <article class="metric-card">
-                  <span>MODULE ACTIVE</span>
-                  <strong id="hudModuleActive">0</strong>
-                </article>
-                <article class="metric-card">
-                  <span>TASK STATE</span>
-                  <strong id="hudTaskState">IDLE</strong>
-                </article>
-              </div>
-            </section>
-
-            <aside class="control-zone module-bay control-zone-side">
-              <header class="zone-head">
-                <h2>MODULE MATRIX</h2>
-                <p>Recon Feature Controls</p>
-              </header>
-
-              <div class="switch-rail">
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>VirusTotal 扫描</span>
-                    <div class="port-scan-switch">
-                      <input id="vtScan" type="checkbox" />
-                      <span id="vtScanStateText">OFF</span>
+                  <div id="asnOptions" class="port-options-panel is-closed">
+                    <h3 class="module-config-title">ASN/C 段扩展配置</h3>
+                    <div class="toggles">
+                      <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
                     </div>
-                  </label>
-                </div>
+                  </div>
 
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>端口扫描模块</span>
-                    <div class="port-scan-switch">
-                      <input id="enablePortScan" type="checkbox" />
-                      <span id="portScanStateText">OFF</span>
+                  <div id="webAssetOptions" class="port-options-panel is-closed">
+                    <h3 class="module-config-title">Web 资产枚举配置</h3>
+                    <div class="toggles">
+                      <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
+                      <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
+                      <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
+                      <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
+                      <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
                     </div>
-                  </label>
-                </div>
+                  </div>
 
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>证书透明度日志</span>
-                    <div class="port-scan-switch">
-                      <input id="ctScan" type="checkbox" />
-                      <span id="ctScanStateText">OFF</span>
+                  <div id="serviceRiskOptions" class="port-options-panel is-closed">
+                    <h3 class="module-config-title">服务风险关联配置</h3>
+                    <div class="toggles">
+                      <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
+                      <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
                     </div>
-                  </label>
-                </div>
+                  </div>
 
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>被动/历史 DNS</span>
-                    <div class="port-scan-switch">
-                      <input id="passiveDnsScan" type="checkbox" />
-                      <span id="passiveDnsScanStateText">OFF</span>
-                    </div>
-                  </label>
+                  <div id="networkOptions" class="port-options-panel is-closed">
+                    <h3 class="module-config-title">内网扫描配置</h3>
+                    <label>
+                      <span>CIDR 目标(可选)</span>
+                      <input id="cidrTargets" type="text" placeholder="例如：192.168.1.0/24,10.0.0.0/24" />
+                    </label>
+                  </div>
                 </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>ASN/C 段扩展</span>
-                    <div class="port-scan-switch">
-                      <input id="asnScan" type="checkbox" />
-                      <span id="asnScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>Web 资产枚举</span>
-                    <div class="port-scan-switch">
-                      <input id="webAssetScan" type="checkbox" />
-                      <span id="webAssetScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>服务风险关联</span>
-                    <div class="port-scan-switch">
-                      <input id="serviceRiskScan" type="checkbox" />
-                      <span id="serviceRiskScanStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div class="feature-block">
-                  <label class="port-scan-master">
-                    <span>内网 IP 扫描</span>
-                    <div class="port-scan-switch">
-                      <input id="allowPrivateIp" type="checkbox" />
-                      <span id="allowPrivateIpStateText">OFF</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </aside>
+              </section>
+            </div>
           </div>
         </form>
-      </section>
-
-      <section id="moduleConfigStage" class="panel module-config-stage reveal delay-2">
-        <header class="module-config-head">
-          <h2>MODULE CONFIG SPACE</h2>
-          <p>Switch details are loaded here</p>
-        </header>
-
-        <div id="moduleConfigEmpty" class="module-config-empty">当前未启用可配置模块。打开右侧开关后，配置会在这里显示。</div>
-
-        <div class="module-config-grid">
-          <div id="vtOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">VirusTotal 配置</h3>
-            <label>
-              <span>VirusTotal API Key</span>
-              <input id="vtApiKey" type="password" placeholder="请输入你自己的 VT API Key" autocomplete="off" />
-            </label>
-          </div>
-
-          <div id="portScanOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">端口扫描配置</h3>
-            <label>
-              <span>端口扫描引擎</span>
-              <select id="portScanner">
-                <option value="auto" selected>Auto（检测到 nmap 才执行）</option>
-                <option value="nmap">Nmap</option>
-              </select>
-            </label>
-            <label>
-              <span>Port Timeout(s)</span>
-              <div class="number-cyber-wrap">
-                <input id="portTimeout" type="number" min="0.1" step="0.1" value="0.8" />
-                <div class="number-cyber-stepper" aria-hidden="true">
-                  <button class="number-step-btn up" type="button" data-target="portTimeout" data-dir="up">▲</button>
-                  <button class="number-step-btn down" type="button" data-target="portTimeout" data-dir="down">▼</button>
-                </div>
-              </div>
-            </label>
-
-            <div class="scan-mode-group">
-              <span class="scan-mode-title">端口扫描模式</span>
-              <div class="scan-mode-options">
-                <label class="toggle"><input type="radio" name="scanMode" value="common" checked /> 常用端口</label>
-                <label class="toggle"><input type="radio" name="scanMode" value="full" /> 全量端口</label>
-                <label class="toggle"><input type="radio" name="scanMode" value="custom" /> 自定义端口</label>
-              </div>
-            </div>
-
-            <label id="customPortsWrap" class="hidden">
-              <span>自定义端口范围</span>
-              <input id="customPorts" type="text" placeholder="例如：22,80,443,3306 或 1-1024" />
-            </label>
-
-            <div class="toggles">
-              <label class="toggle"><input id="tcpScan" type="checkbox" checked /> TCP 扫描</label>
-              <label class="toggle"><input id="udpScan" type="checkbox" /> UDP 扫描</label>
-            </div>
-          </div>
-
-          <div id="asnOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">ASN/C 段扩展配置</h3>
-            <div class="toggles">
-              <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
-            </div>
-          </div>
-
-          <div id="webAssetOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">Web 资产枚举配置</h3>
-            <div class="toggles">
-              <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
-              <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
-              <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
-              <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
-              <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
-            </div>
-          </div>
-
-          <div id="serviceRiskOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">服务风险关联配置</h3>
-            <div class="toggles">
-              <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
-              <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
-            </div>
-          </div>
-
-          <div id="networkOptions" class="port-options-panel is-closed">
-            <h3 class="module-config-title">内网扫描配置</h3>
-            <label>
-              <span>CIDR 目标(可选)</span>
-              <input id="cidrTargets" type="text" placeholder="例如：192.168.1.0/24,10.0.0.0/24" />
-            </label>
-          </div>
-        </div>
       </section>
 
       <section class="bottom-console reveal delay-2">

@@ -215,7 +215,7 @@
 
   function prepareDecodeTargets() {
     queryAll(
-      ".brand-copy h1, .logo-sub, .zone-head h2, .zone-head p, .module-config-head h2, .module-config-head p, .module-config-title, .terminal-wrap h2, .results-wrap h2, .hud-card span, .metric-card span"
+      ".brand-copy h1, .logo-sub, .zone-head h2, .zone-head p, .module-config-head h2, .module-config-head p, .module-config-title, .terminal-wrap h2, .results-wrap h2, .support-card__head strong, .hud-card span, .metric-card span"
     ).forEach((element) => {
       element.classList.add("decode-target");
       if (!element.dataset.decodeOriginal) {
@@ -366,7 +366,7 @@
         maxTilt: 4,
       });
     });
-    queryAll(".hud-card, .metric-card, .control-zone, .port-options-panel, .terminal-wrap, .results-wrap, .summary-item").forEach((element) => {
+    queryAll(".hud-card, .metric-card, .control-zone, .support-card, .port-options-panel, .terminal-wrap, .results-wrap, .summary-item").forEach((element) => {
       installSurfaceEffect(element, { maxTilt: 4 });
     });
     queryAll(".feature-block .port-scan-master").forEach((element) => {
@@ -393,7 +393,7 @@
 
   function prepareWakeTargets() {
     queryAll(
-      ".hud-card, .control-zone, .metric-card, .feature-block, #moduleConfigStage, .port-options-panel, .terminal-wrap, .results-wrap, .summary-item, .module-config-head, .brand-block"
+      ".hud-card, .control-zone, .support-card, .metric-card, .feature-block, #moduleConfigStage, .port-options-panel, .terminal-wrap, .results-wrap, .summary-item, .module-config-head, .brand-block"
     ).forEach((element) => {
       element.classList.add("wake-target");
     });
@@ -678,6 +678,7 @@
   addScrollLayer("#moduleConfigStage", -0.01);
   addScrollLayer(".bottom-console", -0.008);
   addScrollLayer(".control-zone", -0.016);
+  addScrollLayer(".support-card", -0.012);
   addScrollLayer(".hud-card", -0.018);
   addScrollLayer(".metric-card", -0.02);
   addScrollLayer(".feature-block", -0.014);

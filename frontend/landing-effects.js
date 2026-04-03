@@ -95,7 +95,9 @@ function startLandingEnergyLoop() {
 
 function prepareLandingDecodeTargets() {
   document
-    .querySelectorAll(".topbar__brand strong, .intel-card__head strong, .status-panel__head strong, .hero-terminal__status, .enter-button__label, .ghost-button")
+    .querySelectorAll(
+      ".topbar__brand strong, .intel-card__head strong, .status-panel__head strong, .hero-terminal__status, .enter-button__label, .ghost-button, .hero-floating__head strong, .hero-core__canopy strong",
+    )
     .forEach((element) => {
       if (element.dataset.decodeFinal) {
         return;
@@ -146,7 +148,9 @@ function runLandingDecode(element) {
 
 function initLandingWakeObserver() {
   const targets = Array.from(
-    document.querySelectorAll(".topbar-chip, .hero-copy, .hero-core, .hero-terminal, .intel-card, .status-panel, .system-log-panel, .ticker-shell"),
+    document.querySelectorAll(
+      ".topbar-chip, .hero-copy, .hero-core, .hero-terminal, .hero-floating, .intel-card, .status-panel, .system-log-panel, .ticker-shell",
+    ),
   );
 
   targets.forEach((target, index) => {
@@ -247,6 +251,7 @@ function initLandingInteractiveSurfaces() {
     ".status-box",
     ".coordinate-panel > div",
     ".system-log-panel",
+    ".hero-floating",
     ".ticker-shell",
     ".enter-button",
     ".ghost-button",
@@ -309,8 +314,10 @@ function initLandingEnhancements() {
   addLandingScrollLayer(".hero-copy .cta-rack", -0.018);
   addLandingScrollLayer(".hero-copy .hero-terminal", -0.012);
   addLandingScrollLayer(".hero-core .core-stage", -0.024);
+  addLandingScrollLayer(".hero-floating", -0.012);
   addLandingScrollLayer(".intel-column > *", -0.016);
   addLandingScrollLayer(".dashboard-grid > *", -0.01);
+  addLandingScrollLayer(".landing-operations-band > *", -0.008);
   addLandingScrollLayer(".ticker-shell", -0.006);
 
   prepareLandingDecodeTargets();

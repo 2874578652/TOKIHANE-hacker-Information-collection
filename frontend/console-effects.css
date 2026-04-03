@@ -97,6 +97,7 @@ body.console-flash-active .console-flash {
 .module-config-stage,
 .bottom-console,
 .control-zone,
+.support-card,
 .hud-card,
 .metric-card,
 .feature-block,
@@ -255,6 +256,7 @@ body.console-flash-active .console-flash {
 .hud-card.interactive-surface,
 .metric-card.interactive-surface,
 .control-zone.interactive-surface,
+.support-card.interactive-surface,
 .port-options-panel.interactive-surface,
 .terminal-wrap.interactive-surface,
 .results-wrap.interactive-surface,
@@ -274,6 +276,7 @@ body.console-flash-active .console-flash {
 }
 
 .control-zone.interactive-surface.is-hovering,
+.support-card.interactive-surface.is-hovering,
 .port-options-panel.interactive-surface.is-hovering,
 .terminal-wrap.interactive-surface.is-hovering,
 .results-wrap.interactive-surface.is-hovering {
