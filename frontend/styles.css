@@ -37,7 +37,14 @@
 html,
 body {
   margin: 0;
+  width: 100%;
   min-height: 100%;
+  background-color: #03070c;
+  overscroll-behavior: none;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 body {
@@ -48,6 +55,7 @@ body {
     radial-gradient(circle at 82% 10%, rgba(97, 255, 228, 0.08), transparent 26%),
     radial-gradient(circle at 50% 58%, rgba(97, 255, 228, 0.04), transparent 38%),
     linear-gradient(180deg, #03070c 0%, #060d14 40%, #03070c 100%);
+  background-color: #03070c;
   overflow-x: hidden;
 }
 
@@ -509,16 +517,106 @@ textarea {
 .toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  min-height: 38px;
-  padding: 0 12px;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 14px;
   border: 1px solid rgba(97, 255, 228, 0.1);
-  background: rgba(7, 15, 22, 0.8);
+  background: linear-gradient(180deg, rgba(10, 20, 28, 0.88), rgba(7, 15, 22, 0.82));
   color: var(--text-soft);
+  line-height: 1.45;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.toggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(97, 255, 228, 0.2);
+  color: var(--text);
 }
 
 .toggle input {
-  accent-color: var(--cyan);
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1px solid rgba(97, 255, 228, 0.24);
+  background: rgba(4, 11, 17, 0.96);
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.toggle input[type="checkbox"] {
+  border-radius: 4px;
+}
+
+.toggle input[type="radio"] {
+  border-radius: 50%;
+}
+
+.toggle input::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  transform: scale(0);
+  transition: transform 0.18s ease;
+}
+
+.toggle input[type="checkbox"]::before {
+  width: 10px;
+  height: 6px;
+  border: 2px solid #021014;
+  border-top: 0;
+  border-right: 0;
+  transform: translateY(-1px) rotate(-45deg) scale(0);
+  transform-origin: center;
+}
+
+.toggle input[type="radio"]::before {
+  border-radius: 50%;
+  background: #021014;
+}
+
+.toggle input:checked {
+  border-color: rgba(97, 255, 228, 0.9);
+  background: linear-gradient(180deg, rgba(97, 255, 228, 0.98), rgba(57, 210, 255, 0.9));
+  box-shadow: 0 0 0 1px rgba(97, 255, 228, 0.18), 0 0 12px rgba(97, 255, 228, 0.22);
+}
+
+.toggle input:checked::before {
+  transform: translateY(-1px) rotate(-45deg) scale(1);
+}
+
+.toggle input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+.toggle input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(57, 210, 255, 0.18);
+}
+
+.toggle:has(input:checked) {
+  border-color: rgba(97, 255, 228, 0.26);
+  background: linear-gradient(180deg, rgba(11, 28, 36, 0.94), rgba(8, 18, 26, 0.9));
+  color: var(--text);
+}
+
+.toggles {
+  grid-template-columns: 1fr;
+}
+
+.port-options-panel .toggles .toggle {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.port-options-panel .toggle {
+  min-height: 62px;
+  padding: 12px 14px;
 }
 
 .module-grid {
