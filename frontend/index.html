@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Oxanium:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./landing.css" />
@@ -17,12 +17,12 @@
     <div id="bootOverlay" class="boot-overlay">
       <div class="boot-overlay__grid"></div>
       <div class="boot-overlay__content">
-        <p class="boot-overlay__eyebrow">TOKIHANE / QUANTUM ACCESS</p>
-        <h1>INITIALIZING CITY-SCALE RECON GATE</h1>
+        <p class="eyebrow">TOKIHANE / SYSTEM GATE</p>
+        <h1>Initializing Neo Recon Entry</h1>
         <div id="bootFeed" class="boot-feed">
-          <span>[boot] calibrating skyline pulse array...</span>
-          <span>[boot] binding encrypted uplink channels...</span>
-          <span>[boot] synchronizing visual cortex overlays...</span>
+          <span>[boot] aligning silent access corridor...</span>
+          <span>[boot] stabilizing cyan lattice envelope...</span>
+          <span>[boot] preparing console handoff sequence...</span>
         </div>
       </div>
     </div>
@@ -34,306 +34,226 @@
     <div class="scanlines" aria-hidden="true"></div>
     <div class="noise" aria-hidden="true"></div>
     <div class="horizon-grid" aria-hidden="true"></div>
-    <div class="ambient-glow ambient-glow--cyan" aria-hidden="true"></div>
-    <div class="ambient-glow ambient-glow--magenta" aria-hidden="true"></div>
 
     <main class="landing-shell">
-      <div class="landing-content-layer">
-        <section class="landing-theater">
-        <div class="theater-ornament theater-ornament--left" aria-hidden="true"></div>
-        <div class="theater-ornament theater-ornament--right" aria-hidden="true"></div>
-        <div class="theater-ornament theater-ornament--floor" aria-hidden="true"></div>
+      <header class="gate-nav reveal">
+        <a class="gate-nav__brand" href="#top">
+          <div class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="img">
+              <defs>
+                <linearGradient id="landingLogoNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7fffd4" />
+                  <stop offset="100%" stop-color="#39d2ff" />
+                </linearGradient>
+              </defs>
+              <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#landingLogoNeon)" stroke-width="4" />
+              <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#landingLogoNeon)" opacity="0.9" />
+              <path d="M52 55h16v30H52z" fill="#97ffe2" opacity="0.88" />
+              <path d="M44 66h32v6H62v14h-4V72H44z" fill="#081116" opacity="0.88" />
+            </svg>
+          </div>
+          <div>
+            <span class="eyebrow">TOKIHANE / GATEWAY</span>
+            <strong>Neo Recon Interface</strong>
+          </div>
+        </a>
 
-        <header class="topbar">
-          <div class="topbar__brand">
-            <span class="topbar__kicker">TOKIHANE / ACCESS NODE</span>
-            <strong>RECON NEXUS ENTRY</strong>
+        <nav class="gate-nav__links" aria-label="Primary">
+          <a href="#snapshot">Snapshot</a>
+          <a href="#capabilities">Capabilities</a>
+          <a href="#transition">Access</a>
+        </nav>
+
+        <div class="gate-nav__status">
+          <div class="nav-chip">
+            <span>Signal</span>
+            <strong id="navSignal">99.1%</strong>
+          </div>
+          <div class="nav-chip">
+            <span>UTC+8</span>
+            <strong id="navClock">--:--:--</strong>
+          </div>
+          <a id="launchButton" class="launch-button" href="./console.html">Enter Console</a>
+        </div>
+      </header>
+
+      <section id="top" class="hero-stage reveal delay-1">
+        <div class="hero-copy">
+          <p class="eyebrow">Neo Cyber Minimal / Quiet Recon Presence</p>
+          <h1>冷静接入未来侦察系统，先感受，再进入主控。</h1>
+          <p class="hero-copy__lead">
+            TOKIHANE 不是展示型赛博首页，而是主控台前的静默门禁。它先建立品牌与威胁感知，再把用户平滑送入真正可操作的侦察控制台。
+          </p>
+
+          <div class="hero-actions">
+            <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Launch System</a>
+            <a class="hero-button hero-button--ghost" href="#capabilities">View Modules</a>
           </div>
 
-          <div class="topbar__cluster">
-            <div class="topbar-chip">
-              <span>CHANNEL</span>
-              <strong id="channelState" class="status-word status-word--ok">ENCRYPTED</strong>
+          <div class="hero-meta">
+            <div class="meta-strip">
+              <span>Threat posture</span>
+              <strong id="heroThreatLabel">Watchful</strong>
             </div>
-            <div class="topbar-chip">
-              <span>SIGNAL</span>
-              <strong id="signalQuality">99.2%</strong>
-            </div>
-            <div class="topbar-chip topbar-chip--live">
-              <span>UTC+8</span>
-              <strong id="gateClock" class="status-word status-word--ok">--:--:--</strong>
+            <div class="meta-strip">
+              <span>Gate status</span>
+              <strong id="heroGateStatus">Console Ready</strong>
             </div>
           </div>
-        </header>
 
-        <section class="hero-grid">
-          <aside class="hero-floating hero-floating--north frame frame--ghost" data-parallax="9">
-            <header class="hero-floating__head">
-              <span>PERIMETER HUD</span>
-              <strong>SKYLINE FENCE</strong>
-            </header>
-            <div class="hero-floating__grid">
-              <div>
-                <span>OUTER WATCH</span>
-                <strong>14 NODES</strong>
-              </div>
-              <div>
-                <span>REDLINE</span>
-                <strong>FILTERED</strong>
-              </div>
-              <div>
-                <span>TRACE DEPTH</span>
-                <strong>07 LAYERS</strong>
-              </div>
-              <div>
-                <span>ENTRY GATE</span>
-                <strong>LOCKED</strong>
-              </div>
+          <div class="hero-feed">
+            <div class="hero-feed__head">
+              <span>ENTRY STREAM</span>
+              <strong id="entryTone">STABLE</strong>
             </div>
-          </aside>
-
-          <section class="hero-copy frame" data-parallax="18">
-            <div class="hero-copy__header">
-              <p class="eyebrow">FUTURE HACKER SYSTEM ENTRY / DIGITAL CITY TERMINAL</p>
-              <h1 class="glitch-title" data-text="DIGITAL CITY RECON NEXUS">DIGITAL CITY RECON NEXUS</h1>
-              <p class="hero-copy__lead">
-                进入高能侦察中枢，接入赛博扫描控制台、威胁关联矩阵与实时信号通道。这里不是普通首页，而是你的未来攻防主终端入口。
-              </p>
+            <div id="heroFeed" class="hero-feed__body">
+              <div>signal corridor armed for operator presence...</div>
+              <div>entry lattice holding silent transmission posture...</div>
+              <div>console bridge ready for system handoff...</div>
             </div>
-
-            <div class="hero-copy__footer">
-              <div class="hero-pill-rack">
-                <span class="hero-pill hero-pill--ok">SYSTEM ONLINE</span>
-                <span class="hero-pill hero-pill--alert">THREAT WATCH</span>
-                <span class="hero-pill hero-pill--ok">NODE SYNCED</span>
-              </div>
-
-              <div class="cta-rack">
-                <a id="enterButton" class="enter-button" href="./console.html">
-                  <span class="enter-button__label">ENTER SYSTEM</span>
-                  <span class="enter-button__meta">ACCESS CONSOLE / INITIATE RECON</span>
-                </a>
-                <a class="ghost-button" href="./console.html">ACCESS CONSOLE</a>
-              </div>
-
-              <div class="hero-terminal">
-                <div class="hero-terminal__head">
-                  <span>BOOTSTREAM</span>
-                  <span class="hero-terminal__status status-word status-word--ok">LIVE</span>
-                </div>
-                <div id="heroFeed" class="hero-terminal__body">
-                  <div>SYNCING perimeter nodes...</div>
-                  <div>LOCKING quantum packet traces...</div>
-                  <div>THREAT monitor ready for operator handshake...</div>
-                  <div>AWAITING console authorization...</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="hero-core frame frame--transparent" data-parallax="-14">
-            <div class="hero-core__canopy">
-              <span>LOCKED CITY FRAME</span>
-              <strong>TACTICAL SURVEILLANCE CORE</strong>
-            </div>
-
-            <div class="core-stage">
-              <div class="core-stage__mesh"></div>
-              <div class="core-stage__halo"></div>
-              <div class="core-stage__rings"></div>
-              <div class="core-stage__beam"></div>
-              <div class="core-stage__cityline">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-              <div class="core-stage__orb">
-                <div class="core-stage__orb-core"></div>
-              </div>
-              <div class="core-stage__target core-stage__target--a"></div>
-              <div class="core-stage__target core-stage__target--b"></div>
-              <div class="core-stage__axis core-stage__axis--x"></div>
-              <div class="core-stage__axis core-stage__axis--y"></div>
-              <div class="core-stage__labels">
-                <span>SKYLINE SYNC / 128 NODES</span>
-                <span id="vectorLock">VECTOR LOCK / 24.11N 121.47E</span>
-              </div>
-              <div class="core-stage__micro core-stage__micro--left">
-                <span>RELAY</span>
-                <strong>BLACK ICE</strong>
-              </div>
-              <div class="core-stage__micro core-stage__micro--right">
-                <span>LOCK</span>
-                <strong>VECTOR HOT</strong>
-              </div>
-              <div class="core-stage__readout">
-                <div>
-                  <span>PACKET FLOW</span>
-                  <strong id="packetFlow">684 KB/S</strong>
-                </div>
-                <div>
-                  <span>NODE SYNC</span>
-                  <strong id="nodeSync">128/128</strong>
-                </div>
-                <div>
-                  <span>THREAT PULSE</span>
-                  <strong id="threatPulse">ELEVATED</strong>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <aside class="intel-column" data-parallax="10">
-            <article class="intel-card frame intel-card--threat">
-              <header class="intel-card__head">
-                <span>THREAT MONITOR</span>
-                <strong id="threatIndex" class="status-word status-word--alert">73</strong>
-              </header>
-              <div class="threat-meter">
-                <div class="threat-meter__bar">
-                  <span id="threatBar"></span>
-                </div>
-                <p id="threatState" class="threat-state">SPECTRUM STABLE / WATCHING EDGE ANOMALIES</p>
-              </div>
-            </article>
-
-            <article class="intel-card frame">
-              <header class="intel-card__head">
-                <span>LIVE TELEMETRY</span>
-                <strong id="latencyPulse" class="status-word status-word--ok">18 MS</strong>
-              </header>
-              <div id="telemetryList" class="intel-list"></div>
-            </article>
-
-            <article class="intel-card frame">
-              <header class="intel-card__head">
-                <span>ENCRYPTED CHANNELS</span>
-                <strong id="channelCount" class="status-word status-word--ok">06</strong>
-              </header>
-              <div id="channelList" class="intel-list intel-list--compact"></div>
-            </article>
-          </aside>
-
-          <aside class="hero-floating hero-floating--south frame frame--ghost" data-parallax="-12">
-            <header class="hero-floating__head">
-              <span>ENTRY CEREMONY</span>
-              <strong>THREAT CORRIDOR</strong>
-            </header>
-            <div class="hero-floating__grid hero-floating__grid--wide">
-              <div>
-                <span>VECTOR GATE</span>
-                <strong>ARMED</strong>
-              </div>
-              <div>
-                <span>OPERATOR PATH</span>
-                <strong>CLEAR</strong>
-              </div>
-              <div>
-                <span>OVERRIDE</span>
-                <strong>MANUAL</strong>
-              </div>
-            </div>
-          </aside>
-        </section>
-        </section>
-
-        <section class="landing-operations-band">
-          <section class="dashboard-grid">
-            <article class="status-panel frame">
-              <header class="status-panel__head">
-                <span>SECTOR OVERWATCH</span>
-                <strong>SYSTEM ONLINE</strong>
-              </header>
-
-              <div class="status-panel__grid">
-                <div class="status-box">
-                  <span>NODE STABILITY</span>
-                  <strong id="nodeStability">99.982%</strong>
-                </div>
-                <div class="status-box">
-                  <span>ENCRYPTED TUNNELS</span>
-                  <strong id="encryptedTunnels">42</strong>
-                </div>
-                <div class="status-box">
-                  <span>PACKET INTEGRITY</span>
-                  <strong id="packetIntegrity">96.4%</strong>
-                </div>
-                <div class="status-box">
-                  <span>RECON WINDOWS</span>
-                  <strong id="reconWindows">08</strong>
-                </div>
-              </div>
-            </article>
-
-            <article class="status-panel frame frame--transparent">
-              <header class="status-panel__head">
-                <span>COORDINATE STREAM</span>
-                <strong>DIGITAL CITY CHANNEL</strong>
-              </header>
-
-              <div class="signal-deck">
-                <div class="signal-bars" aria-hidden="true">
-                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                </div>
-
-                <div class="coordinate-panel">
-                  <div>
-                    <span>SECTOR</span>
-                    <strong id="sectorReadout">NEON-17 / SHD-ARC</strong>
-                  </div>
-                  <div>
-                    <span>VECTOR</span>
-                    <strong id="vectorReadout">024.110 / 121.470 / ALT 212</strong>
-                  </div>
-                  <div>
-                    <span>TIMESTAMP</span>
-                    <strong id="timestampReadout">--</strong>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </section>
-
-          <section class="system-log-panel frame frame--ghost">
-            <header class="status-panel__head">
-              <span>TERMINAL LOG</span>
-              <strong id="systemLogState" class="status-word status-word--alert">ANOMALY WATCH</strong>
-            </header>
-            <div id="systemLog" class="system-log" aria-live="polite"></div>
-          </section>
-        </section>
-
-        <footer class="ticker-shell frame frame--ghost">
-          <div class="ticker-track">
-            <span>ENCRYPTED CHANNEL OPEN</span>
-            <span>THREAT MONITOR LIVE</span>
-            <span>DIGITAL SKYLINE SYNCED</span>
-            <span>RECON CONSOLE READY</span>
-            <span>QUANTUM ACCESS STABLE</span>
-            <span>PACKET FLOW NOMINAL</span>
-            <span>INITIATE RECON WHEN READY</span>
-            <span>ENCRYPTED CHANNEL OPEN</span>
-            <span>THREAT MONITOR LIVE</span>
-            <span>DIGITAL SKYLINE SYNCED</span>
-            <span>RECON CONSOLE READY</span>
-            <span>QUANTUM ACCESS STABLE</span>
           </div>
-        </footer>
-      </div>
+        </div>
 
-      <div class="landing-hud-layer" aria-hidden="true">
-        <div class="landing-hud-wordmark">
-          <span>TOKIHANE</span>
+        <div class="hero-visual">
+          <div class="hero-visual__frame">
+            <div class="hero-visual__labels">
+              <span>RECON CORE / ENTRY FOCUS</span>
+              <strong id="heroVector">LOCK VECTOR / 024.110 / 121.470</strong>
+            </div>
+
+            <div class="core-visual" aria-hidden="true">
+              <div class="core-visual__grid"></div>
+              <div class="core-visual__ring core-visual__ring--outer"></div>
+              <div class="core-visual__ring core-visual__ring--mid"></div>
+              <div class="core-visual__ring core-visual__ring--inner"></div>
+              <div class="core-visual__axis core-visual__axis--x"></div>
+              <div class="core-visual__axis core-visual__axis--y"></div>
+              <div class="core-visual__axis core-visual__axis--diag-a"></div>
+              <div class="core-visual__axis core-visual__axis--diag-b"></div>
+              <div class="core-visual__sweep"></div>
+
+              <span class="core-node core-node--a"><i></i><em>NODE 17</em></span>
+              <span class="core-node core-node--b"><i></i><em>TRACE</em></span>
+              <span class="core-node core-node--c"><i></i><em>ASSET</em></span>
+              <span class="core-node core-node--d"><i></i><em>THREAT</em></span>
+
+              <div class="core-visual__center">
+                <span>ENTRY CORE</span>
+                <strong id="heroCoreState">SILENT ACCESS</strong>
+                <p id="heroCoreNote">等待操作员进入主控系统。</p>
+              </div>
+            </div>
+
+            <div class="hero-visual__readouts">
+              <div class="readout-card">
+                <span>Packet Flow</span>
+                <strong id="heroPacket">682 KB/S</strong>
+              </div>
+              <div class="readout-card">
+                <span>Node Sync</span>
+                <strong id="heroNodeSync">128 / 128</strong>
+              </div>
+              <div class="readout-card">
+                <span>Threat Pulse</span>
+                <strong id="heroPulse">ELEVATED</strong>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="landing-hud-track landing-hud-track--alpha"></div>
-        <div class="landing-hud-track landing-hud-track--beta"></div>
-        <div class="landing-hud-bracket landing-hud-bracket--core">
-          <span>CORE LOCK / RECON</span>
+      </section>
+
+      <section id="snapshot" class="snapshot-section reveal delay-2">
+        <div class="section-heading">
+          <span class="eyebrow">System Snapshot</span>
+          <h2>首页只展示进入前最关键的系统切面。</h2>
+          <p>保留实时感，但不抢控制台的职责。信息少而锐利，像一组入口前的态势切片。</p>
         </div>
-        <div class="landing-hud-bracket landing-hud-bracket--side">
-          <span>WATCH / THREAT</span>
+
+        <div class="snapshot-grid">
+          <article class="snapshot-card">
+            <span>Threat Level</span>
+            <strong id="snapshotThreat">ELEVATED</strong>
+            <p>边缘异常受控，保持安静危险感。</p>
+          </article>
+          <article class="snapshot-card">
+            <span>Nodes</span>
+            <strong id="snapshotNodes">128</strong>
+            <p>主干节点同步在线，核心网格稳定。</p>
+          </article>
+          <article class="snapshot-card">
+            <span>Signal</span>
+            <strong id="snapshotSignal">99.1%</strong>
+            <p>冷通道完整，扫描链路已预热。</p>
+          </article>
+          <article class="snapshot-card">
+            <span>Active Modules</span>
+            <strong id="snapshotModules">08</strong>
+            <p>侦察、资产、威胁与导出路径就绪。</p>
+          </article>
         </div>
-      </div>
+      </section>
+
+      <section id="capabilities" class="capability-section reveal">
+        <div class="section-heading">
+          <span class="eyebrow">Capability Section</span>
+          <h2>把核心能力做成有秩序的模块，而不是塞满首页的后台碎片。</h2>
+        </div>
+
+        <div class="capability-grid">
+          <article class="capability-card capability-card--wide">
+            <span>Recon</span>
+            <strong>Targeted scan orchestration</strong>
+            <p>通过单一目标锁定与多模块协同，维持侦察流程的清晰主线。</p>
+          </article>
+          <article class="capability-card">
+            <span>Assets</span>
+            <strong>Domain / IP / Web graph</strong>
+            <p>将资产分层呈现，便于从入口快速过渡到主控消费。</p>
+          </article>
+          <article class="capability-card">
+            <span>Threat</span>
+            <strong>Signal and risk correlation</strong>
+            <p>弱配置、CVE 与异常流量被压缩成可读的状态摘要。</p>
+          </article>
+          <article class="capability-card">
+            <span>Telemetry</span>
+            <strong>Live event pulse</strong>
+            <p>保留实时流动感，但只在需要的位置轻声发亮。</p>
+          </article>
+          <article class="capability-card">
+            <span>Export</span>
+            <strong>Report ready output</strong>
+            <p>从侦察执行到结果沉淀，形成连续的系统闭环。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="transition" class="transition-section reveal">
+        <div class="transition-shell">
+          <div class="transition-copy">
+            <span class="eyebrow">Entry Transition</span>
+            <h2>入口到主控，需要一个明确的门禁动作。</h2>
+            <p>
+              首页的职责到这里结束。下面这段区域不再解释功能，而是用扫描、门禁、锁定感，把用户从品牌氛围切到真正的可操作界面。
+            </p>
+          </div>
+
+          <div class="transition-gate">
+            <div class="transition-gate__scan"></div>
+            <div class="transition-gate__panel">
+              <div class="transition-gate__meta">
+                <span>ACCESS STATE</span>
+                <strong id="transitionState">READY TO DEPLOY</strong>
+              </div>
+              <div class="transition-gate__code">
+                <span>HANDOFF CODE</span>
+                <strong id="transitionCode">TKH-NEO-128-READY</strong>
+              </div>
+              <a class="hero-button hero-button--primary transition-button" href="./console.html">Enter Main Console</a>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script src="./landing.js" defer></script>
