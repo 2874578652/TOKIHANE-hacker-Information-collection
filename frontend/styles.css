@@ -677,7 +677,7 @@ textarea {
 
 .feature-block {
   position: relative;
-  min-height: 82px;
+  min-height: 98px;
   background: linear-gradient(180deg, rgba(12, 24, 34, 0.76), rgba(7, 14, 21, 0.9));
   border: 1px solid rgba(97, 255, 228, 0.08);
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -685,28 +685,35 @@ textarea {
 
 .port-scan-master {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "name"
+    "status";
+  align-content: space-between;
   min-height: 100%;
-  padding: 14px 14px 14px 16px;
-  gap: 12px;
+  padding: 16px;
+  gap: 14px;
   cursor: pointer;
 }
 
 .port-scan-master > span {
+  grid-area: name;
   font-family: var(--display);
   font-size: 0.85rem;
   letter-spacing: 0.06em;
   line-height: 1.08;
   text-transform: uppercase;
+  max-width: 100%;
 }
 
 .port-scan-switch {
+  grid-area: status;
   display: grid;
   grid-template-columns: 18px auto;
   align-items: center;
   gap: 10px;
   min-width: 70px;
+  justify-self: end;
   justify-items: end;
 }
 
@@ -752,12 +759,12 @@ textarea {
 }
 
 .port-scan-switch span {
-  min-width: 40px;
-  padding: 2px 0;
+  min-width: 48px;
+  padding: 3px 8px;
   font-family: var(--mono);
   font-size: 0.76rem;
   color: var(--text-dim);
-  text-align: right;
+  text-align: center;
   border: 1px solid rgba(97, 255, 228, 0.08);
   background: rgba(8, 16, 24, 0.72);
 }
@@ -860,11 +867,36 @@ textarea {
 }
 
 .toggle-dock .toggle {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
   justify-content: flex-start;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  min-height: 72px;
+  padding: 14px 16px;
   font-size: 0.98rem;
   line-height: 1.45;
+}
+
+.toggle-dock .toggle input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+
+.toggle-dock .toggle input[type="checkbox"]::before {
+  width: 10px;
+  height: 6px;
+}
+
+.toggle-dock .toggle input[type="radio"]::before {
+  width: 8px;
+  height: 8px;
+}
+
+.toggle-dock .toggle span,
+.toggle-dock .toggle {
+  word-break: break-word;
 }
 
 .action-rack {
