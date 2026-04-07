@@ -174,6 +174,12 @@ body.is-pointer-idle::after {
     rotateY(var(--surface-tilt-y, 0deg));
 }
 
+.hero-floating.surface-fx,
+.system-log-panel.surface-fx,
+.ticker-shell.surface-fx {
+  transform: translate3d(0, var(--surface-lift, 0px), 0);
+}
+
 .cta-rack.is-hot .enter-button {
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.04) inset,

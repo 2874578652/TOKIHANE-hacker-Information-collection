@@ -1510,19 +1510,19 @@ body.is-entering .enter-button {
 
 .hero-grid {
   position: relative;
-  min-height: 900px;
+  min-height: 980px;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: 112px auto 1fr;
-  gap: 18px;
+  grid-template-rows: auto minmax(640px, 1fr) auto;
+  gap: 24px;
   align-items: start;
 }
 
 .hero-copy {
-  grid-column: 1 / span 5;
-  grid-row: 2 / span 2;
+  grid-column: 1 / span 4;
+  grid-row: 2;
   z-index: 5;
-  min-height: 760px;
+  min-height: 720px;
   padding: 34px 30px 28px;
   border-radius: 30px;
   clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 30px, 100% 100%, 24px 100%, 0 calc(100% - 28px));
@@ -1568,9 +1568,9 @@ body.is-entering .enter-button {
 }
 
 .hero-core {
-  grid-column: 4 / span 6;
-  grid-row: 2 / span 2;
-  z-index: 3;
+  grid-column: 5 / span 5;
+  grid-row: 1 / span 2;
+  z-index: 4;
   min-height: 860px;
   padding: 74px 20px 26px;
   border-radius: 36px;
@@ -1667,22 +1667,22 @@ body.is-entering .enter-button {
 }
 
 .core-stage__micro--left {
-  left: -28px;
+  left: 18px;
   top: 34%;
 }
 
 .core-stage__micro--right {
-  right: -28px;
+  right: 18px;
   bottom: 28%;
 }
 
 .intel-column {
   grid-column: 10 / span 3;
-  grid-row: 2 / span 2;
+  grid-row: 2;
   z-index: 6;
   align-self: start;
   gap: 16px;
-  margin-top: 110px;
+  margin-top: 0;
 }
 
 .intel-card {
@@ -1698,19 +1698,19 @@ body.is-entering .enter-button {
 }
 
 .hero-floating--north {
-  grid-column: 8 / span 4;
-  grid-row: 2;
-  justify-self: end;
-  width: min(420px, 100%);
-  margin-top: 22px;
+  grid-column: 10 / span 3;
+  grid-row: 1;
+  justify-self: stretch;
+  width: 100%;
+  margin-top: 0;
 }
 
 .hero-floating--south {
-  grid-column: 2 / span 4;
+  grid-column: 1 / span 4;
   grid-row: 3;
-  width: min(490px, 100%);
-  align-self: end;
-  margin-bottom: 34px;
+  width: 100%;
+  align-self: start;
+  margin-bottom: 0;
 }
 
 .hero-floating__head {
@@ -1772,8 +1772,20 @@ body.is-entering .enter-button {
   display: grid;
   grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.56fr);
   gap: 26px;
-  margin-top: -84px;
+  margin-top: 34px;
+  padding-top: 24px;
   align-items: start;
+}
+
+.landing-operations-band::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(87, 245, 255, 0), rgba(87, 245, 255, 0.26), rgba(255, 84, 108, 0.16), rgba(87, 245, 255, 0));
+  box-shadow: 0 0 18px rgba(87, 245, 255, 0.1);
 }
 
 .dashboard-grid {
@@ -1791,7 +1803,7 @@ body.is-entering .enter-button {
 }
 
 .dashboard-grid .status-panel:last-child {
-  margin-top: 108px;
+  margin-top: 42px;
   padding: 24px 22px;
 }
 
@@ -1819,7 +1831,7 @@ body.is-entering .enter-button {
 }
 
 .system-log-panel {
-  margin-top: 86px;
+  margin-top: 18px;
   min-height: 520px;
   padding: 24px;
   border-radius: 26px;
@@ -1842,46 +1854,46 @@ body.is-entering .enter-button {
   .hero-grid {
     min-height: auto;
     grid-template-columns: repeat(10, minmax(0, 1fr));
-    grid-template-rows: auto;
+    grid-template-rows: auto minmax(540px, 1fr) auto;
     padding-top: 0;
   }
 
   .hero-copy {
     grid-column: 1 / span 4;
-    grid-row: auto;
+    grid-row: 2;
     min-height: 0;
   }
 
   .hero-core {
-    grid-column: 3 / span 5;
-    grid-row: auto;
+    grid-column: 4 / span 4;
+    grid-row: 1 / span 2;
     min-height: 760px;
   }
 
   .intel-column {
     grid-column: 8 / span 3;
-    grid-row: auto;
-    margin-top: 80px;
+    grid-row: 2;
+    margin-top: 0;
   }
 
   .hero-floating--north {
-    grid-column: 7 / span 4;
-    grid-row: auto;
+    grid-column: 8 / span 3;
+    grid-row: 1;
   }
 
   .hero-floating--south {
     grid-column: 1 / span 4;
-    grid-row: auto;
+    grid-row: 3;
     margin-bottom: 0;
   }
 
   .landing-operations-band {
     grid-template-columns: 1fr;
-    margin-top: -20px;
+    margin-top: 28px;
   }
 
   .system-log-panel {
-    margin-top: 0;
+    margin-top: 10px;
   }
 }
 
@@ -2140,17 +2152,49 @@ body.is-entering .enter-button {
 .landing-hud-bracket--core {
   left: 47%;
   top: 244px;
-  width: min(42vw, 760px);
+  width: min(40vw, 700px);
   height: 560px;
   transform: translateX(-50%) translateY(calc(var(--landing-scroll) * 0.04px));
 }
 
 .landing-hud-bracket--side {
-  right: 5.6%;
-  top: 278px;
-  width: min(20vw, 340px);
-  height: 492px;
+  right: 5.4%;
+  top: 224px;
+  width: min(18vw, 300px);
+  height: 564px;
   transform: translateY(calc(var(--landing-scroll) * 0.06px));
+}
+
+.hero-grid > *,
+.landing-operations-band > * {
+  min-width: 0;
+}
+
+.hero-copy,
+.hero-core,
+.hero-floating,
+.intel-card,
+.status-panel,
+.system-log-panel,
+.ticker-shell {
+  isolation: isolate;
+}
+
+.hero-copy {
+  margin-right: 8px;
+}
+
+.hero-core {
+  margin: 0 8px;
+}
+
+.intel-column {
+  padding-left: 8px;
+}
+
+.cta-rack {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-copy,

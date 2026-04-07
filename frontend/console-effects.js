@@ -14,9 +14,6 @@
   const runButton = document.getElementById("runBtn");
   const stopButton = document.getElementById("stopBtn");
   const homeLink = document.querySelector(".console-home-link");
-  const missionColumn = document.querySelector(".console-column--mission");
-  const moduleColumn = document.querySelector(".console-column--modules");
-  const dockLayer = document.querySelector(".bottom-console");
   const scrollLayers = [];
   const hudReactiveTargets = [];
   const watchedValueIds = [
@@ -108,15 +105,8 @@
     });
 
     const scrollFactor = Math.min(1, currentY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight));
-    if (missionColumn) {
-      missionColumn.style.setProperty("--approach-x", `${(10 + scrollFactor * 12).toFixed(2)}px`);
-    }
-    if (moduleColumn) {
-      moduleColumn.style.setProperty("--approach-x", `${(-10 - scrollFactor * 12).toFixed(2)}px`);
-    }
-    if (dockLayer) {
-      dockLayer.style.setProperty("--dock-rise", `${(-16 - scrollFactor * 20).toFixed(2)}px`);
-    }
+    setRootVar("--console-edge-signal", scrollFactor.toFixed(3));
+    setRootVar("--console-dock-signal", (0.22 + scrollFactor * 0.78).toFixed(3));
   }
 
   function addScrollLayer(selector, factor) {
@@ -723,11 +713,7 @@
   initPointerTracking();
   startEnergyLoop();
   addScrollLayer(".hud-top", -0.016);
-  addScrollLayer(".console-panel", -0.014);
   addScrollLayer("#moduleConfigStage", -0.01);
-  addScrollLayer(".bottom-console", -0.008);
-  addScrollLayer(".control-zone", -0.016);
-  addScrollLayer(".support-card", -0.012);
   addScrollLayer(".hud-card", -0.018);
   addScrollLayer(".metric-card", -0.02);
   addScrollLayer(".feature-block", -0.014);

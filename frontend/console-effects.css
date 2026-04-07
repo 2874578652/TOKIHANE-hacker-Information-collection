@@ -98,12 +98,33 @@ body.console-flash-active .console-flash {
 .bottom-console,
 .control-zone,
 .support-card,
+.terminal-wrap,
+.results-wrap {
+  transition:
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    filter 220ms ease;
+}
+
 .hud-card,
 .metric-card,
 .feature-block,
 .port-options-panel,
-.terminal-wrap,
-.results-wrap,
+.summary-item,
+.hud-top,
+.console-panel,
+.module-config-stage,
+.control-zone,
+.support-card,
+.terminal-wrap > *,
+.results-wrap > * {
+  min-width: 0;
+}
+
+.hud-card,
+.metric-card,
+.feature-block,
+.port-options-panel,
 .summary-item {
   transform: translate3d(0, var(--scroll-lift, 0px), 0);
   transition:
@@ -280,6 +301,7 @@ body.console-flash-active .console-flash {
 .port-options-panel.interactive-surface.is-hovering,
 .terminal-wrap.interactive-surface.is-hovering,
 .results-wrap.interactive-surface.is-hovering {
+  transform: translate3d(0, var(--scroll-lift, 0px), 0);
   box-shadow:
     0 0 0 1px rgba(57, 255, 20, 0.14),
     0 0 28px rgba(57, 255, 20, 0.08),
