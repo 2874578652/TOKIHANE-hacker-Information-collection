@@ -249,71 +249,6 @@
               </div>
             </section>
 
-            <section id="moduleConfigStage" class="module-config-stage">
-              <header class="module-config-head">
-                <span>CONFIG SPACE</span>
-                <h2>Module Detail Dock</h2>
-                <p>按需打开配置，保持主界面克制。</p>
-              </header>
-
-              <div id="moduleConfigEmpty" class="module-config-empty">当前没有启用可配置模块。打开上方模块后，详细参数会在这里出现。</div>
-
-              <div class="module-config-grid">
-                <div id="vtOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">VirusTotal 配置</h3>
-                  <label class="input-block">
-                    <span>VirusTotal API Key</span>
-                    <input id="vtApiKey" type="password" placeholder="请输入你自己的 VT API Key" autocomplete="off" />
-                  </label>
-                </div>
-
-                <div id="portScanOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">端口扫描配置</h3>
-                  <p class="config-note">扫描模式、协议和端口超时已在上方主控区统一配置。</p>
-                </div>
-
-                <div id="asnOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">ASN/C 段扩展配置</h3>
-                  <div class="toggle-dock">
-                    <div class="toggles">
-                      <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="webAssetOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">Web 资产枚举配置</h3>
-                  <div class="toggle-dock">
-                    <div class="toggles">
-                      <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
-                      <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
-                      <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
-                      <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
-                      <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="serviceRiskOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">服务风险关联配置</h3>
-                  <div class="toggle-dock">
-                    <div class="toggles">
-                      <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
-                      <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="networkOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">内网扫描配置</h3>
-                  <label class="input-block">
-                    <span>CIDR Targets</span>
-                    <input id="cidrTargets" type="text" placeholder="192.168.1.0/24,10.0.0.0/24" />
-                  </label>
-                </div>
-              </div>
-            </section>
-
             <section class="stack-section stack-section--actions">
               <div class="section-head">
                 <span>ACTIONS</span>
@@ -404,6 +339,71 @@
                     <span>STATE VECTOR</span>
                     <strong id="coreStateVector">COLD</strong>
                   </article>
+                </div>
+              </div>
+            </section>
+
+            <section id="moduleConfigStage" class="module-config-stage module-config-stage--center">
+              <header class="module-config-head">
+                <span>CONFIG SPACE</span>
+                <h2>Module Detail Dock</h2>
+                <p>已加载模块的细节配置转移到中控区下方，避免左侧控制栏过重。</p>
+              </header>
+
+              <div id="moduleConfigEmpty" class="module-config-empty">当前没有启用可配置模块。打开左侧模块后，详细参数会在这里显示。</div>
+
+              <div class="module-config-grid">
+                <div id="vtOptions" class="port-options-panel is-closed">
+                  <h3 class="module-config-title">VirusTotal 配置</h3>
+                  <label class="input-block">
+                    <span>VirusTotal API Key</span>
+                    <input id="vtApiKey" type="password" placeholder="请输入你自己的 VT API Key" autocomplete="off" />
+                  </label>
+                </div>
+
+                <div id="portScanOptions" class="port-options-panel is-closed">
+                  <h3 class="module-config-title">端口扫描配置</h3>
+                  <p class="config-note">扫描模式、协议和端口超时已在左侧主控区统一配置。</p>
+                </div>
+
+                <div id="asnOptions" class="port-options-panel is-closed">
+                  <h3 class="module-config-title">ASN/C 段扩展配置</h3>
+                  <div class="toggle-dock">
+                    <div class="toggles">
+                      <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="webAssetOptions" class="port-options-panel is-closed">
+                  <h3 class="module-config-title">Web 资产枚举配置</h3>
+                  <div class="toggle-dock">
+                    <div class="toggles">
+                      <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
+                      <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
+                      <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
+                      <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
+                      <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="serviceRiskOptions" class="port-options-panel is-closed">
+                  <h3 class="module-config-title">服务风险关联配置</h3>
+                  <div class="toggle-dock">
+                    <div class="toggles">
+                      <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
+                      <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="networkOptions" class="port-options-panel is-closed">
+                  <h3 class="module-config-title">内网扫描配置</h3>
+                  <label class="input-block">
+                    <span>CIDR Targets</span>
+                    <input id="cidrTargets" type="text" placeholder="192.168.1.0/24,10.0.0.0/24" />
+                  </label>
                 </div>
               </div>
             </section>

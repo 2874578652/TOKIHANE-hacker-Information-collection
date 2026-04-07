@@ -699,6 +699,13 @@ textarea {
   gap: 14px;
 }
 
+.module-config-stage--center {
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(9, 19, 27, 0.92), rgba(6, 13, 20, 0.94)),
+    var(--panel);
+}
+
 .module-config-head span {
   font-family: var(--mono);
   font-size: 0.72rem;
@@ -718,8 +725,20 @@ textarea {
   gap: 12px;
 }
 
+.module-config-stage--center .module-config-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+}
+
 .module-config-stage.is-active .module-config-empty {
   display: none;
+}
+
+.module-config-stage--center .module-config-empty {
+  min-height: 132px;
+  display: grid;
+  align-content: center;
+  text-align: center;
 }
 
 .port-options-panel {
@@ -728,6 +747,10 @@ textarea {
   padding: 14px;
   background: rgba(9, 18, 26, 0.86);
   border: 1px solid rgba(97, 255, 228, 0.08);
+}
+
+.module-config-stage--center .port-options-panel {
+  min-height: 100%;
 }
 
 .port-options-panel.is-closed {
