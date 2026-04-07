@@ -274,27 +274,33 @@
 
                 <div id="asnOptions" class="port-options-panel is-closed">
                   <h3 class="module-config-title">ASN/C 段扩展配置</h3>
-                  <div class="toggles">
-                    <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
+                  <div class="toggle-dock">
+                    <div class="toggles">
+                      <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
+                    </div>
                   </div>
                 </div>
 
                 <div id="webAssetOptions" class="port-options-panel is-closed">
                   <h3 class="module-config-title">Web 资产枚举配置</h3>
-                  <div class="toggles">
-                    <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
-                    <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
-                    <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
-                    <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
-                    <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
+                  <div class="toggle-dock">
+                    <div class="toggles">
+                      <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
+                      <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
+                      <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
+                      <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
+                      <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
+                    </div>
                   </div>
                 </div>
 
                 <div id="serviceRiskOptions" class="port-options-panel is-closed">
                   <h3 class="module-config-title">服务风险关联配置</h3>
-                  <div class="toggles">
-                    <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
-                    <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
+                  <div class="toggle-dock">
+                    <div class="toggles">
+                      <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
+                      <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
+                    </div>
                   </div>
                 </div>
 

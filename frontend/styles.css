@@ -40,7 +40,6 @@ body {
   width: 100%;
   min-height: 100%;
   background-color: #03070c;
-  overscroll-behavior: none;
 }
 
 html {
@@ -57,6 +56,8 @@ body {
     linear-gradient(180deg, #03070c 0%, #060d14 40%, #03070c 100%);
   background-color: #03070c;
   overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 body::before {
@@ -517,9 +518,9 @@ textarea {
 .toggle {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  min-height: 48px;
-  padding: 10px 14px;
+  gap: 10px;
+  min-height: 42px;
+  padding: 8px 12px;
   border: 1px solid rgba(97, 255, 228, 0.1);
   background: linear-gradient(180deg, rgba(10, 20, 28, 0.88), rgba(7, 15, 22, 0.82));
   color: var(--text-soft);
@@ -538,9 +539,9 @@ textarea {
   appearance: none;
   -webkit-appearance: none;
   margin: 0;
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
   border: 1px solid rgba(97, 255, 228, 0.24);
   background: rgba(4, 11, 17, 0.96);
   display: grid;
@@ -559,15 +560,15 @@ textarea {
 
 .toggle input::before {
   content: "";
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   transform: scale(0);
   transition: transform 0.18s ease;
 }
 
 .toggle input[type="checkbox"]::before {
-  width: 10px;
-  height: 6px;
+  width: 9px;
+  height: 5px;
   border: 2px solid #021014;
   border-top: 0;
   border-right: 0;
@@ -609,14 +610,27 @@ textarea {
   grid-template-columns: 1fr;
 }
 
+.toggle-dock {
+  padding: 10px;
+  background: rgba(7, 15, 22, 0.72);
+  border: 1px solid rgba(97, 255, 228, 0.08);
+}
+
+.port-options-panel .toggles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
 .port-options-panel .toggles .toggle {
   width: 100%;
   justify-content: flex-start;
 }
 
 .port-options-panel .toggle {
-  min-height: 62px;
-  padding: 12px 14px;
+  min-height: 52px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(12, 24, 33, 0.9), rgba(8, 16, 24, 0.88));
 }
 
 .module-grid {

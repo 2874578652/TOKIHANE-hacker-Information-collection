@@ -35,7 +35,6 @@ html {
   min-height: 100%;
   overflow-x: hidden;
   background-color: #03070c;
-  overscroll-behavior: none;
 }
 
 body {
@@ -50,7 +49,8 @@ body {
     radial-gradient(circle at 82% 14%, rgba(97, 255, 228, 0.08), transparent 26%),
     linear-gradient(180deg, #03070c 0%, #060d14 42%, #03070c 100%);
   background-color: #03070c;
-  overscroll-behavior: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 body::before {
