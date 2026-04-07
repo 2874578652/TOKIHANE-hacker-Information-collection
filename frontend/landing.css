@@ -583,6 +583,8 @@ body.is-loaded .boot-overlay {
 }
 
 .core-visual__ring {
+  inset: 0;
+  margin: auto;
   border-radius: 50%;
   border: 1px solid rgba(97, 255, 228, 0.14);
 }
