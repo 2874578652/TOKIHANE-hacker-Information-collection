@@ -59,6 +59,23 @@ const hudLatency = document.getElementById("hudLatency");
 const hudModuleActive = document.getElementById("hudModuleActive");
 const hudTaskState = document.getElementById("hudTaskState");
 const hudTargetLock = document.getElementById("hudTargetLock");
+const statusTarget = document.getElementById("statusTarget");
+const missionTarget = document.getElementById("missionTarget");
+const missionFocus = document.getElementById("missionFocus");
+const missionMode = document.getElementById("missionMode");
+const missionRisk = document.getElementById("missionRisk");
+const coreTargetEcho = document.getElementById("coreTargetEcho");
+const coreStatusLine = document.getElementById("coreStatusLine");
+const coreSignalLane = document.getElementById("coreSignalLane");
+const coreStateVector = document.getElementById("coreStateVector");
+const liveEvents = document.getElementById("liveEvents");
+const moduleStatusList = document.getElementById("moduleStatusList");
+const portsOutput = document.getElementById("portsOutput");
+const techOutput = document.getElementById("techOutput");
+const exportSource = document.getElementById("exportSource");
+const exportTarget = document.getElementById("exportTarget");
+const dockTabs = Array.from(document.querySelectorAll(".dock-tab"));
+const dockPanels = Array.from(document.querySelectorAll(".dock-panel"));
 
 const COMMON_PORT_RANGE =
   "21,22,23,25,53,80,110,111,135,139,143,389,443,445,465,587,993,995,1433,1521,1723,1883,1900,2049,2375,2376,3306,3389,5432,5900,6379,7001,8000,8080,8081,8443,8888,9200,11211,27017";
@@ -83,12 +100,203 @@ const moduleToggleInputs = [
 ].filter(Boolean);
 
 const optionPanels = [vtOptions, portScanOptions, asnOptions, webAssetOptions, serviceRiskOptions, networkOptions].filter(Boolean);
+const moduleStatusDefinitions = [
+  { input: vtScanInput, label: "VirusTotal" },
+  { input: enablePortScan, label: "Port Scan" },
+  { input: ctScanInput, label: "CT Logs" },
+  { input: passiveDnsScanInput, label: "Passive DNS" },
+  { input: asnScanInput, label: "ASN Expand" },
+  { input: webAssetScanInput, label: "Web Assets" },
+  { input: serviceRiskScanInput, label: "Service Risk" },
+  { input: allowPrivateIpInput, label: "Private IP" },
+].filter((item) => item.input);
+
+function setNodeText(node, text, fallback = "N/A") {
+  if (!node) {
+    return;
+  }
+  const value = String(text ?? "").trim();
+  node.textContent = value || fallback;
+}
+
+function getTargetLabel() {
+  return (
+    targetInput?.value?.trim() ||
+    latestReport?.meta?.target_input ||
+    latestReport?.target?.input ||
+    latestReport?.target?.domain ||
+    latestReport?.target?.normalized_url ||
+    ""
+  );
+}
+
+function getTargetDisplayValue() {
+  return getTargetLabel() || "UNASSIGNED";
+}
+
+function getCoreTargetValue() {
+  return getTargetLabel() || "NO TARGET";
+}
+
+function getSelectedScanModeLabel() {
+  if (!isPortScanEnabled()) {
+    return "PASSIVE";
+  }
+  const mode = getSelectedScanMode();
+  if (mode === "full") {
+    return "FULL";
+  }
+  if (mode === "custom") {
+    return "CUSTOM";
+  }
+  return "COMMON";
+}
+
+function updateMissionMode() {
+  setNodeText(missionMode, getSelectedScanModeLabel(), "PASSIVE");
+}
+
+function updateMissionFocus() {
+  const activeCount = moduleToggleInputs.reduce((count, input) => {
+    return input?.checked ? count + 1 : count;
+  }, 0);
+
+  let focus = "Passive Sweep";
+  if (isRunning) {
+    focus = activeCount > 4 ? "Deep Recon" : "Active Recon";
+  } else if (latestReport) {
+    focus = latestReportSource === "file" ? "Loaded Report" : "Captured Report";
+  } else if (activeCount > 0) {
+    focus = activeCount > 4 ? "Stacked Sweep" : "Prepared Sweep";
+  }
+
+  setNodeText(missionFocus, focus, "Passive Sweep");
+  setNodeText(coreSignalLane, isRunning ? "ACTIVE" : activeCount > 0 ? "PRIMED" : "PASSIVE", "PASSIVE");
+}
+
+function updateCoreStatusLine(message) {
+  if (message) {
+    setNodeText(coreStatusLine, message, "Recon core in standby. Awaiting operator input.");
+    return;
+  }
+
+  const target = getTargetLabel();
+  if (isRunning && target) {
+    setNodeText(coreStatusLine, `Recon sweep executing against ${target}.`, "Recon core in standby. Awaiting operator input.");
+    return;
+  }
+  if (latestReport && target) {
+    setNodeText(coreStatusLine, `Latest intelligence snapshot loaded for ${target}.`, "Recon core in standby. Awaiting operator input.");
+    return;
+  }
+  setNodeText(coreStatusLine, "Recon core in standby. Awaiting operator input.", "Recon core in standby. Awaiting operator input.");
+}
+
+function updateExportMeta() {
+  setNodeText(exportSource, latestReport ? String(latestReportSource || "scan").toUpperCase() : "NO REPORT", "NO REPORT");
+  setNodeText(exportTarget, getTargetDisplayValue(), "UNASSIGNED");
+}
+
+function appendDockRows(container, rows, emptyText) {
+  if (!container) {
+    return;
+  }
+  container.innerHTML = "";
+  const list = Array.isArray(rows) ? rows.filter(Boolean) : [];
+  const source = list.length ? list : [emptyText];
+  source.forEach((text) => {
+    const item = document.createElement("div");
+    item.className = "summary-item";
+    item.textContent = text;
+    container.appendChild(item);
+  });
+}
+
+function renderModuleStatusList() {
+  if (!moduleStatusList) {
+    return;
+  }
+  moduleStatusList.innerHTML = "";
+  moduleStatusDefinitions.forEach(({ input, label }) => {
+    const row = document.createElement("div");
+    row.className = "module-status";
+
+    const name = document.createElement("span");
+    name.textContent = label;
+
+    const state = document.createElement("strong");
+    const enabled = !!input?.checked;
+    state.textContent = enabled ? "ON" : "OFF";
+    state.dataset.state = enabled ? "on" : "off";
+
+    row.append(name, state);
+    moduleStatusList.appendChild(row);
+  });
+}
+
+function pushLiveEvent(text, level = "info") {
+  if (!liveEvents || !text) {
+    return;
+  }
+
+  const line = document.createElement("div");
+  const stamp = new Date().toLocaleTimeString("zh-CN", { hour12: false });
+  line.className = "event-line";
+  line.textContent = `[${stamp}] ${text}`;
+  if (level === "error") {
+    line.classList.add("is-danger");
+  } else if (level === "ok") {
+    line.classList.add("is-online");
+  } else {
+    line.classList.add("event-line--muted");
+  }
+
+  const placeholder = liveEvents.querySelector(".event-line--muted");
+  if (placeholder && liveEvents.children.length === 1) {
+    placeholder.remove();
+  }
+
+  liveEvents.prepend(line);
+  while (liveEvents.children.length > 6) {
+    liveEvents.removeChild(liveEvents.lastElementChild);
+  }
+}
+
+function initDockTabs() {
+  if (!dockTabs.length || !dockPanels.length) {
+    return;
+  }
+
+  const activate = (tabName) => {
+    dockTabs.forEach((tab) => {
+      const active = tab.dataset.tab === tabName;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+    });
+
+    dockPanels.forEach((panel) => {
+      const active = panel.dataset.panel === tabName;
+      panel.classList.toggle("is-active", active);
+      panel.hidden = !active;
+    });
+  };
+
+  dockTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      activate(tab.dataset.tab || "assets");
+    });
+  });
+}
 
 function setHudTaskState(stateText) {
   if (!hudTaskState) {
     return;
   }
-  hudTaskState.textContent = stateText || "IDLE";
+  const nextState = stateText || "IDLE";
+  hudTaskState.textContent = nextState;
+  setNodeText(coreStateVector, nextState, "IDLE");
+  updateMissionFocus();
+  updateCoreStatusLine();
 }
 
 function updateHudClock() {
@@ -113,7 +321,9 @@ function setHudThreat(level) {
   if (!hudThreat) {
     return;
   }
-  hudThreat.textContent = level || "LOW";
+  const nextLevel = level || "LOW";
+  hudThreat.textContent = nextLevel;
+  setNodeText(missionRisk, nextLevel, "LOW");
 }
 
 function updateHudThreatFromReport(data) {
@@ -134,11 +344,12 @@ function updateHudThreatFromReport(data) {
 }
 
 function updateHudTargetLock() {
-  if (!hudTargetLock) {
-    return;
-  }
-  const raw = targetInput?.value?.trim() || "";
-  hudTargetLock.textContent = raw || "WAITING...";
+  setNodeText(hudTargetLock, getTargetLabel(), "WAITING...");
+  setNodeText(statusTarget, getTargetDisplayValue(), "UNASSIGNED");
+  setNodeText(missionTarget, getTargetDisplayValue(), "UNASSIGNED");
+  setNodeText(coreTargetEcho, getCoreTargetValue(), "NO TARGET");
+  updateExportMeta();
+  updateCoreStatusLine();
 }
 
 function updateModuleActiveCount() {
@@ -149,6 +360,9 @@ function updateModuleActiveCount() {
     return input?.checked ? count + 1 : count;
   }, 0);
   hudModuleActive.textContent = String(activeCount);
+  renderModuleStatusList();
+  updateMissionMode();
+  updateMissionFocus();
 }
 
 function syncModuleConfigStage() {
@@ -189,6 +403,10 @@ function initHudRuntime() {
   updateHudTargetLock();
   updateModuleActiveCount();
   updateHudMetrics();
+  updateMissionMode();
+  updateMissionFocus();
+  updateExportMeta();
+  renderModuleStatusList();
 
   setInterval(() => {
     updateHudClock();
@@ -256,6 +474,7 @@ function syncScanModeUI() {
     if (customPortsInput) {
       customPortsInput.required = false;
     }
+    updateMissionMode();
     return;
   }
 
@@ -270,6 +489,7 @@ function syncScanModeUI() {
     customPortsWrap.classList.add("hidden");
     customPortsInput.required = false;
   }
+  updateMissionMode();
 }
 
 function syncPortScannerUI() {
@@ -304,6 +524,7 @@ function syncPortScanUI() {
   syncPortScannerUI();
   updateModuleActiveCount();
   syncModuleConfigStage();
+  updateMissionMode();
 }
 
 function syncVtScanUI() {
@@ -383,6 +604,7 @@ function syncAdvancedFeatureUI() {
   togglePanel(networkOptions, allowPrivate);
   updateModuleActiveCount();
   syncModuleConfigStage();
+  renderModuleStatusList();
 }
 
 function initMatrixRain() {
@@ -581,6 +803,55 @@ function logLine(text, level = "info") {
   line.style.color = level === "error" ? "#ff8f9f" : level === "ok" ? "#9dffc3" : "#ffdce1";
   terminal.appendChild(line);
   terminal.scrollTop = terminal.scrollHeight;
+  pushLiveEvent(text, level);
+  updateCoreStatusLine(text);
+}
+
+function renderPortInsights(data) {
+  const ipScan = data?.ip_scan || {};
+  const rows = [];
+
+  Object.entries(ipScan.results || {}).forEach(([ip, result]) => {
+    const tcpRows = Array.isArray(result?.tcp?.open_ports) ? result.tcp.open_ports : [];
+    const udpRows = Array.isArray(result?.udp?.open_ports) ? result.udp.open_ports : [];
+
+    tcpRows.forEach((row) => {
+      rows.push(`${ip}:${row?.port}/${row?.protocol || "tcp"} / ${row?.service || "unknown"}`);
+    });
+
+    udpRows.forEach((row) => {
+      rows.push(`${ip}:${row?.port}/${row?.protocol || "udp"} / ${row?.service || "unknown"}`);
+    });
+  });
+
+  appendDockRows(portsOutput, rows, "No open port intelligence loaded.");
+}
+
+function renderTechInsights(data) {
+  const tech = data?.tech_stack || {};
+  const webAssets = data?.web_assets || {};
+  const serviceRisk = data?.service_risk || {};
+  const rows = [];
+
+  const techList = Array.isArray(tech.detected_technologies) ? tech.detected_technologies : [];
+  if (techList.length) {
+    rows.push(`Detected technologies: ${techList.join(", ")}`);
+  }
+
+  const endpoints = Array.isArray(webAssets.combined_endpoints) ? webAssets.combined_endpoints.length : 0;
+  const sensitive = Number(webAssets?.sensitive_paths?.count || 0);
+  const dirHits = Number(webAssets?.directory_probe?.hit_count || 0);
+  if (webAssets.enabled || endpoints || sensitive || dirHits) {
+    rows.push(`Web assets / endpoints: ${endpoints} / sensitive paths: ${sensitive} / directory hits: ${dirHits}`);
+  }
+
+  const cveMatches = Array.isArray(serviceRisk?.cve_lookup?.matches) ? serviceRisk.cve_lookup.matches.length : 0;
+  const weakChecks = Array.isArray(serviceRisk?.weak_checks?.findings) ? serviceRisk.weak_checks.findings.length : 0;
+  if (serviceRisk.enabled || cveMatches || weakChecks) {
+    rows.push(`Service risk / CVE matches: ${cveMatches} / weak findings: ${weakChecks}`);
+  }
+
+  appendDockRows(techOutput, rows, "No technology or service risk intelligence loaded.");
 }
 
 function formatSummary(data) {
@@ -701,11 +972,16 @@ function formatSummary(data) {
 
 function renderReport(data, source = "scan") {
   formatSummary(data);
+  renderPortInsights(data);
+  renderTechInsights(data);
   rawOutput.textContent = JSON.stringify(data, null, 2);
   latestReport = data;
   latestReportSource = source;
   updateHudThreatFromReport(data);
   updateHudTargetLock();
+  updateMissionMode();
+  updateMissionFocus();
+  updateExportMeta();
   logLine("Report rendered.", "ok");
 }
 
@@ -715,7 +991,10 @@ function renderNoBackendState(message) {
   item.className = "summary-item";
   item.textContent = message;
   summary.appendChild(item);
+  appendDockRows(portsOutput, [], "No open port intelligence loaded.");
+  appendDockRows(techOutput, [], "No technology or service risk intelligence loaded.");
   rawOutput.textContent = "";
+  updateExportMeta();
 }
 
 function setProgress(value, customText) {
@@ -809,6 +1088,8 @@ function setRunningState(running) {
     setHudTaskState("IDLE");
   }
   updateHudMetrics();
+  updateMissionFocus();
+  updateCoreStatusLine();
 }
 
 function clearPollTimer() {
@@ -1029,7 +1310,12 @@ function clearCurrentScan() {
   item.className = "summary-item";
   item.textContent = "当前扫描结果已清空。";
   summary.appendChild(item);
+  appendDockRows(portsOutput, [], "Open port intelligence will appear here.");
+  appendDockRows(techOutput, [], "Technology and service risk insights will appear here.");
   terminal.innerHTML = "";
+  if (liveEvents) {
+    liveEvents.innerHTML = '<div class="event-line event-line--muted">[standby] console ready. awaiting mission lock.</div>';
+  }
   setProgress(0, "扫描进度：0%");
   if (fileInput) {
     fileInput.value = "";
@@ -1047,6 +1333,9 @@ function clearCurrentScan() {
   setHudTaskState("IDLE");
   setHudThreat("LOW");
   updateHudTargetLock();
+  updateMissionFocus();
+  updateMissionMode();
+  updateExportMeta();
   logLine("已清空当前扫描内容，并关闭全部模块开关。", "ok");
 }
 
@@ -1118,6 +1407,7 @@ moduleToggleInputs.forEach((input) => {
   input.addEventListener("change", updateModuleActiveCount);
 });
 const perfLiteEnabled = applyPerformancePreset();
+initDockTabs();
 initCyberNumberSteppers();
 initMatrixRain();
 initVoidRainPanel();
@@ -1135,6 +1425,9 @@ updateHudTargetLock();
 updateHudClock();
 updateHudSignal();
 updateModuleActiveCount();
+updateMissionMode();
+updateMissionFocus();
+updateExportMeta();
 if (perfLiteEnabled) {
   logLine("已启用流畅模式（自动降特效渲染）。", "ok");
 }
