@@ -413,7 +413,33 @@ body.is-loaded .boot-overlay {
   margin: 0;
   font-size: clamp(2.6rem, 5vw, 5.6rem);
   line-height: 0.94;
-  max-width: 10ch;
+  max-width: 12ch;
+}
+
+.hero-logo-title {
+  display: grid;
+  gap: 0.08em;
+}
+
+.hero-logo-title span {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(92deg, #ff526d 0%, #ffc0dc 16%, #f1fbff 34%, #72e7ff 56%, #4d7bff 80%, #ff526d 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 0 22px rgba(255, 82, 109, 0.14),
+    0 0 34px rgba(77, 123, 255, 0.18),
+    0 0 48px rgba(114, 231, 255, 0.1);
+  animation: heroLogoSpectrum 7.2s linear infinite, heroLogoPulse 3.6s ease-in-out infinite;
+}
+
+.hero-logo-title span:last-child {
+  font-size: 0.62em;
+  letter-spacing: 0.18em;
 }
 
 .hero-copy__lead,
@@ -424,6 +450,10 @@ body.is-loaded .boot-overlay {
   margin: 0;
   color: var(--text-soft);
   line-height: 1.68;
+}
+
+.hero-copy__lead {
+  max-width: 62ch;
 }
 
 .hero-actions {
@@ -857,6 +887,22 @@ body.is-loaded .boot-overlay {
 @keyframes heroRadarSpin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes heroLogoSpectrum {
+  to {
+    background-position: 220% 50%;
+  }
+}
+
+@keyframes heroLogoPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(255, 82, 109, 0)) drop-shadow(0 0 0 rgba(77, 123, 255, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255, 82, 109, 0.18)) drop-shadow(0 0 22px rgba(77, 123, 255, 0.22));
   }
 }
 

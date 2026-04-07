@@ -45,7 +45,7 @@ const threatStates = [
     tone: "STABLE",
     gate: "Console Ready",
     core: "SILENT ACCESS",
-    note: "入口系统保持冷静锁定，等待操作员接管。",
+    note: "The entry system holds a cold lock while waiting for operator takeover.",
     state: "READY TO DEPLOY",
   },
   {
@@ -54,7 +54,7 @@ const threatStates = [
     tone: "TRACKING",
     gate: "Transition Armed",
     core: "SIGNAL LOCK",
-    note: "核心节点正在凝聚视线，主控切换路径已建立。",
+    note: "The core node is drawing attention inward and the console transfer path is already formed.",
     state: "CHANNELS PRIMED",
   },
   {
@@ -63,7 +63,7 @@ const threatStates = [
     tone: "ACTIVE",
     gate: "Corridor Live",
     core: "THREAT LENS",
-    note: "边缘异常被持续观测，系统保持安静的危险感。",
+    note: "Edge anomalies remain under watch while the system preserves a quiet sense of danger.",
     state: "ENTRY WINDOW OPEN",
   },
 ];
