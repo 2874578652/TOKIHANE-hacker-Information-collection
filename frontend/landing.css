@@ -620,7 +620,7 @@ body.is-loaded .boot-overlay {
 }
 
 .core-visual__sweep {
-  inset: 10%;
+  inset: 6%;
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
