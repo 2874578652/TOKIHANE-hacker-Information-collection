@@ -556,6 +556,16 @@ body.is-loaded .boot-overlay {
     linear-gradient(180deg, rgba(10, 18, 26, 0.96), rgba(7, 12, 18, 0.94));
 }
 
+.core-visual__scope {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  height: min(88%, 520px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
 .core-visual__grid,
 .core-visual__ring,
 .core-visual__axis,
