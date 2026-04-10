@@ -79,41 +79,45 @@
 
       <section id="top" class="hero-stage reveal delay-1">
         <div class="hero-copy">
-          <p class="eyebrow">Neo Cyber Minimal / Quiet Recon Presence</p>
-          <h1 class="hero-logo-title">
-            <span>TOKIHANE</span>
-            <span>RECON GATE</span>
-          </h1>
-          <p class="hero-copy__lead">
-            A quiet entry interface for operator-grade reconnaissance. It builds brand tension, stabilizes the signal lane,
-            and hands the operator into the live console without cluttering the landing surface.
-          </p>
+          <div class="hero-copy__intro">
+            <p class="eyebrow">Neo Cyber Minimal / Quiet Recon Presence</p>
+            <h1 class="hero-logo-title">
+              <span>TOKIHANE</span>
+              <span>RECON GATE</span>
+            </h1>
+            <p class="hero-copy__lead">
+              A quiet entry interface for operator-grade reconnaissance. It builds brand tension, stabilizes the signal
+              lane, and hands the operator into the live console without cluttering the landing surface.
+            </p>
+          </div>
 
           <div class="hero-actions">
             <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Launch System</a>
             <a class="hero-button hero-button--ghost" href="#capabilities">View Modules</a>
           </div>
 
-          <div class="hero-meta">
-            <div class="meta-strip">
-              <span>Threat posture</span>
-              <strong id="heroThreatLabel">Watchful</strong>
+          <div class="hero-copy__detail">
+            <div class="hero-meta">
+              <div class="meta-strip">
+                <span>Threat posture</span>
+                <strong id="heroThreatLabel">Watchful</strong>
+              </div>
+              <div class="meta-strip">
+                <span>Gate status</span>
+                <strong id="heroGateStatus">Console Ready</strong>
+              </div>
             </div>
-            <div class="meta-strip">
-              <span>Gate status</span>
-              <strong id="heroGateStatus">Console Ready</strong>
-            </div>
-          </div>
 
-          <div class="hero-feed">
-            <div class="hero-feed__head">
-              <span>ENTRY STREAM</span>
-              <strong id="entryTone">STABLE</strong>
-            </div>
-            <div id="heroFeed" class="hero-feed__body">
-              <div>signal corridor armed for operator presence...</div>
-              <div>entry lattice holding silent transmission posture...</div>
-              <div>console bridge ready for system handoff...</div>
+            <div class="hero-feed">
+              <div class="hero-feed__head">
+                <span>ENTRY STREAM</span>
+                <strong id="entryTone">STABLE</strong>
+              </div>
+              <div id="heroFeed" class="hero-feed__body">
+                <div>signal corridor armed for operator presence...</div>
+                <div>entry lattice holding silent transmission posture...</div>
+                <div>console bridge ready for system handoff...</div>
+              </div>
             </div>
           </div>
         </div>
@@ -175,27 +179,49 @@
           <p>It preserves live-system tension without stealing the console's job. Fewer panels, sharper meaning, stronger entry focus.</p>
         </div>
 
-        <div class="snapshot-grid">
-          <article class="snapshot-card">
-            <span>Threat Level</span>
-            <strong id="snapshotThreat">ELEVATED</strong>
-            <p>Edge anomalies stay contained while the system holds a quiet, dangerous posture.</p>
+        <div class="snapshot-layout">
+          <article class="snapshot-feature">
+            <span class="eyebrow">Signal Curation</span>
+            <h3>Pre-console intelligence is arranged like a deliberate scorecard, not a crowded dashboard.</h3>
+            <p>
+              The landing page now reads in one clean sweep: system mood first, critical indicators second, and console
+              handoff last. That keeps the atmosphere cinematic while the information stays immediately legible.
+            </p>
+
+            <div class="snapshot-feature__rail">
+              <div>
+                <span>Entry Surface</span>
+                <strong>Focused Hero / Guided Handoff</strong>
+              </div>
+              <div>
+                <span>Reading Rhythm</span>
+                <strong>Lead, Signal, Modules, Transition</strong>
+              </div>
+            </div>
           </article>
-          <article class="snapshot-card">
-            <span>Nodes</span>
-            <strong id="snapshotNodes">128</strong>
-            <p>Backbone nodes remain synchronized and the core lattice stays stable.</p>
-          </article>
-          <article class="snapshot-card">
-            <span>Signal</span>
-            <strong id="snapshotSignal">99.1%</strong>
-            <p>The cold channel is intact and the scan corridor is already warmed up.</p>
-          </article>
-          <article class="snapshot-card">
-            <span>Active Modules</span>
-            <strong id="snapshotModules">08</strong>
-            <p>Recon, asset, threat, and export paths are standing by for handoff.</p>
-          </article>
+
+          <div class="snapshot-grid">
+            <article class="snapshot-card">
+              <span>Threat Level</span>
+              <strong id="snapshotThreat">ELEVATED</strong>
+              <p>Edge anomalies stay contained while the system holds a quiet, dangerous posture.</p>
+            </article>
+            <article class="snapshot-card">
+              <span>Nodes</span>
+              <strong id="snapshotNodes">128</strong>
+              <p>Backbone nodes remain synchronized and the core lattice stays stable.</p>
+            </article>
+            <article class="snapshot-card">
+              <span>Signal</span>
+              <strong id="snapshotSignal">99.1%</strong>
+              <p>The cold channel is intact and the scan corridor is already warmed up.</p>
+            </article>
+            <article class="snapshot-card">
+              <span>Active Modules</span>
+              <strong id="snapshotModules">08</strong>
+              <p>Recon, asset, threat, and export paths are standing by for handoff.</p>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -206,27 +232,27 @@
         </div>
 
         <div class="capability-grid">
-          <article class="capability-card capability-card--wide">
+          <article class="capability-card capability-card--feature">
             <span>Recon</span>
             <strong>Targeted scan orchestration</strong>
             <p>One target lock and coordinated modules keep the reconnaissance path readable from first contact.</p>
           </article>
-          <article class="capability-card">
+          <article class="capability-card capability-card--stack">
             <span>Assets</span>
             <strong>Domain / IP / Web graph</strong>
             <p>Assets surface in layers so operators can move from entry to command without losing context.</p>
           </article>
-          <article class="capability-card">
+          <article class="capability-card capability-card--signal">
             <span>Threat</span>
             <strong>Signal and risk correlation</strong>
             <p>Weak posture, CVE links, and hostile noise are compressed into decision-grade summaries.</p>
           </article>
-          <article class="capability-card">
+          <article class="capability-card capability-card--accent">
             <span>Telemetry</span>
             <strong>Live event pulse</strong>
             <p>Live motion remains present, but it only glows where operators actually need attention.</p>
           </article>
-          <article class="capability-card">
+          <article class="capability-card capability-card--compact">
             <span>Export</span>
             <strong>Report ready output</strong>
             <p>Execution, evidence, and output remain part of one continuous system loop.</p>
@@ -243,6 +269,12 @@
               This is where the landing page stops explaining and starts handing off. Scan lines, gate pressure, and
               lock-state feedback push the user out of atmosphere and into operation.
             </p>
+
+            <div class="transition-copy__notes">
+              <span>Editorial split layout</span>
+              <span>Operator-first CTA</span>
+              <span>Low-noise motion cues</span>
+            </div>
           </div>
 
           <div class="transition-gate">

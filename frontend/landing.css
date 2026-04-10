@@ -242,9 +242,9 @@ body.is-loaded .boot-overlay {
 .landing-shell {
   position: relative;
   z-index: 1;
-  width: min(1680px, calc(100vw - 40px));
+  width: min(1720px, calc(100vw - 40px));
   margin: 0 auto;
-  padding: 22px 0 40px;
+  padding: 18px 0 56px;
 }
 
 .gate-nav,
@@ -252,6 +252,7 @@ body.is-loaded .boot-overlay {
 .snapshot-section,
 .capability-section,
 .transition-shell,
+.snapshot-feature,
 .hero-visual__frame,
 .hero-feed,
 .snapshot-card,
@@ -266,6 +267,7 @@ body.is-loaded .boot-overlay {
 .snapshot-section::before,
 .capability-section::before,
 .transition-shell::before,
+.snapshot-feature::before,
 .hero-visual__frame::before,
 .hero-feed::before,
 .snapshot-card::before,
@@ -299,8 +301,12 @@ body.is-loaded .boot-overlay {
   grid-template-columns: minmax(260px, 1fr) auto auto;
   align-items: center;
   gap: 20px;
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin-bottom: 22px;
+  position: sticky;
+  top: 18px;
+  z-index: 6;
+  backdrop-filter: blur(18px);
 }
 
 .gate-nav__brand {
@@ -391,10 +397,10 @@ body.is-loaded .boot-overlay {
 
 .hero-stage {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(480px, 1.1fr);
-  gap: 28px;
-  padding: 42px 36px;
-  min-height: 74vh;
+  grid-template-columns: minmax(0, 5.2fr) minmax(500px, 6fr);
+  gap: 34px;
+  padding: clamp(28px, 3vw, 44px);
+  min-height: clamp(720px, 78vh, 860px);
   background:
     radial-gradient(circle at 70% 30%, rgba(57, 210, 255, 0.08), transparent 34%),
     linear-gradient(180deg, rgba(8, 16, 24, 0.82), rgba(5, 10, 16, 0.92));
@@ -404,9 +410,16 @@ body.is-loaded .boot-overlay {
 
 .hero-copy {
   display: grid;
-  align-content: center;
+  grid-template-rows: auto auto 1fr;
+  gap: 20px;
+  align-content: stretch;
+  padding: 12px 0 10px 4px;
+}
+
+.hero-copy__intro {
+  display: grid;
   gap: 18px;
-  padding: 18px 0;
+  max-width: 720px;
 }
 
 .hero-copy h1 {
@@ -456,6 +469,14 @@ body.is-loaded .boot-overlay {
   max-width: 62ch;
 }
 
+.hero-copy__detail {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+  margin-top: auto;
+}
+
 .hero-actions {
   display: flex;
   gap: 12px;
@@ -464,12 +485,15 @@ body.is-loaded .boot-overlay {
 
 .hero-meta {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
 .meta-strip {
-  padding: 14px 16px;
+  display: grid;
+  align-content: start;
+  min-height: 108px;
+  padding: 16px 18px;
   background: rgba(8, 16, 24, 0.82);
   border-left: 2px solid rgba(97, 255, 228, 0.16);
 }
@@ -492,7 +516,8 @@ body.is-loaded .boot-overlay {
 }
 
 .hero-feed {
-  padding: 16px 18px;
+  min-height: 100%;
+  padding: 18px 20px;
   background: rgba(8, 16, 24, 0.74);
   border: 1px solid rgba(97, 255, 228, 0.08);
 }
@@ -520,16 +545,19 @@ body.is-loaded .boot-overlay {
 
 .hero-visual {
   display: grid;
-  align-content: center;
+  align-content: stretch;
 }
 
 .hero-visual__frame {
-  padding: 22px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 20px;
+  min-height: 100%;
+  padding: 24px;
   background:
     radial-gradient(circle at center, rgba(97, 255, 228, 0.08), transparent 38%),
     linear-gradient(180deg, rgba(9, 18, 26, 0.94), rgba(6, 12, 18, 0.96));
   border: 1px solid rgba(97, 255, 228, 0.1);
-  min-height: 720px;
 }
 
 .hero-visual__labels {
@@ -548,7 +576,7 @@ body.is-loaded .boot-overlay {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 560px;
+  min-height: clamp(500px, 58vh, 640px);
   overflow: hidden;
   border: 1px solid rgba(97, 255, 228, 0.08);
   background:
@@ -723,7 +751,6 @@ body.is-loaded .boot-overlay {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 18px;
 }
 
 .readout-card {
@@ -744,12 +771,12 @@ body.is-loaded .boot-overlay {
 .snapshot-section,
 .capability-section {
   margin-top: 22px;
-  padding: 28px;
+  padding: 32px;
 }
 
 .section-heading {
-  max-width: 860px;
-  margin-bottom: 22px;
+  max-width: 780px;
+  margin-bottom: 24px;
 }
 
 .section-heading h2,
@@ -758,14 +785,80 @@ body.is-loaded .boot-overlay {
   font-size: clamp(1.45rem, 2.2vw, 2.4rem);
 }
 
+.snapshot-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.86fr) minmax(0, 1.14fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.snapshot-feature {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(57, 210, 255, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(10, 21, 30, 0.9), rgba(6, 13, 20, 0.94));
+  border: 1px solid rgba(97, 255, 228, 0.08);
+  box-shadow: var(--glow-soft);
+}
+
+.snapshot-feature h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.45rem, 2vw, 2.15rem);
+  line-height: 1.08;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.snapshot-feature p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.72;
+}
+
+.snapshot-feature__rail {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.snapshot-feature__rail div {
+  padding: 14px 16px;
+  background: rgba(7, 16, 23, 0.82);
+  border: 1px solid rgba(97, 255, 228, 0.08);
+}
+
+.snapshot-feature__rail span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.snapshot-feature__rail strong {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .snapshot-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .snapshot-card {
-  padding: 18px 18px 20px;
+  display: grid;
+  align-content: start;
+  min-height: 196px;
+  padding: 20px 18px 22px;
   background: linear-gradient(180deg, rgba(11, 22, 31, 0.9), rgba(8, 16, 23, 0.72));
   border: 1px solid rgba(97, 255, 228, 0.08);
   box-shadow: var(--glow-soft);
@@ -783,21 +876,47 @@ body.is-loaded .boot-overlay {
 .capability-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 14px;
+  grid-auto-rows: minmax(176px, auto);
+  gap: 16px;
 }
 
 .capability-card {
-  grid-column: span 3;
-  min-height: 220px;
-  padding: 22px;
+  display: grid;
+  align-content: start;
+  gap: 0;
+  min-height: 0;
+  padding: 24px;
   background:
     linear-gradient(180deg, rgba(10, 20, 28, 0.9), rgba(6, 13, 20, 0.92)),
     var(--panel);
   border: 1px solid rgba(97, 255, 228, 0.08);
 }
 
-.capability-card--wide {
+.capability-card--feature {
+  grid-column: span 5;
+  grid-row: span 2;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(57, 210, 255, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(10, 20, 28, 0.9), rgba(6, 13, 20, 0.96));
+}
+
+.capability-card--stack {
+  grid-column: span 3;
+}
+
+.capability-card--signal {
   grid-column: span 4;
+}
+
+.capability-card--accent {
+  grid-column: span 4;
+  background:
+    linear-gradient(135deg, rgba(255, 82, 109, 0.09), transparent 42%),
+    linear-gradient(180deg, rgba(10, 20, 28, 0.92), rgba(6, 13, 20, 0.92));
+}
+
+.capability-card--compact {
+  grid-column: span 3;
 }
 
 .capability-card strong {
@@ -815,19 +934,40 @@ body.is-loaded .boot-overlay {
 
 .transition-shell {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(380px, 1fr);
+  grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
   gap: 24px;
-  padding: 30px;
+  padding: 32px;
 }
 
 .transition-copy {
   display: grid;
   align-content: center;
+  gap: 16px;
+}
+
+.transition-copy__notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.transition-copy__notes span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(97, 255, 228, 0.1);
+  background: rgba(8, 16, 24, 0.8);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-soft);
 }
 
 .transition-gate {
   position: relative;
-  min-height: 340px;
+  min-height: 380px;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -848,7 +988,9 @@ body.is-loaded .boot-overlay {
 .transition-gate__panel {
   position: relative;
   z-index: 1;
-  width: min(88%, 440px);
+  display: grid;
+  gap: 12px;
+  width: min(88%, 480px);
   padding: 26px;
   background: rgba(8, 16, 24, 0.78);
   border: 1px solid rgba(97, 255, 228, 0.1);
@@ -956,20 +1098,28 @@ body.is-loaded .boot-overlay {
   }
 
   .hero-stage,
+  .snapshot-layout,
   .transition-shell {
     grid-template-columns: 1fr;
+  }
+
+  .hero-copy__detail {
+    grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1fr);
   }
 
   .hero-visual__frame {
     min-height: auto;
   }
 
-  .snapshot-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .capability-card--feature {
+    grid-column: span 12;
+    grid-row: auto;
   }
 
-  .capability-card,
-  .capability-card--wide {
+  .capability-card--stack,
+  .capability-card--signal,
+  .capability-card--accent,
+  .capability-card--compact {
     grid-column: span 6;
   }
 }
@@ -985,7 +1135,7 @@ body.is-loaded .boot-overlay {
   .snapshot-section,
   .capability-section,
   .transition-shell {
-    padding: 16px;
+    padding: 18px;
   }
 
   .hero-copy h1 {
@@ -993,14 +1143,22 @@ body.is-loaded .boot-overlay {
     font-size: clamp(2.2rem, 12vw, 4rem);
   }
 
+  .hero-copy__detail,
   .hero-meta,
   .snapshot-grid,
   .hero-visual__readouts {
     grid-template-columns: 1fr;
   }
 
-  .capability-card,
-  .capability-card--wide {
+  .snapshot-feature {
+    padding: 20px;
+  }
+
+  .capability-card--feature,
+  .capability-card--stack,
+  .capability-card--signal,
+  .capability-card--accent,
+  .capability-card--compact {
     grid-column: span 12;
     min-height: auto;
   }
@@ -1016,6 +1174,10 @@ body.is-loaded .boot-overlay {
 }
 
 @media (max-width: 640px) {
+  .gate-nav {
+    position: static;
+  }
+
   .gate-nav__links {
     gap: 12px;
   }
@@ -1031,6 +1193,10 @@ body.is-loaded .boot-overlay {
 
   .hero-actions {
     flex-direction: column;
+  }
+
+  .snapshot-feature__rail {
+    grid-template-columns: 1fr;
   }
 
   .core-visual__ring--outer {

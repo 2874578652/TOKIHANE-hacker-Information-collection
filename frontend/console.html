@@ -21,34 +21,37 @@
     <main class="console-shell">
       <div class="console-frame">
         <header class="hud-top reveal">
-          <div class="brand-block">
-            <div class="logo-mark" aria-hidden="true">
-              <svg viewBox="0 0 120 120" role="img">
-                <defs>
-                  <linearGradient id="logoNeonA" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#7fffd4" />
-                    <stop offset="100%" stop-color="#39d0ff" />
-                  </linearGradient>
-                </defs>
-                <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#logoNeonA)" stroke-width="4" />
-                <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#logoNeonA)" opacity="0.9" />
-                <path d="M52 55h16v30H52z" fill="#97ffe2" opacity="0.88" />
-                <path d="M44 66h32v6H62v14h-4V72H44z" fill="#0a151d" opacity="0.88" />
-              </svg>
+          <div class="hud-top__lead">
+            <div class="brand-block">
+              <div class="logo-mark" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img">
+                  <defs>
+                    <linearGradient id="logoNeonA" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#7fffd4" />
+                      <stop offset="100%" stop-color="#39d0ff" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#logoNeonA)" stroke-width="4" />
+                  <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#logoNeonA)" opacity="0.9" />
+                  <path d="M52 55h16v30H52z" fill="#97ffe2" opacity="0.88" />
+                  <path d="M44 66h32v6H62v14h-4V72H44z" fill="#0a151d" opacity="0.88" />
+                </svg>
+              </div>
+
+              <div class="brand-copy">
+                <p class="eyebrow">TOKIHANE / NEO CYBER MINIMAL</p>
+                <h1>Tactical Recon Console</h1>
+                <p class="logo-sub">Quiet breach posture / future terminal / operator-grade control</p>
+              </div>
+
+              <a href="./" class="console-home-link">Back to Gate</a>
             </div>
 
-            <div class="brand-copy">
-              <p class="eyebrow">TOKIHANE / NEO CYBER MINIMAL</p>
-              <h1>Tactical Recon Console</h1>
-              <p class="logo-sub">Quiet breach posture / future terminal / operator-grade control</p>
+            <div class="status-focus">
+              <span class="eyebrow">CURRENT TARGET</span>
+              <strong id="statusTarget">UNASSIGNED</strong>
+              <p>Primary mission context stays pinned beside the brand block so the whole console reads from one focal lane.</p>
             </div>
-
-            <a href="./" class="console-home-link">Back to Gate</a>
-          </div>
-
-          <div class="status-focus">
-            <span class="eyebrow">CURRENT TARGET</span>
-            <strong id="statusTarget">UNASSIGNED</strong>
           </div>
 
           <div class="hud-cards">
@@ -280,6 +283,7 @@
             <div class="center-stage__head">
               <span class="zone-code">CORE/02</span>
               <h2>Radar Core</h2>
+              <p>The active visualization, module detail dock, and readout stream stay stacked in one deliberate center column.</p>
             </div>
 
             <section class="recon-core control-zone">
@@ -456,9 +460,15 @@
 
         <section class="bottom-console reveal delay-2">
           <div class="dock-head">
-            <div>
+            <div class="dock-head__copy">
               <span class="eyebrow">RESULT DOCK</span>
               <h2>Outcome Bays</h2>
+              <p>Assets, ports, tech, logs, and export output now read as one modular result system instead of disconnected panels.</p>
+            </div>
+
+            <div class="dock-head__meta">
+              <span>Dock Layout</span>
+              <strong>5 Bays / Live Sync</strong>
             </div>
           </div>
 
