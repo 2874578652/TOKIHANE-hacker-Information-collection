@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKIHANE // RECON CONSOLE</title>
+    <title>TOKIHANE // SCAN WORKSPACE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -39,18 +39,18 @@
               </div>
 
               <div class="brand-copy">
-                <p class="eyebrow">TOKIHANE / NEO CYBER MINIMAL</p>
-                <h1>Tactical Recon Console</h1>
-                <p class="logo-sub">Quiet breach posture / future terminal / operator-grade control</p>
+                <p class="eyebrow">TOKIHANE / TARGET INTELLIGENCE</p>
+                <h1>Attack Surface Workspace</h1>
+                <p class="logo-sub">Domain, IP, port, and web asset scanning</p>
               </div>
 
-              <a href="./" class="console-home-link">Back to Gate</a>
+              <a href="./" class="console-home-link">Back to Overview</a>
             </div>
 
             <div class="status-focus">
               <span class="eyebrow">CURRENT TARGET</span>
-              <strong id="statusTarget">UNASSIGNED</strong>
-              <p>Primary mission context stays pinned beside the brand block so the whole console reads from one focal lane.</p>
+              <strong id="statusTarget">NO TARGET</strong>
+              <p>Target, scan scope, and result status stay visible while collection is running.</p>
             </div>
           </div>
 
@@ -78,13 +78,13 @@
           <aside class="control-sidebar control-zone">
             <header class="zone-head">
               <span class="zone-code">OPS/01</span>
-              <h2>Control Panel</h2>
+              <h2>Scan Controls</h2>
             </header>
 
             <section class="stack-section">
               <div class="section-head">
                 <span>TARGET INPUT</span>
-                <strong>LOCK VECTOR</strong>
+                <strong>TARGET SETUP</strong>
               </div>
 
               <label class="input-block">
@@ -114,7 +114,7 @@
             <section class="stack-section">
               <div class="section-head">
                 <span>SCAN MODE</span>
-                <strong>PROFILE SELECT</strong>
+                <strong>SCAN PROFILE</strong>
               </div>
 
               <label class="input-block">
@@ -164,7 +164,7 @@
             <section class="stack-section">
               <div class="section-head">
                 <span>MODULES</span>
-                <strong>FEATURE MATRIX</strong>
+                <strong>SCAN SOURCES</strong>
               </div>
 
               <div class="module-grid">
@@ -253,7 +253,7 @@
             <section class="stack-section stack-section--actions">
               <div class="section-head">
                 <span>ACTIONS</span>
-                <strong>EXECUTION</strong>
+                <strong>RUN SCAN</strong>
               </div>
 
               <div class="action-rack">
@@ -269,7 +269,7 @@
 
               <div class="progress-wrap">
                 <div class="progress-meta">
-                  <span class="eyebrow">EXECUTION TRACK</span>
+                  <span class="eyebrow">SCAN PROGRESS</span>
                   <strong id="progressText">扫描进度：0%</strong>
                 </div>
                 <div class="progress-track">
@@ -283,17 +283,17 @@
             <div class="center-stage__head">
               <span class="zone-code">CORE/02</span>
               <h2>Radar Core</h2>
-              <p>The active visualization, module detail dock, and readout stream stay stacked in one deliberate center column.</p>
+              <p>Review the active target, live scan status, and module output from the central analysis view.</p>
             </div>
 
             <section class="recon-core control-zone">
               <div class="core-ribbon">
                 <div class="core-ribbon__cell">
-                  <span>TARGET LOCK</span>
-                  <strong id="hudTargetLock">WAITING...</strong>
+                  <span>TARGET</span>
+                  <strong id="hudTargetLock">ENTER TARGET</strong>
                 </div>
                 <div class="core-ribbon__cell">
-                  <span>MODULE ACTIVE</span>
+                  <span>MODULES ON</span>
                   <strong id="hudModuleActive">0</strong>
                 </div>
                 <div class="core-ribbon__cell">
@@ -314,31 +314,31 @@
                   <span class="radar-axis radar-axis--diag-b"></span>
                   <span class="radar-sweep"></span>
                   <canvas id="voidRainPanel" class="void-rain-canvas"></canvas>
-                  <span class="radar-node radar-node--n1"><i></i><em>EDGE 01</em></span>
-                  <span class="radar-node radar-node--n2"><i></i><em>PORT MAP</em></span>
-                  <span class="radar-node radar-node--n3"><i></i><em>DNS TRACE</em></span>
-                  <span class="radar-node radar-node--n4"><i></i><em>WEB GRAPH</em></span>
-                  <span class="radar-node radar-node--n5"><i></i><em>RISK LINK</em></span>
+                  <span class="radar-node radar-node--n1"><i></i><em>HOST</em></span>
+                  <span class="radar-node radar-node--n2"><i></i><em>PORTS</em></span>
+                  <span class="radar-node radar-node--n3"><i></i><em>DNS</em></span>
+                  <span class="radar-node radar-node--n4"><i></i><em>WEB</em></span>
+                  <span class="radar-node radar-node--n5"><i></i><em>RISK</em></span>
                 </div>
 
                 <div class="radar-center">
-                  <span class="radar-center__eyebrow">PRIMARY SIGNATURE</span>
+                  <span class="radar-center__eyebrow">ACTIVE TARGET</span>
                   <strong id="coreTargetEcho">NO TARGET</strong>
-                  <p id="coreStatusLine">Recon core in standby. Awaiting operator input.</p>
+                  <p id="coreStatusLine">Scan engine idle. Enter a target to begin.</p>
                 </div>
 
                 <div class="radar-readouts">
                   <article class="metric-card">
-                    <span>PACKET FLOW</span>
+                    <span>DATA FLOW</span>
                     <strong id="hudPacketFlow">0 kb/s</strong>
                   </article>
                   <article class="metric-card">
-                    <span>SIGNAL LANE</span>
-                    <strong id="coreSignalLane">PASSIVE</strong>
+                    <span>SCAN STATE</span>
+                    <strong id="coreSignalLane">IDLE</strong>
                   </article>
                   <article class="metric-card">
-                    <span>STATE VECTOR</span>
-                    <strong id="coreStateVector">COLD</strong>
+                    <span>TASK STATE</span>
+                    <strong id="coreStateVector">IDLE</strong>
                   </article>
                 </div>
               </div>
@@ -346,11 +346,11 @@
 
             <section id="moduleConfigStage" class="module-config-stage module-config-stage--center">
               <header class="module-config-head">
-                <span>CONFIG SPACE</span>
-                <h2>Module Detail Dock</h2>
+                <span>MODULE CONFIG</span>
+                <h2>Scan Module Settings</h2>
               </header>
 
-              <div id="moduleConfigEmpty" class="module-config-empty">Enable modules to load detail panels here.</div>
+              <div id="moduleConfigEmpty" class="module-config-empty">Enable a module to view its scan settings.</div>
 
               <div class="module-config-grid">
                 <div id="vtOptions" class="port-options-panel is-closed">
@@ -363,7 +363,7 @@
 
                 <div id="portScanOptions" class="port-options-panel is-closed">
                   <h3 class="module-config-title">端口扫描配置</h3>
-                  <p class="config-note">Scan mode, protocol, and timeout are configured in the left control panel.</p>
+                  <p class="config-note">Scan mode, protocol, and timeout are configured in the left scan controls.</p>
                 </div>
 
                 <div id="asnOptions" class="port-options-panel is-closed">
@@ -413,17 +413,17 @@
             <section class="intel-panel control-zone">
               <header class="zone-head zone-head--compact">
                 <span class="zone-code">INTEL/03</span>
-                <h2>Mission Summary</h2>
+                <h2>Scan Summary</h2>
               </header>
 
               <div id="missionBrief" class="summary-grid">
                 <article class="summary-card">
                   <span>Target</span>
-                  <strong id="missionTarget">UNASSIGNED</strong>
+                  <strong id="missionTarget">NO TARGET</strong>
                 </article>
                 <article class="summary-card">
                   <span>Focus</span>
-                  <strong id="missionFocus">Passive Sweep</strong>
+                  <strong id="missionFocus">Ready to Scan</strong>
                 </article>
                 <article class="summary-card">
                   <span>Mode</span>
@@ -443,7 +443,7 @@
               </header>
 
               <div id="liveEvents" class="live-events">
-                <div class="event-line event-line--muted">[standby] console ready. awaiting mission lock.</div>
+                <div class="event-line event-line--muted">[standby] scan workspace ready. enter a target to begin.</div>
               </div>
             </section>
 
@@ -461,14 +461,14 @@
         <section class="bottom-console reveal delay-2">
           <div class="dock-head">
             <div class="dock-head__copy">
-              <span class="eyebrow">RESULT DOCK</span>
-              <h2>Outcome Bays</h2>
-              <p>Assets, ports, tech, logs, and export output now read as one modular result system instead of disconnected panels.</p>
+              <span class="eyebrow">SCAN RESULTS</span>
+              <h2>Findings and Output</h2>
+              <p>Review assets, open ports, technologies, logs, and export data for the active target.</p>
             </div>
 
             <div class="dock-head__meta">
-              <span>Dock Layout</span>
-              <strong>5 Bays / Live Sync</strong>
+              <span>Result Tabs</span>
+              <strong>5 Views / Live Update</strong>
             </div>
           </div>
 
@@ -483,19 +483,19 @@
           <div class="dock-panels">
             <section class="dock-panel is-active" data-panel="assets" role="tabpanel">
               <div id="summary" class="summary">
-                <div class="summary-item">No data loaded.</div>
+                <div class="summary-item">Run a scan or load a report to view results.</div>
               </div>
             </section>
 
             <section class="dock-panel" data-panel="ports" role="tabpanel" hidden>
               <div id="portsOutput" class="dock-list dock-list--ports">
-                <div class="summary-item">Open port intelligence will appear here.</div>
+                <div class="summary-item">Open ports and service banners will appear here.</div>
               </div>
             </section>
 
             <section class="dock-panel" data-panel="tech" role="tabpanel" hidden>
               <div id="techOutput" class="dock-list">
-                <div class="summary-item">Technology and service risk insights will appear here.</div>
+                <div class="summary-item">Technologies, fingerprints, and service risk findings will appear here.</div>
               </div>
             </section>
 
@@ -508,11 +508,11 @@
                 <div class="export-summary">
                   <article class="summary-card">
                     <span>Source</span>
-                    <strong id="exportSource">NO REPORT</strong>
+                    <strong id="exportSource">NO DATA</strong>
                   </article>
                   <article class="summary-card">
                     <span>Target</span>
-                    <strong id="exportTarget">UNASSIGNED</strong>
+                    <strong id="exportTarget">NO TARGET</strong>
                   </article>
                 </div>
                 <pre id="rawOutput" class="raw-output"></pre>

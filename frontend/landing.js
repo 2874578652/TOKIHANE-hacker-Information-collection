@@ -22,57 +22,57 @@ const launchButton = document.getElementById("launchButton");
 const enterButton = document.getElementById("enterButton");
 
 const bootMessages = [
-  "[boot] aligning silent access corridor...",
-  "[boot] stabilizing cyan lattice envelope...",
-  "[boot] preparing console handoff sequence...",
-  "[boot] verifying low-noise HUD channels...",
-  "[boot] confirming operator-ready transition gate...",
+  "[boot] loading target intelligence engine...",
+  "[boot] syncing domain and asset collectors...",
+  "[boot] preparing scan workspace...",
+  "[boot] verifying DNS, web, and service probes...",
+  "[boot] confirming export and report handlers...",
 ];
 
 const feedMessages = [
-  "entry corridor secured through cold channel seven...",
-  "future terminal posture remains stable and silent...",
-  "recon bridge prepared for module handoff...",
-  "threat lattice monitoring edge anomalies...",
-  "lock vector calibrated for console transition...",
-  "system gate holding quiet breach stance...",
+  "target input queue is ready for domains, URLs, and IPs...",
+  "dns, certificate, and web collectors are standing by...",
+  "service checks are prepared for the next live scan...",
+  "risk review pipeline is waiting for new findings...",
+  "workspace telemetry is synced with scan modules...",
+  "json export handler is ready for completed results...",
 ];
 
 const threatStates = [
   {
-    threat: "WATCHFUL",
-    pulse: "ELEVATED",
-    tone: "STABLE",
-    gate: "Console Ready",
-    core: "SILENT ACCESS",
-    note: "The entry system holds a cold lock while waiting for operator takeover.",
-    state: "READY TO DEPLOY",
+    threat: "MONITORED",
+    pulse: "LOW",
+    tone: "READY",
+    gate: "Scanner Ready",
+    core: "TARGET READY",
+    note: "Enter a domain, URL, or IP to start collection.",
+    state: "READY FOR SCAN",
   },
   {
-    threat: "FOCUSED",
+    threat: "REVIEW",
     pulse: "TRACKED",
-    tone: "TRACKING",
-    gate: "Transition Armed",
-    core: "SIGNAL LOCK",
-    note: "The core node is drawing attention inward and the console transfer path is already formed.",
-    state: "CHANNELS PRIMED",
+    tone: "SYNCED",
+    gate: "Sources Online",
+    core: "ASSET DISCOVERY",
+    note: "Collectors are staged for DNS, web assets, and service enumeration.",
+    state: "MODULES ONLINE",
   },
   {
     threat: "ELEVATED",
     pulse: "HOT",
     tone: "ACTIVE",
-    gate: "Corridor Live",
-    core: "THREAT LENS",
-    note: "Edge anomalies remain under watch while the system preserves a quiet sense of danger.",
-    state: "ENTRY WINDOW OPEN",
+    gate: "Scan Queue Live",
+    core: "RISK REVIEW",
+    note: "Reputation, exposed services, and web assets will be correlated after submission.",
+    state: "COLLECTION ACTIVE",
   },
 ];
 
 const vectors = [
-  "LOCK VECTOR / 024.110 / 121.470",
-  "LOCK VECTOR / 031.886 / 117.204",
-  "LOCK VECTOR / 022.543 / 114.057",
-  "LOCK VECTOR / 039.904 / 116.407",
+  "TARGET GRID / 024.110 / 121.470",
+  "TARGET GRID / 031.886 / 117.204",
+  "TARGET GRID / 022.543 / 114.057",
+  "TARGET GRID / 039.904 / 116.407",
 ];
 
 let feedIndex = 0;

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKIHANE // SYSTEM GATE</title>
+    <title>TOKIHANE // ATTACK SURFACE SCANNER</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,18 +14,18 @@
     <link rel="stylesheet" href="./landing-effects.css" />
   </head>
   <body>
-    <div id="bootOverlay" class="boot-overlay">
-      <div class="boot-overlay__grid"></div>
-      <div class="boot-overlay__content">
-        <p class="eyebrow">TOKIHANE / SYSTEM GATE</p>
-        <h1>Initializing Neo Recon Entry</h1>
-        <div id="bootFeed" class="boot-feed">
-          <span>[boot] aligning silent access corridor...</span>
-          <span>[boot] stabilizing cyan lattice envelope...</span>
-          <span>[boot] preparing console handoff sequence...</span>
+      <div id="bootOverlay" class="boot-overlay">
+        <div class="boot-overlay__grid"></div>
+        <div class="boot-overlay__content">
+          <p class="eyebrow">TOKIHANE / SCAN PLATFORM</p>
+          <h1>Initializing Target Intelligence</h1>
+          <div id="bootFeed" class="boot-feed">
+            <span>[boot] loading target intelligence engine...</span>
+            <span>[boot] syncing domain and asset collectors...</span>
+            <span>[boot] preparing scan workspace...</span>
+          </div>
         </div>
       </div>
-    </div>
 
     <canvas id="laserRain" class="fx-canvas laser-rain"></canvas>
     <canvas id="particleField" class="fx-canvas particle-field"></canvas>
@@ -53,15 +53,15 @@
             </svg>
           </div>
           <div>
-            <span class="eyebrow">TOKIHANE / GATEWAY</span>
-            <strong>Neo Recon Interface</strong>
+            <span class="eyebrow">TOKIHANE / SCANNER</span>
+            <strong>Attack Surface Scanner</strong>
           </div>
         </a>
 
         <nav class="gate-nav__links" aria-label="Primary">
-          <a href="#snapshot">Snapshot</a>
-          <a href="#capabilities">Capabilities</a>
-          <a href="#transition">Access</a>
+          <a href="#snapshot">Overview</a>
+          <a href="#capabilities">Modules</a>
+          <a href="#transition">Workspace</a>
         </nav>
 
         <div class="gate-nav__status">
@@ -73,50 +73,50 @@
             <span>UTC+8</span>
             <strong id="navClock">--:--:--</strong>
           </div>
-          <a id="launchButton" class="launch-button" href="./console.html">Enter Console</a>
+          <a id="launchButton" class="launch-button" href="./console.html">Open Scanner</a>
         </div>
       </header>
 
       <section id="top" class="hero-stage reveal delay-1">
         <div class="hero-copy">
           <div class="hero-copy__intro">
-            <p class="eyebrow">Neo Cyber Minimal / Quiet Recon Presence</p>
+            <p class="eyebrow">Attack Surface Discovery / Domain, IP, and Web Intelligence</p>
             <h1 class="hero-logo-title">
               <span>TOKIHANE</span>
-              <span>RECON GATE</span>
+              <span>SCAN WORKSPACE</span>
             </h1>
             <p class="hero-copy__lead">
-              A quiet entry interface for operator-grade reconnaissance. It builds brand tension, stabilizes the signal
-              lane, and hands the operator into the live console without cluttering the landing surface.
+              Discover domains, IP addresses, exposed services, web assets, and risk signals from one workspace. Start
+              with a target, choose the right modules, and move into live scan results without leaving the platform.
             </p>
           </div>
 
           <div class="hero-actions">
-            <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Launch System</a>
+            <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Open Workspace</a>
             <a class="hero-button hero-button--ghost" href="#capabilities">View Modules</a>
           </div>
 
           <div class="hero-copy__detail">
             <div class="hero-meta">
               <div class="meta-strip">
-                <span>Threat posture</span>
-                <strong id="heroThreatLabel">Watchful</strong>
+                <span>Risk posture</span>
+                <strong id="heroThreatLabel">Monitored</strong>
               </div>
               <div class="meta-strip">
-                <span>Gate status</span>
-                <strong id="heroGateStatus">Console Ready</strong>
+                <span>Workspace</span>
+                <strong id="heroGateStatus">Scanner Ready</strong>
               </div>
             </div>
 
             <div class="hero-feed">
               <div class="hero-feed__head">
-                <span>ENTRY STREAM</span>
-                <strong id="entryTone">STABLE</strong>
+                <span>SCAN FEED</span>
+                <strong id="entryTone">READY</strong>
               </div>
               <div id="heroFeed" class="hero-feed__body">
-                <div>signal corridor armed for operator presence...</div>
-                <div>entry lattice holding silent transmission posture...</div>
-                <div>console bridge ready for system handoff...</div>
+                <div>target input queue is ready for domains, URLs, and IPs...</div>
+                <div>asset collectors are synced for DNS, ports, and web discovery...</div>
+                <div>scan workspace is ready to launch the next task...</div>
               </div>
             </div>
           </div>
@@ -125,8 +125,8 @@
         <div class="hero-visual">
           <div class="hero-visual__frame">
             <div class="hero-visual__labels">
-              <span>RECON CORE / ENTRY FOCUS</span>
-              <strong id="heroVector">LOCK VECTOR / 024.110 / 121.470</strong>
+              <span>ASSET RADAR / TARGET OVERVIEW</span>
+              <strong id="heroVector">TARGET GRID / 024.110 / 121.470</strong>
             </div>
 
             <div class="core-visual" aria-hidden="true">
@@ -148,23 +148,23 @@
               </div>
 
               <div class="core-visual__center">
-                <span>ENTRY CORE</span>
-                <strong id="heroCoreState">SILENT ACCESS</strong>
-                <p id="heroCoreNote">Awaiting operator transfer into the live console.</p>
+                <span>SCAN CORE</span>
+                <strong id="heroCoreState">TARGET READY</strong>
+                <p id="heroCoreNote">Enter a domain, URL, or IP to start collection.</p>
               </div>
             </div>
 
             <div class="hero-visual__readouts">
               <div class="readout-card">
-                <span>Packet Flow</span>
+                <span>Asset Flow</span>
                 <strong id="heroPacket">682 KB/S</strong>
               </div>
               <div class="readout-card">
-                <span>Node Sync</span>
+                <span>Collectors</span>
                 <strong id="heroNodeSync">128 / 128</strong>
               </div>
               <div class="readout-card">
-                <span>Threat Pulse</span>
+                <span>Risk Level</span>
                 <strong id="heroPulse">ELEVATED</strong>
               </div>
             </div>
@@ -174,28 +174,28 @@
 
       <section id="snapshot" class="snapshot-section reveal delay-2">
         <div class="section-heading">
-          <span class="eyebrow">System Snapshot</span>
-          <h2>Only the critical pre-console signals live on the landing page.</h2>
-          <p>It preserves live-system tension without stealing the console's job. Fewer panels, sharper meaning, stronger entry focus.</p>
+          <span class="eyebrow">Scan Snapshot</span>
+          <h2>Key metrics before you start a target scan.</h2>
+          <p>Check platform health, collector readiness, and enabled modules before opening the live scan workspace.</p>
         </div>
 
         <div class="snapshot-layout">
           <article class="snapshot-feature">
-            <span class="eyebrow">Signal Curation</span>
-            <h3>Pre-console intelligence is arranged like a deliberate scorecard, not a crowded dashboard.</h3>
+            <span class="eyebrow">Scan Coverage</span>
+            <h3>Start from one target and expand into domains, IPs, services, and web assets.</h3>
             <p>
-              The landing page now reads in one clean sweep: system mood first, critical indicators second, and console
-              handoff last. That keeps the atmosphere cinematic while the information stays immediately legible.
+              Submit a single domain, URL, or IP, then pivot through passive intelligence, certificate history, port
+              discovery, service checks, and web enumeration in one scan flow.
             </p>
 
             <div class="snapshot-feature__rail">
               <div>
-                <span>Entry Surface</span>
-                <strong>Focused Hero / Guided Handoff</strong>
+                <span>Target Input</span>
+                <strong>Domain, URL, or IP</strong>
               </div>
               <div>
-                <span>Reading Rhythm</span>
-                <strong>Lead, Signal, Modules, Transition</strong>
+                <span>Output Scope</span>
+                <strong>Assets, Ports, Tech, Reports</strong>
               </div>
             </div>
           </article>
@@ -204,22 +204,22 @@
             <article class="snapshot-card">
               <span>Threat Level</span>
               <strong id="snapshotThreat">ELEVATED</strong>
-              <p>Edge anomalies stay contained while the system holds a quiet, dangerous posture.</p>
+              <p>Risk signals combine exposure, reputation, and service findings for quick review.</p>
             </article>
             <article class="snapshot-card">
               <span>Nodes</span>
               <strong id="snapshotNodes">128</strong>
-              <p>Backbone nodes remain synchronized and the core lattice stays stable.</p>
+              <p>Collectors and analysis workers remain synchronized for the next target.</p>
             </article>
             <article class="snapshot-card">
               <span>Signal</span>
               <strong id="snapshotSignal">99.1%</strong>
-              <p>The cold channel is intact and the scan corridor is already warmed up.</p>
+              <p>Platform connectivity is healthy and ready for external lookups.</p>
             </article>
             <article class="snapshot-card">
               <span>Active Modules</span>
               <strong id="snapshotModules">08</strong>
-              <p>Recon, asset, threat, and export paths are standing by for handoff.</p>
+              <p>Discovery and enrichment modules can be combined for each target.</p>
             </article>
           </div>
         </div>
@@ -227,35 +227,35 @@
 
       <section id="capabilities" class="capability-section reveal">
         <div class="section-heading">
-          <span class="eyebrow">Capability Section</span>
-          <h2>Core capabilities appear as ordered modules, not as dashboard debris on the entry page.</h2>
+          <span class="eyebrow">Scan Modules</span>
+          <h2>Core modules for discovery, enrichment, and risk review.</h2>
         </div>
 
         <div class="capability-grid">
           <article class="capability-card capability-card--feature">
             <span>Recon</span>
-            <strong>Targeted scan orchestration</strong>
-            <p>One target lock and coordinated modules keep the reconnaissance path readable from first contact.</p>
+            <strong>Target intake and scan orchestration</strong>
+            <p>Submit a domain, URL, or IP and dispatch the right collection pipeline in one place.</p>
           </article>
           <article class="capability-card capability-card--stack">
             <span>Assets</span>
-            <strong>Domain / IP / Web graph</strong>
-            <p>Assets surface in layers so operators can move from entry to command without losing context.</p>
+            <strong>Domain / IP / Web mapping</strong>
+            <p>Expand hosts, subdomains, endpoints, and ownership clues into one investigation trail.</p>
           </article>
           <article class="capability-card capability-card--signal">
             <span>Threat</span>
-            <strong>Signal and risk correlation</strong>
-            <p>Weak posture, CVE links, and hostile noise are compressed into decision-grade summaries.</p>
+            <strong>Reputation and service risk review</strong>
+            <p>Combine exposure, IOC context, and service findings into a faster triage workflow.</p>
           </article>
           <article class="capability-card capability-card--accent">
             <span>Telemetry</span>
-            <strong>Live event pulse</strong>
-            <p>Live motion remains present, but it only glows where operators actually need attention.</p>
+            <strong>Live scan status</strong>
+            <p>Watch queue state, runtime events, and module activity while results are still arriving.</p>
           </article>
           <article class="capability-card capability-card--compact">
             <span>Export</span>
-            <strong>Report ready output</strong>
-            <p>Execution, evidence, and output remain part of one continuous system loop.</p>
+            <strong>JSON results and evidence output</strong>
+            <p>Keep portable scan records for reporting, review, and follow-up verification.</p>
           </article>
         </div>
       </section>
@@ -263,17 +263,17 @@
       <section id="transition" class="transition-section reveal">
         <div class="transition-shell">
           <div class="transition-copy">
-            <span class="eyebrow">Entry Transition</span>
-            <h2>The move from entry screen to live console needs a deliberate gate action.</h2>
+            <span class="eyebrow">Scan Workspace</span>
+            <h2>Open the live workspace to submit targets and review results.</h2>
             <p>
-              This is where the landing page stops explaining and starts handing off. Scan lines, gate pressure, and
-              lock-state feedback push the user out of atmosphere and into operation.
+              Move into the scanner to configure modules, run collection, inspect findings, and export the final JSON
+              report for the active target.
             </p>
 
             <div class="transition-copy__notes">
-              <span>Editorial split layout</span>
-              <span>Operator-first CTA</span>
-              <span>Low-noise motion cues</span>
+              <span>Domain / URL / IP Input</span>
+              <span>Live Results and Logs</span>
+              <span>JSON Export Ready</span>
             </div>
           </div>
 
@@ -281,14 +281,14 @@
             <div class="transition-gate__scan"></div>
             <div class="transition-gate__panel">
               <div class="transition-gate__meta">
-                <span>ACCESS STATE</span>
-                <strong id="transitionState">READY TO DEPLOY</strong>
+                <span>WORKSPACE STATUS</span>
+                <strong id="transitionState">READY FOR SCAN</strong>
               </div>
               <div class="transition-gate__code">
-                <span>HANDOFF CODE</span>
-                <strong id="transitionCode">TKH-NEO-128-READY</strong>
+                <span>SESSION CODE</span>
+                <strong id="transitionCode">TKH-SCAN-128-READY</strong>
               </div>
-              <a class="hero-button hero-button--primary transition-button" href="./console.html">Enter Main Console</a>
+              <a class="hero-button hero-button--primary transition-button" href="./console.html">Open Scan Workspace</a>
             </div>
           </div>
         </div>

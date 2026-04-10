@@ -131,7 +131,7 @@ function getTargetLabel() {
 }
 
 function getTargetDisplayValue() {
-  return getTargetLabel() || "UNASSIGNED";
+  return getTargetLabel() || "NO TARGET";
 }
 
 function getCoreTargetValue() {
@@ -140,7 +140,7 @@ function getCoreTargetValue() {
 
 function getSelectedScanModeLabel() {
   if (!isPortScanEnabled()) {
-    return "PASSIVE";
+    return "INTEL ONLY";
   }
   const mode = getSelectedScanMode();
   if (mode === "full") {
@@ -153,7 +153,7 @@ function getSelectedScanModeLabel() {
 }
 
 function updateMissionMode() {
-  setNodeText(missionMode, getSelectedScanModeLabel(), "PASSIVE");
+  setNodeText(missionMode, getSelectedScanModeLabel(), "INTEL ONLY");
 }
 
 function updateMissionFocus() {
@@ -161,40 +161,40 @@ function updateMissionFocus() {
     return input?.checked ? count + 1 : count;
   }, 0);
 
-  let focus = "Passive Sweep";
+  let focus = "Ready to Scan";
   if (isRunning) {
-    focus = activeCount > 4 ? "Deep Recon" : "Active Recon";
+    focus = activeCount > 4 ? "Deep Scan Running" : "Target Scan Running";
   } else if (latestReport) {
-    focus = latestReportSource === "file" ? "Loaded Report" : "Captured Report";
+    focus = latestReportSource === "file" ? "Report Loaded" : "Scan Complete";
   } else if (activeCount > 0) {
-    focus = activeCount > 4 ? "Stacked Sweep" : "Prepared Sweep";
+    focus = activeCount > 4 ? "Modules Armed" : "Scan Plan Ready";
   }
 
-  setNodeText(missionFocus, focus, "Passive Sweep");
-  setNodeText(coreSignalLane, isRunning ? "ACTIVE" : activeCount > 0 ? "PRIMED" : "PASSIVE", "PASSIVE");
+  setNodeText(missionFocus, focus, "Ready to Scan");
+  setNodeText(coreSignalLane, isRunning ? "RUNNING" : activeCount > 0 ? "READY" : "IDLE", "IDLE");
 }
 
 function updateCoreStatusLine(message) {
   if (message) {
-    setNodeText(coreStatusLine, message, "Recon core in standby. Awaiting operator input.");
+    setNodeText(coreStatusLine, message, "Scan engine idle. Enter a target to begin.");
     return;
   }
 
   const target = getTargetLabel();
   if (isRunning && target) {
-    setNodeText(coreStatusLine, `Recon sweep executing against ${target}.`, "Recon core in standby. Awaiting operator input.");
+    setNodeText(coreStatusLine, `Scanning ${target} for assets, ports, and risk signals.`, "Scan engine idle. Enter a target to begin.");
     return;
   }
   if (latestReport && target) {
-    setNodeText(coreStatusLine, `Latest intelligence snapshot loaded for ${target}.`, "Recon core in standby. Awaiting operator input.");
+    setNodeText(coreStatusLine, `Latest scan results loaded for ${target}.`, "Scan engine idle. Enter a target to begin.");
     return;
   }
-  setNodeText(coreStatusLine, "Recon core in standby. Awaiting operator input.", "Recon core in standby. Awaiting operator input.");
+  setNodeText(coreStatusLine, "Scan engine idle. Enter a target to begin.", "Scan engine idle. Enter a target to begin.");
 }
 
 function updateExportMeta() {
-  setNodeText(exportSource, latestReport ? String(latestReportSource || "scan").toUpperCase() : "NO REPORT", "NO REPORT");
-  setNodeText(exportTarget, getTargetDisplayValue(), "UNASSIGNED");
+  setNodeText(exportSource, latestReport ? String(latestReportSource || "scan").toUpperCase() : "NO DATA", "NO DATA");
+  setNodeText(exportTarget, getTargetDisplayValue(), "NO TARGET");
 }
 
 function appendDockRows(container, rows, emptyText) {
@@ -344,9 +344,9 @@ function updateHudThreatFromReport(data) {
 }
 
 function updateHudTargetLock() {
-  setNodeText(hudTargetLock, getTargetLabel(), "WAITING...");
-  setNodeText(statusTarget, getTargetDisplayValue(), "UNASSIGNED");
-  setNodeText(missionTarget, getTargetDisplayValue(), "UNASSIGNED");
+  setNodeText(hudTargetLock, getTargetLabel(), "ENTER TARGET");
+  setNodeText(statusTarget, getTargetDisplayValue(), "NO TARGET");
+  setNodeText(missionTarget, getTargetDisplayValue(), "NO TARGET");
   setNodeText(coreTargetEcho, getCoreTargetValue(), "NO TARGET");
   updateExportMeta();
   updateCoreStatusLine();
@@ -1310,11 +1310,11 @@ function clearCurrentScan() {
   item.className = "summary-item";
   item.textContent = "当前扫描结果已清空。";
   summary.appendChild(item);
-  appendDockRows(portsOutput, [], "Open port intelligence will appear here.");
-  appendDockRows(techOutput, [], "Technology and service risk insights will appear here.");
+  appendDockRows(portsOutput, [], "Open ports and service banners will appear here.");
+  appendDockRows(techOutput, [], "Technologies, fingerprints, and service risk findings will appear here.");
   terminal.innerHTML = "";
   if (liveEvents) {
-    liveEvents.innerHTML = '<div class="event-line event-line--muted">[standby] console ready. awaiting mission lock.</div>';
+    liveEvents.innerHTML = '<div class="event-line event-line--muted">[standby] scan workspace ready. enter a target to begin.</div>';
   }
   setProgress(0, "扫描进度：0%");
   if (fileInput) {
