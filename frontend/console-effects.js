@@ -12,6 +12,19 @@
   const runButton = document.getElementById("runBtn");
   const stopButton = document.getElementById("stopBtn");
   const homeLink = document.querySelector(".console-home-link");
+  const TRANSITION_KEY = "tokihane-page-transition";
+  const consoleDigitSelectors = [
+    ".brand-block",
+    ".status-focus",
+    ".hud-card",
+    ".stack-section",
+    ".feature-block",
+    ".recon-core",
+    ".module-config-stage",
+    ".intel-panel",
+    ".dock-panel",
+  ];
+  const digitCharacters = "00112233445566778899";
   const watchedValueIds = [
     "hudThreat",
     "hudSignal",
@@ -25,6 +38,7 @@
   ];
 
   let lastSweepAt = 0;
+  let isPageNavigating = false;
 
   function ensureOverlay(id, className) {
     let node = document.getElementById(id);
@@ -39,6 +53,92 @@
 
   ensureOverlay("consoleSweep", "console-sweep");
   const flash = ensureOverlay("consoleFlash", "console-flash");
+  ensureOverlay("consoleDepth", "console-depth");
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function pickRandomDigit() {
+    return digitCharacters[Math.floor(Math.random() * digitCharacters.length)] || "0";
+  }
+
+  function getDigitDensity() {
+    if (root.classList.contains("perf-lite")) {
+      return 84;
+    }
+    return prefersReducedMotion() ? 54 : 156;
+  }
+
+  function buildDigitCloud(id, className, selectors, totalCount = 120) {
+    document.getElementById(id)?.remove();
+
+    const container = document.createElement("div");
+    container.id = id;
+    container.className = className;
+
+    const targets = selectors
+      .flatMap((selector) => Array.from(document.querySelectorAll(selector)))
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 24 && rect.height > 24;
+      });
+
+    const fallbackTargets = targets.length ? targets : [document.body];
+    const areas = fallbackTargets.map((element) => {
+      const rect = element.getBoundingClientRect();
+      return Math.max(rect.width * rect.height, 1);
+    });
+    const totalArea = areas.reduce((sum, value) => sum + value, 0);
+
+    fallbackTargets.forEach((element, index) => {
+      const rect = element.getBoundingClientRect();
+      const ratio = totalArea > 0 ? areas[index] / totalArea : 1 / fallbackTargets.length;
+      const count = Math.max(4, Math.round(totalCount * ratio));
+
+      for (let offset = 0; offset < count; offset += 1) {
+        const char = document.createElement("span");
+        const size = 11 + Math.random() * 13;
+        char.className = `${className}__char`;
+        char.textContent = pickRandomDigit();
+        char.style.left = `${rect.left + Math.random() * rect.width}px`;
+        char.style.top = `${rect.top + Math.random() * rect.height}px`;
+        char.style.fontSize = `${size}px`;
+        char.style.setProperty("--delay", `${Math.random() * 280}ms`);
+        char.style.setProperty("--from-x", `${(Math.random() - 0.5) * window.innerWidth * 0.74}px`);
+        char.style.setProperty("--from-y", `${(Math.random() - 0.5) * window.innerHeight * 0.74}px`);
+        char.style.setProperty("--drift-x", `${(Math.random() - 0.5) * 140}px`);
+        char.style.setProperty("--drift-y", `${-30 - Math.random() * 120}px`);
+        char.style.setProperty("--start-scale", `${0.36 + Math.random() * 1.1}`);
+        char.style.setProperty("--rotate", `${(Math.random() - 0.5) * 220}deg`);
+        container.appendChild(char);
+      }
+    });
+
+    body.appendChild(container);
+    return container;
+  }
+
+  function initEntryTransition() {
+    if (!root.classList.contains("page-enter-console")) {
+      return;
+    }
+
+    try {
+      window.sessionStorage.removeItem(TRANSITION_KEY);
+    } catch (error) {}
+
+    buildDigitCloud("consoleDigitCloud", "console-digit-cloud", consoleDigitSelectors, getDigitDensity());
+    window.requestAnimationFrame(() => {
+      body.classList.add("is-revealing-console");
+    });
+
+    window.setTimeout(() => {
+      body.classList.remove("is-revealing-console");
+      root.classList.remove("page-enter-console");
+      document.getElementById("consoleDigitCloud")?.remove();
+    }, prefersReducedMotion() ? 420 : 1420);
+  }
 
   function triggerSweep(force = false) {
     const now = performance.now();
@@ -257,18 +357,22 @@
     }
     homeLink.addEventListener("click", (event) => {
       const href = homeLink.getAttribute("href");
-      if (!href) {
+      if (!href || isPageNavigating) {
         return;
       }
       event.preventDefault();
-      triggerFlash(false);
-      triggerSweep(true);
+      isPageNavigating = true;
+      try {
+        window.sessionStorage.setItem(TRANSITION_KEY, "console-to-landing");
+      } catch (error) {}
+      body.classList.add("is-sinking-home");
       window.setTimeout(() => {
         window.location.href = href;
-      }, 160);
+      }, prefersReducedMotion() ? 420 : 1160);
     });
   }
 
+  initEntryTransition();
   initPointerTracking();
   initRevealObserver();
   initValueObservers();

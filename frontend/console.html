@@ -12,6 +12,15 @@
     />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./console-effects.css" />
+    <script>
+      (() => {
+        try {
+          if (window.sessionStorage.getItem("tokihane-page-transition") === "landing-to-console") {
+            document.documentElement.classList.add("page-enter-console");
+          }
+        } catch (error) {}
+      })();
+    </script>
   </head>
   <body>
     <canvas id="matrixRain" class="matrix-rain"></canvas>

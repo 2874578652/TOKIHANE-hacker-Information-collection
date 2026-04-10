@@ -12,6 +12,15 @@
     />
     <link rel="stylesheet" href="./landing.css" />
     <link rel="stylesheet" href="./landing-effects.css" />
+    <script>
+      (() => {
+        try {
+          if (window.sessionStorage.getItem("tokihane-page-transition") === "console-to-landing") {
+            document.documentElement.classList.add("page-enter-landing");
+          }
+        } catch (error) {}
+      })();
+    </script>
   </head>
   <body>
       <div id="bootOverlay" class="boot-overlay">

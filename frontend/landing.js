@@ -20,6 +20,20 @@ const transitionState = document.getElementById("transitionState");
 const transitionCode = document.getElementById("transitionCode");
 const launchButton = document.getElementById("launchButton");
 const enterButton = document.getElementById("enterButton");
+const TRANSITION_KEY = "tokihane-page-transition";
+const landingDigitSelectors = [
+  ".gate-nav",
+  ".hero-stage",
+  ".snapshot-feature",
+  ".snapshot-card",
+  ".capability-card",
+  ".transition-gate__panel",
+  ".nav-chip",
+  ".meta-strip",
+  ".hero-feed",
+  ".readout-card",
+];
+const digitCharacters = "00112233445566778899";
 
 const bootMessages = [
   "[boot] loading target intelligence engine...",
@@ -81,9 +95,122 @@ let packetValue = 682;
 let nodeValue = 128;
 let signalValue = 99.1;
 let moduleValue = 8;
+let isPageNavigating = false;
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function pickRandomDigit() {
+  return digitCharacters[Math.floor(Math.random() * digitCharacters.length)] || "0";
+}
+
+function getDigitDensity() {
+  if (document.documentElement.classList.contains("perf-lite")) {
+    return 84;
+  }
+  return prefersReducedMotion() ? 48 : 168;
+}
+
+function buildDigitCloud(id, className, selectors, totalCount = 120) {
+  const existing = document.getElementById(id);
+  if (existing) {
+    existing.remove();
+  }
+
+  const container = document.createElement("div");
+  container.id = id;
+  container.className = className;
+
+  const targets = selectors
+    .flatMap((selector) => Array.from(document.querySelectorAll(selector)))
+    .filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.width > 24 && rect.height > 24;
+    });
+
+  const fallbackTargets = targets.length ? targets : [document.body];
+  const areas = fallbackTargets.map((element) => {
+    const rect = element.getBoundingClientRect();
+    return Math.max(rect.width * rect.height, 1);
+  });
+  const totalArea = areas.reduce((sum, value) => sum + value, 0);
+
+  fallbackTargets.forEach((element, index) => {
+    const rect = element.getBoundingClientRect();
+    const ratio = totalArea > 0 ? areas[index] / totalArea : 1 / fallbackTargets.length;
+    const count = Math.max(4, Math.round(totalCount * ratio));
+
+    for (let offset = 0; offset < count; offset += 1) {
+      const char = document.createElement("span");
+      const size = 11 + Math.random() * 13;
+      char.className = `${className}__char`;
+      char.textContent = pickRandomDigit();
+      char.style.left = `${rect.left + Math.random() * rect.width}px`;
+      char.style.top = `${rect.top + Math.random() * rect.height}px`;
+      char.style.fontSize = `${size}px`;
+      char.style.setProperty("--delay", `${Math.random() * 260}ms`);
+      char.style.setProperty("--drift-x", `${(Math.random() - 0.5) * 240}px`);
+      char.style.setProperty("--drift-y", `${-90 - Math.random() * 220}px`);
+      char.style.setProperty("--from-x", `${(Math.random() - 0.5) * window.innerWidth * 0.62}px`);
+      char.style.setProperty("--from-y", `${(Math.random() - 0.5) * window.innerHeight * 0.62}px`);
+      char.style.setProperty("--start-scale", `${0.36 + Math.random() * 1.1}`);
+      char.style.setProperty("--end-scale", `${0.72 + Math.random() * 1.08}`);
+      char.style.setProperty("--rotate", `${(Math.random() - 0.5) * 240}deg`);
+      container.appendChild(char);
+    }
+  });
+
+  document.body.appendChild(container);
+  return container;
+}
+
+function clearDigitCloud(id) {
+  document.getElementById(id)?.remove();
+}
+
+function initReturnAssembly() {
+  if (!document.documentElement.classList.contains("page-enter-landing")) {
+    return;
+  }
+
+  try {
+    window.sessionStorage.removeItem(TRANSITION_KEY);
+  } catch (error) {}
+
+  buildDigitCloud("landingDigitCloud", "landing-digit-cloud", landingDigitSelectors, getDigitDensity());
+  window.requestAnimationFrame(() => {
+    document.body.classList.add("is-arriving-assembled");
+  });
+
+  window.setTimeout(() => {
+    document.body.classList.remove("is-arriving-assembled");
+    document.documentElement.classList.remove("page-enter-landing");
+    clearDigitCloud("landingDigitCloud");
+  }, prefersReducedMotion() ? 420 : 1480);
+}
+
+function beginConsoleTransition(href) {
+  if (!href || isPageNavigating) {
+    return;
+  }
+
+  isPageNavigating = true;
+
+  try {
+    window.sessionStorage.setItem(TRANSITION_KEY, "landing-to-console");
+  } catch (error) {}
+
+  buildDigitCloud("landingDigitCloud", "landing-digit-cloud", landingDigitSelectors, getDigitDensity());
+  document.body.classList.add("is-entering", "sweep-active", "is-digitizing-out");
+
+  window.setTimeout(() => {
+    window.location.href = href;
+  }, prefersReducedMotion() ? 260 : 980);
 }
 
 function formatClock(date) {
@@ -187,6 +314,11 @@ function finishBoot() {
 }
 
 function initBootSequence() {
+  if (document.documentElement.classList.contains("page-enter-landing")) {
+    finishBoot();
+    return;
+  }
+
   if (!bootOverlay || !bootFeed) {
     finishBoot();
     return;
@@ -338,7 +470,7 @@ function initParticleField() {
 }
 
 function initEntryLinks() {
-  [launchButton, enterButton].forEach((link) => {
+  Array.from(document.querySelectorAll('a[href="./console.html"]')).forEach((link) => {
     if (!link) {
       return;
     }
@@ -348,16 +480,13 @@ function initEntryLinks() {
         return;
       }
       event.preventDefault();
-      document.body.classList.add("is-entering");
-      document.body.classList.add("sweep-active");
-      window.setTimeout(() => {
-        window.location.href = href;
-      }, 220);
+      beginConsoleTransition(href);
     });
   });
 }
 
 applyPerformancePreset();
+initReturnAssembly();
 initBootSequence();
 updateClock();
 updateLiveMetrics();
