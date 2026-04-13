@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKIHANE Recon Workspace</title>
+    <title>TOKI Scan Console</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,8 +23,22 @@
       <header class="topbar hud-panel">
         <div class="topbar__main">
           <div class="brand-block">
-            <p class="eyebrow">TOKIHANE / Recon Workspace</p>
-            <h1>授权侦察任务控制台</h1>
+            <p class="eyebrow">TOKI / Scan Console</p>
+            <h1 class="brand-lockup">
+              <span class="brand-logo" aria-hidden="true">
+                <svg viewBox="0 0 72 72" role="presentation" focusable="false">
+                  <path
+                    class="brand-logo__frame"
+                    d="M22 8h28l14 14v28L50 64H22L8 50V22L22 8Z"
+                  />
+                  <path class="brand-logo__trace" d="M22 20h28" />
+                  <path class="brand-logo__trace" d="M36 20v30" />
+                  <path class="brand-logo__trace brand-logo__trace--accent" d="M24 50h24" />
+                  <path class="brand-logo__trace brand-logo__trace--slash" d="M24 44l12-12 12 12" />
+                </svg>
+              </span>
+              <span class="brand-title" data-text="TOKI SCAN">TOKI SCAN</span>
+            </h1>
             <p class="topbar__lead">
               围绕异步扫描任务、能力编排、实时回执与证据视图重建的网络侦察控制台。页面保持现有后端逻辑不变，但视觉系统全面重构为安全作战终端。
             </p>
@@ -372,6 +386,7 @@
               </div>
               <div class="panel-flags">
                 <span class="console-flag">last missions</span>
+                <button class="button button--secondary button--compact" id="clearJobsBtn" type="button">清空历史</button>
               </div>
             </div>
             <div id="jobsList" class="job-list empty-state">还没有可展示的任务。</div>

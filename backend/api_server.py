@@ -111,6 +111,7 @@ app.add_middleware(
 
 jobs: dict[str, ScanJob] = {}
 jobs_lock = threading.Lock()
+ACTIVE_JOB_STATUSES = {"queued", "running", "stopping"}
 
 
 def _run_scan_job(job: ScanJob) -> None:
@@ -304,3 +305,27 @@ def list_jobs() -> dict[str, Any]:
     with jobs_lock:
         ordered = sorted(jobs.values(), key=lambda item: item.created_at, reverse=True)
     return {"jobs": [_job_response(job) for job in ordered]}
+
+
+@app.delete("/api/jobs")
+def clear_jobs() -> dict[str, Any]:
+    with jobs_lock:
+        active_jobs = {job_id: job for job_id, job in jobs.items() if job.status in ACTIVE_JOB_STATUSES}
+        cleared_count = len(jobs) - len(active_jobs)
+        active_kept = len(active_jobs)
+
+        if cleared_count:
+            jobs.clear()
+            jobs.update(active_jobs)
+
+    message = "历史任务已清空。"
+    if active_kept:
+        message = f"已清空 {cleared_count} 个历史任务，保留 {active_kept} 个运行中任务。"
+    elif cleared_count == 0:
+        message = "没有可清空的历史任务。"
+
+    return {
+        "cleared": cleared_count,
+        "active_kept": active_kept,
+        "message": message,
+    }

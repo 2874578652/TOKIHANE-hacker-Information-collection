@@ -42,6 +42,7 @@ const refs = {
   stopScanBtn: document.getElementById("stopScanBtn"),
   reportFileInput: document.getElementById("reportFileInput"),
   loadSampleBtn: document.getElementById("loadSampleBtn"),
+  clearJobsBtn: document.getElementById("clearJobsBtn"),
   importHint: document.getElementById("importHint"),
   jobsList: document.getElementById("jobsList"),
   statusChip: document.getElementById("statusChip"),
@@ -74,6 +75,8 @@ const state = {
   healthTimer: null,
   activeTab: "overview",
 };
+
+const ACTIVE_JOB_STATUSES = new Set(["queued", "running", "stopping"]);
 
 function inferDefaultApiUrl() {
   const { protocol, hostname, origin } = window.location;
@@ -310,6 +313,7 @@ async function refreshJobs() {
     const payload = await fetchJson(getJobsUrl());
     renderJobs(payload.jobs || []);
   } catch (error) {
+    refs.clearJobsBtn.disabled = true;
     refs.jobsList.innerHTML = `<div class="notice" data-tone="danger">${escapeHtml(`无法读取任务列表：${error.message}`)}</div>`;
   }
 }
@@ -406,7 +410,29 @@ async function stopCurrentScan() {
   }
 }
 
+async function clearJobHistory() {
+  if (refs.clearJobsBtn.disabled) return;
+
+  const confirmed = window.confirm("确定清空历史任务吗？排队中、运行中和停止中的任务会被保留。");
+  if (!confirmed) return;
+
+  refs.clearJobsBtn.disabled = true;
+
+  try {
+    const payload = await fetchJson(getJobsUrl(), { method: "DELETE" });
+    const tone = payload.cleared > 0 ? "success" : payload.active_kept > 0 ? "warning" : "neutral";
+    setStatusMessage(payload.message || "历史任务已清空。", tone);
+    await refreshJobs();
+  } catch (error) {
+    setStatusMessage(`清空历史任务失败：${error.message}`, "danger");
+    refs.clearJobsBtn.disabled = false;
+  }
+}
+
 function renderJobs(jobs) {
+  const hasClearableJobs = jobs.some((job) => !ACTIVE_JOB_STATUSES.has(job.status));
+  refs.clearJobsBtn.disabled = !hasClearableJobs;
+
   if (!jobs.length) {
     refs.jobsList.className = "job-list empty-state";
     refs.jobsList.textContent = "还没有可展示的任务。";
@@ -1026,6 +1052,7 @@ function init() {
   refs.reportFileInput.addEventListener("change", handleReportFile);
   refs.loadSampleBtn.addEventListener("click", loadSampleReport);
   refs.refreshJobsBtn.addEventListener("click", refreshJobs);
+  refs.clearJobsBtn.addEventListener("click", clearJobHistory);
 
   [
     refs.scanModeInput,
