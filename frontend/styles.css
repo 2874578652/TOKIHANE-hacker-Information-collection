@@ -249,14 +249,14 @@ textarea {
 }
 
 .sidebar {
-  order: 2;
+  order: 1;
   position: static;
   max-height: none;
   overflow: visible;
 }
 
 .content {
-  order: 1;
+  order: 2;
 }
 
 .panel-section + .panel-section {
