@@ -3,529 +3,825 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKIHANE // ATTACK SURFACE SCANNER</title>
+    <title>NEOSCAN // Cyber Recon Interface</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=Fira+Code:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./landing.css" />
-    <link rel="stylesheet" href="./landing-effects.css" />
-    <script>
-      (() => {
-        try {
-          if (window.sessionStorage.getItem("tokihane-page-transition") === "console-to-landing") {
-            document.documentElement.classList.add("page-enter-landing");
-          }
-        } catch (error) {}
-      })();
-    </script>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="bootOverlay" class="boot-overlay">
-      <div class="boot-overlay__grid"></div>
-      <div class="boot-overlay__content">
-        <p class="eyebrow">TOKIHANE / SCAN PLATFORM</p>
-        <h1>Initializing Target Intelligence</h1>
-        <div id="bootFeed" class="boot-feed">
-          <span>[boot] loading target intelligence engine...</span>
-          <span>[boot] syncing domain and asset collectors...</span>
-          <span>[boot] preparing scan session...</span>
+    <div class="noise-layer" aria-hidden="true"></div>
+    <div class="scanlines-layer" aria-hidden="true"></div>
+    <div class="vignette-layer" aria-hidden="true"></div>
+    <div class="grid-horizon" aria-hidden="true"></div>
+    <canvas id="matrixRain" class="fx-canvas matrix-rain" aria-hidden="true"></canvas>
+    <canvas id="particleField" class="fx-canvas particle-field" aria-hidden="true"></canvas>
+
+    <div class="neo-app" data-view="dashboard" data-result-tab="overview">
+      <header class="hud-navbar">
+        <div class="hud-navbar__left">
+          <a class="brand-lockup ripple-target" href="#hero" aria-label="NEOSCAN home">
+            <span class="brand-lockup__glyph" aria-hidden="true"></span>
+            <div class="brand-lockup__copy">
+              <strong class="brand-lockup__wordmark">NEOSCAN</strong>
+              <span class="brand-lockup__sub">underground recon suite</span>
+            </div>
+          </a>
+
+          <button id="mobileMenuToggle" class="circuit-toggle ripple-target" type="button" aria-expanded="false" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
-      </div>
-    </div>
 
-    <canvas id="laserRain" class="fx-canvas laser-rain"></canvas>
-    <canvas id="particleField" class="fx-canvas particle-field"></canvas>
-    <div id="pageSweep" class="page-sweep" aria-hidden="true"></div>
-    <div id="transitionFlash" class="transition-flash" aria-hidden="true"></div>
-    <div class="scanlines" aria-hidden="true"></div>
-    <div class="noise" aria-hidden="true"></div>
-    <div class="horizon-grid" aria-hidden="true"></div>
+        <div class="hud-navbar__center">
+          <label class="hud-target-bar ripple-target">
+            <span class="hud-target-bar__icon" aria-hidden="true"></span>
+            <input id="navTargetInput" type="text" placeholder="quick target // domain or ip" autocomplete="off" />
+          </label>
+          <button id="navLaunchBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+            Prime Console
+          </button>
+        </div>
 
-    <main class="landing-shell">
-      <header class="gate-nav reveal">
-        <a class="gate-nav__brand" href="#top" aria-label="TOKIHANE home">
-          <div class="logo-mark" aria-hidden="true">
-            <svg viewBox="0 0 120 120" role="img">
-              <defs>
-                <linearGradient id="landingLogoNeon" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#7fffd4" />
-                  <stop offset="52%" stop-color="#39d2ff" />
-                  <stop offset="100%" stop-color="#a870ff" />
-                </linearGradient>
-              </defs>
-              <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#landingLogoNeon)" stroke-width="4" />
-              <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#landingLogoNeon)" opacity="0.92" />
-              <path d="M52 55h16v30H52z" fill="#c6fff5" opacity="0.92" />
-              <path d="M44 66h32v6H62v14h-4V72H44z" fill="#071117" opacity="0.9" />
-            </svg>
+        <div class="hud-navbar__right">
+          <div class="hud-chip hud-chip--wallet">
+            <span>0xNEON CREDITS</span>
+            <strong>999.00</strong>
           </div>
-          <div class="brand-copy">
-            <span class="eyebrow">TOKIHANE / THREAT SURFACE</span>
-            <strong>Attack Surface Scanner</strong>
-          </div>
-        </a>
 
-        <nav class="gate-nav__links" aria-label="Primary">
-          <a href="#value">Why TOKIHANE</a>
-          <a href="#capabilities">Capabilities</a>
-          <a href="#workflow">Scan Flow</a>
-          <a href="#metrics">Signals</a>
-          <a href="#transition">Console</a>
-        </nav>
+          <div class="hud-chip hud-chip--user">
+            <span>@ghost</span>
+            <strong>tier: obsidian</strong>
+          </div>
 
-        <div class="gate-nav__status">
-          <div class="nav-chip">
-            <span>Signal</span>
-            <strong id="navSignal">99.1%</strong>
+          <div class="lang-switch" aria-label="language switch">
+            <button class="lang-switch__btn is-active ripple-target" type="button" data-lang="en">EN</button>
+            <button class="lang-switch__btn ripple-target" type="button" data-lang="cn">CN</button>
           </div>
-          <div class="nav-chip">
-            <span>UTC+8</span>
-            <strong id="navClock">--:--:--</strong>
-          </div>
-          <a id="launchButton" class="launch-button" href="./console.html">Start Scan</a>
         </div>
       </header>
 
-      <section id="top" class="hero-stage reveal delay-1">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <div class="hero-copy__intro">
-              <div class="hero-badge">
-                <span>Live attack surface scans</span>
-                <i></i>
-                <span>Domain / URL / IP coverage</span>
+      <aside id="mobileDrawer" class="mobile-drawer" hidden>
+        <a class="mobile-drawer__link ripple-target" href="#hero">Landing</a>
+        <a class="mobile-drawer__link ripple-target" href="#workspace">Ops Nexus</a>
+        <a class="mobile-drawer__link ripple-target" href="#resultsAnchor">Results</a>
+        <button class="mobile-drawer__link ripple-target" type="button" data-view-target="console">Open Console</button>
+      </aside>
+
+      <main class="page-shell">
+        <section id="hero" class="hero-section">
+          <div class="hero-section__copy">
+            <div class="hero-kicker">
+              <span class="hero-kicker__dot"></span>
+              <span>NEURAL TARGETING // ACTIVE OPS GRID</span>
+            </div>
+
+            <div class="hero-tagline">INFILTRATE • RECON • DOMINATE</div>
+
+            <h1 class="hero-title">
+              <span>NEON-LIT</span>
+              <span>OFFENSIVE RECON</span>
+              <span>FOR ELITE OPERATORS.</span>
+            </h1>
+
+            <p class="hero-lead">
+              Build a target profile, stream live discovery, map infrastructure, fingerprint exposure, and export intel from a
+              single dystopian control surface engineered to feel dangerously premium.
+            </p>
+
+            <div class="hero-input-shell">
+              <label class="hero-input-shell__label">Enter target (domain / IP / URL / username)</label>
+              <div class="hero-input-shell__row">
+                <input id="heroTargetInput" class="hero-target-input" type="text" placeholder="corp.tld / 8.8.8.8 / https://target.tld / ghost_handle" autocomplete="off" />
+                <button id="heroScanButton" class="neo-button neo-button--primary ripple-target" type="button">
+                  INITIATE SCAN
+                </button>
               </div>
-              <h1 class="hero-logo-title">
-                <span>Surface Signals.</span>
-                <span>Operator Speed.</span>
-              </h1>
-              <p class="hero-copy__lead">
-                  Discover exposed assets, map target infrastructure, correlate risk signals, and move from first input to
-                  actionable findings inside one continuous scan pipeline.
+              <div class="hero-input-shell__actions">
+                <button class="neo-button neo-button--ghost ripple-target" type="button" data-view-target="console">
+                  OPEN CONSOLE
+                </button>
+                <button id="demoSampleBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+                  LOAD GHOST SAMPLE
+                </button>
+              </div>
+            </div>
+
+            <div class="hero-chip-row">
+              <span class="signal-chip">Realtime telemetry</span>
+              <span class="signal-chip">Passive + active recon</span>
+              <span class="signal-chip">Live node graph</span>
+              <span class="signal-chip">Dark export pipeline</span>
+            </div>
+
+            <div class="hero-stats">
+              <article class="hero-stat-panel">
+                <span>Signal Integrity</span>
+                <strong id="heroSignalIntegrity">99.4%</strong>
+              </article>
+              <article class="hero-stat-panel">
+                <span>Threat Posture</span>
+                <strong id="heroThreatPosture">MONITORED</strong>
+              </article>
+              <article class="hero-stat-panel">
+                <span>Node Cluster</span>
+                <strong id="heroNodeStatus">128 ONLINE</strong>
+              </article>
+            </div>
+          </div>
+
+          <div class="hero-section__visual">
+            <div class="holo-stage">
+              <div class="holo-stage__glow"></div>
+              <div class="holo-stage__grid"></div>
+              <div class="holo-stage__core">
+                <div class="holo-stage__rings" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="holo-stage__beam"></div>
+                <div class="holo-stage__target">
+                  <span class="eyebrow">ACTIVE TARGET</span>
+                  <strong id="heroTargetEcho">waiting for target</strong>
+                  <p id="heroStatusLine">signal trace idle // feed a target to ignite the console</p>
+                </div>
+              </div>
+
+              <article class="floating-panel floating-panel--top">
+                <span>Asset Flow</span>
+                <strong id="heroAssetFlow">675 KB/S</strong>
+              </article>
+
+              <article class="floating-panel floating-panel--left">
+                <span>Active Nodes</span>
+                <strong id="heroCollectorCount">127 / 128</strong>
+              </article>
+
+              <article class="floating-panel floating-panel--right">
+                <span>Threat Level</span>
+                <strong id="heroThreatLevel">TRACKED</strong>
+              </article>
+
+              <article class="feed-panel">
+                <div class="feed-panel__head">
+                  <span>Signal Stream</span>
+                  <strong id="heroFeedState">READY</strong>
+                </div>
+                <div id="heroFeed" class="feed-panel__body">
+                  <div>ghost collectors are calibrating passive channels...</div>
+                  <div>whois, dns, and header sensors are ready to deploy...</div>
+                  <div>raw export lanes are standing by for exfil package build...</div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="workspace" class="workspace-shell">
+          <div class="workspace-shell__head">
+            <div>
+              <span class="eyebrow">OPS NEXUS</span>
+              <h2>One surface for threat intake, deep recon, and theatrical delivery.</h2>
+              <p>
+                Dashboard intelligence, scan orchestration, and result exploitation all live in the same premium control
+                rail so operators never lose the thread.
               </p>
             </div>
 
-            <div class="hero-actions">
-              <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Open Scanner</a>
-              <a class="hero-button hero-button--ghost" href="#workflow">See Scan Flow</a>
-            </div>
-
-            <div class="hero-trust-strip" aria-label="Product highlights">
-              <span>Realtime telemetry</span>
-              <span>Multi-source collection</span>
-              <span>Export-ready evidence</span>
-              <span>Clear result review</span>
-            </div>
-
-            <div class="hero-meta">
-              <div class="meta-strip">
-                <span>Risk posture</span>
-                <strong id="heroThreatLabel">Monitored</strong>
-              </div>
-              <div class="meta-strip">
-                <span>Scanner state</span>
-                <strong id="heroGateStatus">Scanner Ready</strong>
-              </div>
+            <div class="workspace-switcher" role="tablist" aria-label="Main workspace views">
+              <button class="view-tab is-active ripple-target" type="button" data-view-target="dashboard">Dashboard</button>
+              <button class="view-tab ripple-target" type="button" data-view-target="console">Scan Console</button>
+              <button class="view-tab ripple-target" type="button" data-view-target="results">Results</button>
             </div>
           </div>
 
-          <div class="hero-visual">
-            <div class="hero-visual__frame">
-              <div class="hero-visual__top">
-                <div class="hero-visual__labels">
-                  <span>Live target lattice</span>
-                  <strong id="heroVector">TARGET GRID / 024.110 / 121.470</strong>
+          <div class="workspace-viewport">
+            <section class="workspace-view is-active" data-view="dashboard">
+              <div class="dashboard-grid">
+                <div class="dashboard-grid__stats">
+                  <article class="stat-card stat-card--cyan">
+                    <span>Scans Today</span>
+                    <strong id="statScansToday">014</strong>
+                    <p>Night-cycle jobs launched across passive and active lanes.</p>
+                  </article>
+
+                  <article class="stat-card stat-card--magenta">
+                    <span>Targets Tracked</span>
+                    <strong id="statTargetsTracked">086</strong>
+                    <p>Entities stitched into the live watchlist and mission history.</p>
+                  </article>
+
+                  <article class="stat-card stat-card--green">
+                    <span>Vulns Found</span>
+                    <strong id="statVulnsFound">021</strong>
+                    <p>Fingerprints, risky exposures, and high-signal anomalies surfaced.</p>
+                  </article>
+
+                  <article class="stat-card stat-card--danger">
+                    <span>Active Nodes</span>
+                    <strong id="statActiveNodes">128</strong>
+                    <p>Distributed recon workers synchronized to the command lattice.</p>
+                  </article>
                 </div>
-                <div class="hero-status-badge">
-                  <span>Queue</span>
-                  <strong>READY</strong>
+
+                <div class="dashboard-grid__table neo-card">
+                  <div class="card-head">
+                    <div>
+                      <span class="eyebrow">Recent Scans</span>
+                      <h3>Live operations ledger</h3>
+                    </div>
+                    <span class="status-pill status-pill--online">streaming</span>
+                  </div>
+
+                  <div class="table-wrap">
+                    <table class="neon-table">
+                      <thead>
+                        <tr>
+                          <th>Target</th>
+                          <th>Type</th>
+                          <th>Status</th>
+                          <th>Threat</th>
+                          <th>Last Seen</th>
+                        </tr>
+                      </thead>
+                      <tbody id="recentScansBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="dashboard-grid__map neo-card">
+                  <div class="card-head">
+                    <div>
+                      <span class="eyebrow">Global Reach</span>
+                      <h3>Last scan locations</h3>
+                    </div>
+                    <span id="mapLocationCount" class="status-pill">06 pins</span>
+                  </div>
+
+                  <div class="world-map-shell">
+                    <svg class="world-map" viewBox="0 0 1000 500" aria-hidden="true">
+                      <path d="M101 189l42-35 86-11 53 31 61-9 43 31 8 44-25 16-42 4-31 27 11 43-21 24-60-7-53-48-47 4-42-36-9-41z"></path>
+                      <path d="M406 145l75-38 105 11 83 44 81 4 38 48-13 33-48 5-36 28-83 11-36-18-19 27 15 49-47 25-71-16-44-40-59-4-45-44-8-50 35-32z"></path>
+                      <path d="M760 304l45-28 64 9 29 48-19 49-57 42-61-7-28-51z"></path>
+                    </svg>
+                    <div id="mapPins" class="map-pins"></div>
+                  </div>
+                </div>
+
+                <div class="dashboard-grid__feed neo-card">
+                  <div class="card-head">
+                    <div>
+                      <span class="eyebrow">Command Feed</span>
+                      <h3>Underground chatter</h3>
+                    </div>
+                    <button id="copyFeedBtn" class="icon-button ripple-target" type="button" data-copy-target="intelFeed">copy</button>
+                  </div>
+
+                  <div id="intelFeed" class="intel-feed">
+                    <div class="intel-feed__item">
+                      <strong>ghost relay</strong>
+                      <span>heuristic scanner reports fresh header anomalies on obfuscated infra.</span>
+                    </div>
+                    <div class="intel-feed__item">
+                      <strong>night broker</strong>
+                      <span>high-churn dns patterns detected on a known staging domain.</span>
+                    </div>
+                    <div class="intel-feed__item">
+                      <strong>shadow pin</strong>
+                      <span>new tls metadata stitched into the reconnaissance evidence graph.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </section>
 
-              <div class="hero-display">
-                <div class="hero-display__glow" aria-hidden="true"></div>
-                <div class="hero-display__grid" aria-hidden="true"></div>
+            <section class="workspace-view" data-view="console">
+              <div class="console-grid">
+                <aside class="console-grid__sidebar">
+                  <section class="neo-card module-panel">
+                    <div class="card-head">
+                      <div>
+                        <span class="eyebrow">Mission Target</span>
+                        <h3>Target lock</h3>
+                      </div>
+                      <span id="consoleThreatChip" class="status-pill status-pill--warning">tracked</span>
+                    </div>
 
-                <div class="core-visual" aria-hidden="true">
-                  <div class="core-visual__scope">
-                    <div class="core-visual__grid"></div>
-                    <div class="core-visual__ring core-visual__ring--outer"></div>
-                    <div class="core-visual__ring core-visual__ring--mid"></div>
-                    <div class="core-visual__ring core-visual__ring--inner"></div>
-                    <div class="core-visual__axis core-visual__axis--x"></div>
-                    <div class="core-visual__axis core-visual__axis--y"></div>
-                    <div class="core-visual__axis core-visual__axis--diag-a"></div>
-                    <div class="core-visual__axis core-visual__axis--diag-b"></div>
-                    <div class="core-visual__sweep"></div>
-                    <span class="core-node core-node--a"><i></i><em>DNS</em></span>
-                    <span class="core-node core-node--b"><i></i><em>PORTS</em></span>
-                    <span class="core-node core-node--c"><i></i><em>WEB</em></span>
-                    <span class="core-node core-node--d"><i></i><em>RISK</em></span>
-                  </div>
-                </div>
+                    <label class="field-block">
+                      <span>Primary target</span>
+                      <input id="consoleTargetInput" type="text" placeholder="target.tld / 203.0.113.5 / https://portal.tld" autocomplete="off" />
+                    </label>
 
-                <div class="hero-center-card">
-                  <span>Analysis core</span>
-                  <strong id="heroCoreState">TARGET READY</strong>
-                  <p id="heroCoreNote">Enter a domain, URL, or IP to start collection.</p>
-                </div>
+                    <div class="action-cluster">
+                      <button id="consoleStartBtn" class="neo-button neo-button--primary ripple-target" type="button">
+                        Launch Scan
+                      </button>
+                      <button id="consoleStopBtn" class="neo-button neo-button--ghost ripple-target" type="button" disabled>
+                        Abort
+                      </button>
+                    </div>
 
-                <div class="hero-feed hero-feed--floating">
-                  <div class="hero-feed__head">
-                    <span>Signal stream</span>
-                    <strong id="entryTone">READY</strong>
-                  </div>
-                  <div id="heroFeed" class="hero-feed__body">
-                    <div>target intake is listening for domains, URLs, and IPs...</div>
-                    <div>dns, service, and web collection modules are synchronized...</div>
-                    <div>export handlers are armed for the next completed scan...</div>
-                  </div>
-                </div>
+                    <div class="action-cluster">
+                      <button id="demoModeBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+                        Ghost Mode
+                      </button>
+                      <button id="importReportBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+                        Import JSON
+                      </button>
+                    </div>
 
-                <div class="hero-floating hero-floating--north">
-                  <div class="readout-card readout-card--glass">
-                    <span>Asset flow</span>
-                    <strong id="heroPacket">682 KB/S</strong>
-                  </div>
-                </div>
+                    <input id="reportFileInput" type="file" accept=".json,application/json" hidden />
 
-                <div class="hero-floating hero-floating--west">
-                  <div class="readout-card readout-card--glass">
-                    <span>Collectors</span>
-                    <strong id="heroNodeSync">128 / 128</strong>
-                  </div>
-                </div>
+                    <div id="reportMeta" class="file-meta">
+                      <span>Report channel idle.</span>
+                      <strong id="reportMetaName">No imported evidence</strong>
+                    </div>
+                  </section>
 
-                <div class="hero-floating hero-floating--south">
-                  <div class="readout-card readout-card--accent">
-                    <span>Risk level</span>
-                    <strong id="heroPulse">ELEVATED</strong>
-                  </div>
+                  <section class="neo-card module-panel">
+                    <div class="card-head">
+                      <div>
+                        <span class="eyebrow">Scan Modules</span>
+                        <h3>Black site modules</h3>
+                      </div>
+                      <span id="moduleCountChip" class="status-pill">06 armed</span>
+                    </div>
+
+                    <div class="module-toggle-grid">
+                      <label class="module-toggle ripple-target">
+                        <input id="modulePassive" type="checkbox" checked />
+                        <span>
+                          <strong>Passive Recon</strong>
+                          <small>historical trails + passive dns echoes</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleDns" type="checkbox" checked />
+                        <span>
+                          <strong>DNS Enumeration</strong>
+                          <small>resolve public records and alias trails</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleSubdomain" type="checkbox" checked />
+                        <span>
+                          <strong>Subdomain Brute</strong>
+                          <small>ct logs + passive expansion</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="modulePort" type="checkbox" checked />
+                        <span>
+                          <strong>Port Scan</strong>
+                          <small>tcp/udp fingerprint and service banners</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleWhois" type="checkbox" checked />
+                        <span>
+                          <strong>WHOIS + OSINT</strong>
+                          <small>registrar, dates, nameservers, enrich</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleVuln" type="checkbox" checked />
+                        <span>
+                          <strong>Vulnerability Fingerprint</strong>
+                          <small>cve correlation and weak-check hints</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleSocial" type="checkbox" />
+                        <span>
+                          <strong>Social Media Recon</strong>
+                          <small>username traces and social mentions</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleWeb" type="checkbox" checked />
+                        <span>
+                          <strong>Web Asset Crawl</strong>
+                          <small>endpoints, js extraction, surface mapping</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleAsn" type="checkbox" />
+                        <span>
+                          <strong>ASN Expansion</strong>
+                          <small>adjacent network reconnaissance</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="moduleThreat" type="checkbox" />
+                        <span>
+                          <strong>Threat Intel</strong>
+                          <small>virustotal signal correlation</small>
+                        </span>
+                      </label>
+
+                      <label class="module-toggle ripple-target">
+                        <input id="modulePrivate" type="checkbox" />
+                        <span>
+                          <strong>Private Sweep</strong>
+                          <small>allow internal cidr ranges</small>
+                        </span>
+                      </label>
+                    </div>
+                  </section>
+                </aside>
+
+                <div class="console-grid__main">
+                  <section class="neo-card console-status-panel">
+                    <div class="card-head">
+                      <div>
+                        <span class="eyebrow">Scan State</span>
+                        <h3>Live decryption channel</h3>
+                      </div>
+                      <div class="status-cluster">
+                        <span id="consoleStatusChip" class="status-pill status-pill--online">idle</span>
+                        <span id="consoleTargetChip" class="status-pill">no target</span>
+                      </div>
+                    </div>
+
+                    <div class="decrypt-bar">
+                      <div class="decrypt-bar__track">
+                        <div id="scanProgressBar" class="decrypt-bar__fill"></div>
+                      </div>
+                      <div class="decrypt-bar__meta">
+                        <span id="scanProgressText">decrypting... 0%</span>
+                        <span id="scanRuntimeText">runtime // 00:00</span>
+                      </div>
+                    </div>
+
+                    <div class="status-ribbon">
+                      <article>
+                        <span>Transport</span>
+                        <strong id="statusTransport">API LINKED</strong>
+                      </article>
+                      <article>
+                        <span>Mode</span>
+                        <strong id="statusMode">COMMON</strong>
+                      </article>
+                      <article>
+                        <span>Threat</span>
+                        <strong id="statusThreat">LOW</strong>
+                      </article>
+                      <article>
+                        <span>Nodes</span>
+                        <strong id="statusNodes">128</strong>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section class="neo-card terminal-panel">
+                    <div class="card-head">
+                      <div>
+                        <span class="eyebrow">Terminal Stream</span>
+                        <h3>Live offensive transcript</h3>
+                      </div>
+                      <button id="clearConsoleLogBtn" class="icon-button ripple-target" type="button">clear</button>
+                    </div>
+
+                    <div id="scanLog" class="scan-log"></div>
+                  </section>
+
+                  <section class="neo-card advanced-panel">
+                    <div class="card-head">
+                      <div>
+                        <span class="eyebrow">Advanced Controls</span>
+                        <h3>Holographic tuning rails</h3>
+                      </div>
+                      <span class="status-pill">expert only</span>
+                    </div>
+
+                    <div class="advanced-accordion">
+                      <details class="holo-accordion" open>
+                        <summary>Core transport and timing</summary>
+                        <div class="holo-accordion__body">
+                          <div class="field-grid">
+                            <label class="field-block">
+                              <span>Backend API</span>
+                              <input id="apiUrlInput" type="text" placeholder="http://127.0.0.1:8000/api/scan" />
+                            </label>
+                            <label class="field-block">
+                              <span>Timeout (s)</span>
+                              <input id="timeoutInput" type="number" min="1" step="1" value="10" />
+                            </label>
+                            <label class="field-block">
+                              <span>Port timeout (s)</span>
+                              <input id="portTimeoutInput" type="number" min="0.1" step="0.1" value="0.8" />
+                            </label>
+                            <label class="field-block">
+                              <span>Port mode</span>
+                              <select id="portModeInput">
+                                <option value="common" selected>Common</option>
+                                <option value="full">Full</option>
+                                <option value="custom">Custom</option>
+                              </select>
+                            </label>
+                          </div>
+                          <label id="customPortsField" class="field-block field-block--hidden">
+                            <span>Custom ports</span>
+                            <input id="customPortsInput" type="text" placeholder="22,80,443,8443 or 1-1024" />
+                          </label>
+                        </div>
+                      </details>
+
+                      <details class="holo-accordion">
+                        <summary>Transport protocols and enrichment</summary>
+                        <div class="holo-accordion__body">
+                          <div class="switch-row">
+                            <label class="mini-switch ripple-target">
+                              <input id="tcpEnabledInput" type="checkbox" checked />
+                              <span>TCP</span>
+                            </label>
+                            <label class="mini-switch ripple-target">
+                              <input id="udpEnabledInput" type="checkbox" />
+                              <span>UDP</span>
+                            </label>
+                            <label class="mini-switch ripple-target">
+                              <input id="webCrawlerInput" type="checkbox" checked />
+                              <span>Web crawler</span>
+                            </label>
+                            <label class="mini-switch ripple-target">
+                              <input id="jsExtractInput" type="checkbox" checked />
+                              <span>JS extract</span>
+                            </label>
+                          </div>
+                        </div>
+                      </details>
+
+                      <details class="holo-accordion">
+                        <summary>Threat intel and private lanes</summary>
+                        <div class="holo-accordion__body">
+                          <div class="field-grid">
+                            <label class="field-block">
+                              <span>VirusTotal API key</span>
+                              <input id="vtApiKeyInput" type="password" placeholder="paste your own key to arm threat intel" autocomplete="off" />
+                            </label>
+                            <label class="field-block">
+                              <span>Private CIDR targets</span>
+                              <input id="cidrTargetsInput" type="text" placeholder="10.0.0.0/24,192.168.1.0/24" />
+                            </label>
+                          </div>
+                        </div>
+                      </details>
+                    </div>
+                  </section>
                 </div>
               </div>
-            </div>
+            </section>
+
+            <section id="resultsAnchor" class="workspace-view" data-view="results">
+              <div class="results-shell">
+                <section class="neo-card results-summary">
+                  <div class="card-head">
+                    <div>
+                      <span class="eyebrow">Result Stack</span>
+                      <h3>Evidence package</h3>
+                    </div>
+                    <div class="results-actions">
+                      <button id="copyOverviewBtn" class="neo-button neo-button--ghost ripple-target" type="button" data-copy-target="overviewCards">
+                        Copy Overview
+                      </button>
+                      <button id="downloadReportBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+                        Download JSON
+                      </button>
+                      <button id="darkWebExportBtn" class="neo-button neo-button--danger ripple-target" type="button">
+                        Export to Dark Web
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id="overviewCards" class="results-summary__grid">
+                    <article class="result-kpi">
+                      <span>Target</span>
+                      <strong id="resultTargetKpi">NO TARGET</strong>
+                    </article>
+                    <article class="result-kpi">
+                      <span>Status</span>
+                      <strong id="resultStatusKpi">STANDBY</strong>
+                    </article>
+                    <article class="result-kpi">
+                      <span>Open Ports</span>
+                      <strong id="resultOpenPortsKpi">0</strong>
+                    </article>
+                    <article class="result-kpi">
+                      <span>Tech Signals</span>
+                      <strong id="resultTechKpi">0</strong>
+                    </article>
+                    <article class="result-kpi">
+                      <span>Threat Score</span>
+                      <strong id="resultThreatScoreKpi">00</strong>
+                    </article>
+                    <article class="result-kpi">
+                      <span>Source</span>
+                      <strong id="resultSourceKpi">NO DATA</strong>
+                    </article>
+                  </div>
+                </section>
+
+                <section class="neo-card results-stack">
+                  <div class="results-tabs" role="tablist" aria-label="Results tabs">
+                    <button class="result-tab is-active ripple-target" type="button" data-result-tab="overview">Overview</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="recon">Recon Data</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="network">Network Map</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="vulns">Vulnerabilities</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="json">Raw JSON</button>
+                  </div>
+
+                  <div class="results-panels">
+                    <section class="result-panel is-active" data-result-panel="overview">
+                      <div class="result-panel__grid">
+                        <details class="result-card" open>
+                          <summary>
+                            <span>Mission digest</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="missionDigest">copy</button>
+                          </summary>
+                          <div id="missionDigest" class="result-card__body result-list"></div>
+                        </details>
+
+                        <details class="result-card" open>
+                          <summary>
+                            <span>Signal synopsis</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="signalSynopsis">copy</button>
+                          </summary>
+                          <div id="signalSynopsis" class="result-card__body result-list"></div>
+                        </details>
+
+                        <details class="result-card" open>
+                          <summary>
+                            <span>Terminal highlights</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="terminalHighlights">copy</button>
+                          </summary>
+                          <div id="terminalHighlights" class="result-card__body result-list"></div>
+                        </details>
+                      </div>
+                    </section>
+
+                    <section class="result-panel" data-result-panel="recon">
+                      <div class="recon-grid">
+                        <div class="result-card result-card--table">
+                          <div class="result-card__table-head">
+                            <span>DNS Records</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="dnsTableBody">copy</button>
+                          </div>
+                          <table class="neon-table neon-table--compact">
+                            <thead>
+                              <tr>
+                                <th>Type</th>
+                                <th>Value</th>
+                              </tr>
+                            </thead>
+                            <tbody id="dnsTableBody"></tbody>
+                          </table>
+                        </div>
+
+                        <div class="result-card result-card--table">
+                          <div class="result-card__table-head">
+                            <span>WHOIS + OSINT</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="whoisTableBody">copy</button>
+                          </div>
+                          <table class="neon-table neon-table--compact">
+                            <thead>
+                              <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                              </tr>
+                            </thead>
+                            <tbody id="whoisTableBody"></tbody>
+                          </table>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Detected Technologies</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="techChipList">copy</button>
+                          </div>
+                          <div id="techChipList" class="chip-cloud"></div>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Resolved Targets</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="resolvedTargetsList">copy</button>
+                          </div>
+                          <div id="resolvedTargetsList" class="result-list"></div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section class="result-panel" data-result-panel="network">
+                      <div class="network-grid">
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Subdomain Relationship Mesh</span>
+                            <button id="rerenderGraphBtn" class="icon-button ripple-target" type="button">refresh</button>
+                          </div>
+                          <canvas id="networkCanvas" class="network-canvas"></canvas>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Node Legend</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="nodeLegend">copy</button>
+                          </div>
+                          <div id="nodeLegend" class="result-list"></div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section class="result-panel" data-result-panel="vulns">
+                      <div id="vulnCards" class="vuln-grid"></div>
+                    </section>
+
+                    <section class="result-panel" data-result-panel="json">
+                      <div class="result-card result-card--raw">
+                        <div class="result-card__table-head">
+                          <span>Raw Intelligence Payload</span>
+                          <button class="icon-button ripple-target" type="button" data-copy-target="rawJsonView">copy</button>
+                        </div>
+                        <pre id="rawJsonView" class="raw-json"></pre>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+              </div>
+            </section>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="value" class="value-section reveal delay-2">
-        <div class="section-heading">
-          <span class="eyebrow">Core Value</span>
-          <h2>Find exposed services, hidden assets, and useful evidence faster.</h2>
-          <p>Keep scan setup, live status, and final review on one path so important signals stay easy to follow.</p>
-        </div>
-
-        <div class="value-grid">
-          <article class="value-card">
-            <div class="value-card__icon">01</div>
-            <strong>One input, multi-surface expansion</strong>
-            <p>Start from a domain, URL, or IP and pivot into hosts, services, technologies, and exposed web assets.</p>
-          </article>
-          <article class="value-card value-card--raised">
-            <div class="value-card__icon">02</div>
-            <strong>Operational telemetry while you scan</strong>
-            <p>Track queue state, live progress, latency, and module activity without losing focus on the active target.</p>
-          </article>
-          <article class="value-card">
-            <div class="value-card__icon">03</div>
-            <strong>Evidence-ready outputs</strong>
-            <p>Export structured results, retain raw findings, and move cleanly into follow-up validation or reporting.</p>
-          </article>
-          <article class="value-card">
-            <div class="value-card__icon">04</div>
-            <strong>Modular depth on demand</strong>
-            <p>Arm only the modules you need, or scale into deeper collection when the target warrants more coverage.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="capabilities" class="capability-section reveal">
-        <div class="section-heading section-heading--split">
+        <footer class="site-footer">
           <div>
-            <span class="eyebrow">Product Capabilities</span>
-            <h2>Three mission lanes that move from target intake to export-ready evidence.</h2>
+            <span class="eyebrow">NEOSCAN</span>
+            <strong>Offensive reconnaissance interface for premium operators.</strong>
           </div>
-          <p>Start with scoped target intake, expand into live discovery, and finish with organized findings you can review or export.</p>
-        </div>
-
-        <div class="capability-stream">
-          <article class="capability-band">
-            <div class="capability-band__copy">
-              <span class="eyebrow">Intake / Orchestration</span>
-              <h3>Stage targets, choose modules, and launch the right collection depth.</h3>
-              <p>Queue focused scans for surface discovery, or open up deeper service and web analysis when you need more context.</p>
-              <ul class="capability-list">
-                <li>Target normalization for domain, URL, and IP input</li>
-                <li>Configurable port scope, timeout, and protocol mix</li>
-                <li>Module switching without restarting the active run</li>
-              </ul>
-            </div>
-            <div class="capability-band__visual">
-              <div class="capability-panel capability-panel--wide">
-                <span>Intake lane</span>
-                <strong>Recon plan staged</strong>
-                <div class="capability-panel__rows">
-                  <div>Target intake</div>
-                  <div>Profile routing</div>
-                  <div>Module armory</div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="capability-band capability-band--reverse">
-            <div class="capability-band__copy">
-              <span class="eyebrow">Discovery / Enrichment</span>
-              <h3>Expand infrastructure context across DNS, certificates, ports, and web assets.</h3>
-              <p>Correlate what is exposed, what is reachable, and what belongs to the same operational surface.</p>
-              <ul class="capability-list">
-                <li>Passive intelligence and certificate history</li>
-                <li>Open-port and service-banner collection</li>
-                <li>Web endpoint, fingerprint, and asset enumeration</li>
-              </ul>
-            </div>
-            <div class="capability-band__visual">
-              <div class="capability-panel capability-panel--stack">
-                <span>Discovery graph</span>
-                <strong>Surface mapping</strong>
-                <div class="capability-panel__stack">
-                  <div>DNS lineage</div>
-                  <div>Port + service map</div>
-                  <div>Endpoint inventory</div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="capability-band">
-            <div class="capability-band__copy">
-              <span class="eyebrow">Review / Export</span>
-              <h3>Turn raw scan output into readable findings and structured evidence.</h3>
-              <p>Keep the summary readable for fast triage, then pivot into detail, logs, or raw JSON when the task requires it.</p>
-              <ul class="capability-list">
-                <li>Risk-oriented result grouping</li>
-                <li>Readable scan logs and module states</li>
-                <li>Portable JSON output for reporting and handoff</li>
-              </ul>
-            </div>
-            <div class="capability-band__visual">
-              <div class="capability-panel capability-panel--tall">
-                <span>Evidence dock</span>
-                <strong>Report ready</strong>
-                <div class="capability-panel__ledger">
-                  <div>
-                    <span>Results</span>
-                    <strong>5 views</strong>
-                  </div>
-                  <div>
-                    <span>Logs</span>
-                    <strong>Live</strong>
-                  </div>
-                  <div>
-                    <span>Export</span>
-                    <strong>JSON</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="workflow" class="workflow-section reveal">
-        <div class="section-heading">
-          <span class="eyebrow">Scan Flow</span>
-          <h2>From first target to export in four deliberate steps.</h2>
-          <p>Define scope, launch collection, review findings, and export evidence without losing track of the active target.</p>
-        </div>
-
-        <div class="workflow-rail" aria-hidden="true"></div>
-        <div class="workflow-grid">
-          <article class="workflow-step">
-            <span class="workflow-step__index">01</span>
-            <strong>Define the target</strong>
-            <p>Enter a domain, URL, IP, or import an existing report for immediate review.</p>
-          </article>
-          <article class="workflow-step">
-            <span class="workflow-step__index">02</span>
-            <strong>Arm the modules</strong>
-            <p>Select the collection depth, protocols, and optional enrichment sources needed for the mission.</p>
-          </article>
-          <article class="workflow-step">
-            <span class="workflow-step__index">03</span>
-            <strong>Monitor the run</strong>
-            <p>Watch live telemetry, queue state, and scan progress while signals continue to resolve.</p>
-          </article>
-          <article class="workflow-step">
-            <span class="workflow-step__index">04</span>
-            <strong>Review and export</strong>
-            <p>Pivot across summaries, ports, technologies, logs, and raw output before exporting the final evidence.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="metrics" class="snapshot-section reveal">
-        <div class="snapshot-layout">
-          <article class="snapshot-feature">
-            <span class="eyebrow">Signal Overview</span>
-            <h3>Telemetry that confirms readiness before each scan begins.</h3>
-            <p>
-              Health, signal quality, and module posture stay visible up front so you can launch, tune scan depth, or
-              review imported evidence with confidence.
-            </p>
-            <div class="snapshot-feature__rail">
-              <div>
-                <span>Coverage</span>
-                <strong>DNS / Ports / Web / Risk</strong>
-              </div>
-              <div>
-                <span>Operator mode</span>
-                <strong>Live Console + Export</strong>
-              </div>
-            </div>
-          </article>
-
-          <div class="snapshot-grid">
-            <article class="snapshot-card">
-              <span>Threat Level</span>
-              <strong id="snapshotThreat">ELEVATED</strong>
-              <p>Exposure, reputation, and service findings are fused into a quick-review signal.</p>
-            </article>
-            <article class="snapshot-card">
-              <span>Collectors</span>
-              <strong id="snapshotNodes">128</strong>
-              <p>Distributed workers stay synchronized for the next target intake.</p>
-            </article>
-            <article class="snapshot-card">
-              <span>Signal</span>
-              <strong id="snapshotSignal">99.1%</strong>
-              <p>Workspace health remains stable for external lookups and module coordination.</p>
-            </article>
-            <article class="snapshot-card">
-              <span>Active Modules</span>
-              <strong id="snapshotModules">08</strong>
-              <p>Collection depth can be scaled up or down per mission profile.</p>
-            </article>
+          <div class="site-footer__meta">
+            <span>deep black // neon signal // zero mercy</span>
+            <span>monthly tier: 999 credits</span>
           </div>
-        </div>
-      </section>
+        </footer>
+      </main>
 
-      <section id="trust" class="trust-section reveal">
-        <div class="section-heading section-heading--split">
+      <button id="terminalFab" class="terminal-fab ripple-target" type="button">Terminal</button>
+
+      <section id="terminalOverlay" class="terminal-overlay" hidden>
+        <div class="terminal-overlay__chrome">
           <div>
-            <span class="eyebrow">Trusted For Review</span>
-            <h2>Built to stay readable during live scans and detailed result review.</h2>
+            <span class="eyebrow">Dark Terminal</span>
+            <h3>Ghost shell</h3>
           </div>
-          <p>Live status, result summaries, and deeper detail stay separated so high-signal findings are easier to spot and act on.</p>
+          <button id="terminalCloseBtn" class="neo-button neo-button--ghost ripple-target" type="button">Close</button>
         </div>
 
-        <div class="trust-grid">
-          <article class="trust-card">
-            <span>Readable under load</span>
-            <strong>Clear hierarchy while scans are active</strong>
-          </article>
-          <article class="trust-card">
-            <span>Review-first output</span>
-            <strong>Summaries, detail panes, and exports in one path</strong>
-          </article>
-          <article class="trust-card">
-            <span>Flexible depth</span>
-            <strong>Light recon or deeper target expansion without context switching</strong>
-          </article>
-        </div>
+        <div id="terminalOverlayLog" class="terminal-overlay__log"></div>
+
+        <form id="terminalCommandForm" class="terminal-overlay__input">
+          <label class="terminal-overlay__prompt">ghost@neoscan:~$</label>
+          <input id="terminalCommandInput" type="text" autocomplete="off" spellcheck="false" placeholder="type help, status, scan example.com, view results..." />
+        </form>
       </section>
 
-      <section id="transition" class="transition-section reveal">
-        <div class="transition-shell">
-          <div class="transition-copy">
-            <span class="eyebrow">Open The Console</span>
-            <h2>Start a scan session with live telemetry and export-ready results.</h2>
-            <p>
-              Configure module depth, launch collection, track progress, inspect findings, and export the final report
-              package for the active target.
-            </p>
-
-            <div class="transition-copy__notes">
-              <span>Target intake + report import</span>
-              <span>Live scan status + result tabs</span>
-              <span>Portable evidence export</span>
+      <section id="scanOverlay" class="scan-overlay" hidden>
+        <div class="scan-overlay__panel">
+          <span class="eyebrow">Decrypting uplink</span>
+          <strong id="scanOverlayTitle">bootstrapping neon channels</strong>
+          <div class="decrypt-bar">
+            <div class="decrypt-bar__track">
+              <div id="scanOverlayProgressBar" class="decrypt-bar__fill"></div>
             </div>
-          </div>
-
-          <div class="transition-panel transition-gate__panel">
-            <div class="transition-panel__status">
-              <div>
-                <span>Workspace status</span>
-                <strong id="transitionState">READY FOR SCAN</strong>
-              </div>
-              <div>
-                <span>Session code</span>
-                <strong id="transitionCode">TKH-SCAN-128-READY</strong>
-              </div>
-            </div>
-            <div class="transition-panel__actions">
-              <a class="hero-button hero-button--primary transition-button" href="./console.html">Open Scan Workspace</a>
-              <a class="hero-button hero-button--ghost" href="#capabilities">Review Features</a>
+            <div class="decrypt-bar__meta">
+              <span id="scanOverlayProgressText">decrypting... 0%</span>
+              <span id="scanOverlayStatusText">warming passive collectors</span>
             </div>
           </div>
         </div>
       </section>
 
-      <footer class="site-footer reveal">
-        <div class="footer-grid">
-          <div class="footer-brand">
-            <a class="gate-nav__brand gate-nav__brand--footer" href="#top">
-              <div class="logo-mark" aria-hidden="true">
-                <svg viewBox="0 0 120 120" role="img">
-                  <defs>
-                    <linearGradient id="landingLogoFooter" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#7fffd4" />
-                      <stop offset="52%" stop-color="#39d2ff" />
-                      <stop offset="100%" stop-color="#a870ff" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#landingLogoFooter)" stroke-width="4" />
-                  <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#landingLogoFooter)" opacity="0.92" />
-                  <path d="M52 55h16v30H52z" fill="#c6fff5" opacity="0.92" />
-                  <path d="M44 66h32v6H62v14h-4V72H44z" fill="#071117" opacity="0.9" />
-                </svg>
-              </div>
-              <div class="brand-copy">
-                <span class="eyebrow">TOKIHANE / INTELLIGENCE</span>
-                <strong>Attack Surface Scanner</strong>
-              </div>
-            </a>
-            <p>Scan targets, review live telemetry, and export structured findings from one focused surface.</p>
-          </div>
+      <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
-          <div class="footer-column">
-            <span class="eyebrow">Product</span>
-            <a href="#value">Value</a>
-            <a href="#capabilities">Capabilities</a>
-            <a href="#workflow">Scan Flow</a>
-          </div>
+      <div class="sound-placeholders" hidden aria-hidden="true">
+        <audio id="sfxScanStart" preload="none"></audio>
+        <audio id="sfxGlitch" preload="none"></audio>
+        <audio id="sfxSuccess" preload="none"></audio>
+      </div>
+    </div>
 
-          <div class="footer-column">
-            <span class="eyebrow">Workspace</span>
-            <a href="#metrics">Signals</a>
-            <a href="#transition">Open Console</a>
-            <a href="./console.html">Start Scan</a>
-          </div>
-
-          <div class="footer-column">
-            <span class="eyebrow">Status</span>
-            <a href="#top">Scanner Ready</a>
-            <a href="#trust">Result Review</a>
-            <span class="footer-note">Copyright © TOKIHANE</span>
-          </div>
-        </div>
-      </footer>
-    </main>
-
-    <script src="./landing.js" defer></script>
-    <script src="./landing-effects.js" defer></script>
+    <script src="./app.js" defer></script>
   </body>
 </html>
