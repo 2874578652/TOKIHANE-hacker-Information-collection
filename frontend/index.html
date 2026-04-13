@@ -70,7 +70,7 @@
 
       <main class="workspace-grid">
         <aside class="panel sidebar">
-          <section class="panel-section">
+          <section class="panel-section panel-section--form">
             <div class="section-head">
               <div>
                 <p class="eyebrow">Scan Intake</p>
@@ -79,7 +79,7 @@
             </div>
 
             <form id="scanForm" class="stack">
-              <section class="subsection subsection--compact">
+              <section class="subsection subsection--compact subsection--primary">
                 <div class="subsection__head">
                   <div>
                     <p class="eyebrow">Primary Inputs</p>
@@ -136,7 +136,7 @@
                 </div>
               </section>
 
-              <section class="subsection subsection--compact">
+              <section class="subsection subsection--compact subsection--toggles">
                 <div class="subsection__head">
                   <div>
                     <p class="eyebrow">Quick Toggles</p>
@@ -165,7 +165,7 @@
                 </div>
               </section>
 
-              <details class="subsection accordion">
+              <details class="subsection accordion subsection--advanced">
                 <summary class="accordion__summary">
                   <div>
                     <p class="eyebrow">Advanced Network</p>
@@ -193,7 +193,7 @@
                 </div>
               </details>
 
-              <section class="subsection">
+              <section class="subsection subsection--modules">
                 <div class="subsection__head">
                   <div>
                     <p class="eyebrow">Module Matrix</p>
@@ -251,14 +251,14 @@
                 </div>
               </section>
 
-              <div class="actions">
+              <div class="actions actions--form">
                 <button class="button button--primary" id="startScanBtn" type="submit">创建扫描任务</button>
                 <button class="button button--danger" id="stopScanBtn" type="button" disabled>停止当前任务</button>
               </div>
             </form>
           </section>
 
-          <section class="panel-section">
+          <section class="panel-section panel-section--utility">
             <div class="section-head">
               <div>
                 <p class="eyebrow">Report Import</p>
@@ -272,7 +272,7 @@
             </div>
           </section>
 
-          <section class="panel-section">
+          <section class="panel-section panel-section--utility">
             <div class="section-head">
               <div>
                 <p class="eyebrow">Job History</p>

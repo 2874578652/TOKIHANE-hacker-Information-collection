@@ -133,7 +133,7 @@ textarea {
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-5);
-  padding: var(--space-6);
+  padding: 24px 28px;
   border-radius: var(--radius-xl);
 }
 
@@ -169,7 +169,7 @@ textarea {
 }
 
 .hero-card {
-  padding: var(--space-6);
+  padding: 24px 28px;
   border-radius: var(--radius-xl);
 }
 
@@ -202,8 +202,8 @@ textarea {
 .hero-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: var(--space-6);
+  gap: 12px;
+  margin-top: 20px;
 }
 
 .hero-metrics div {
@@ -238,7 +238,7 @@ textarea {
 
 .workspace-grid {
   display: grid;
-  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--space-5);
   margin-top: var(--space-5);
   align-items: start;
@@ -249,10 +249,14 @@ textarea {
 }
 
 .sidebar {
-  position: sticky;
-  top: 20px;
-  max-height: calc(100vh - 40px);
-  overflow: auto;
+  order: 2;
+  position: static;
+  max-height: none;
+  overflow: visible;
+}
+
+.content {
+  order: 1;
 }
 
 .panel-section + .panel-section {
@@ -261,6 +265,15 @@ textarea {
 
 .panel-section {
   padding: var(--space-5);
+}
+
+.panel-section--form {
+  padding-bottom: 18px;
+}
+
+.panel-section--utility {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .section-head,
@@ -289,6 +302,16 @@ textarea {
 .stack {
   display: grid;
   gap: 16px;
+}
+
+#scanForm {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+#scanForm > * {
+  min-width: 0;
 }
 
 .field {
@@ -349,8 +372,23 @@ textarea {
   padding: 16px;
 }
 
+.subsection--primary {
+  grid-column: span 6;
+}
+
+.subsection--toggles,
+.subsection--advanced {
+  grid-column: span 3;
+}
+
+.subsection--modules {
+  grid-column: 1 / -1;
+}
+
 .module-groups {
   margin-top: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
 }
 
 .module-group {
@@ -373,11 +411,12 @@ textarea {
 .actions {
   display: flex;
   gap: 12px;
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
   padding-top: 8px;
-  background: linear-gradient(180deg, rgba(243, 246, 251, 0), rgba(243, 246, 251, 0.95) 28%);
+}
+
+.actions--form {
+  grid-column: 1 / -1;
+  justify-content: flex-start;
 }
 
 .button {
@@ -413,6 +452,7 @@ textarea {
 .job-list {
   display: grid;
   gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .accordion {
@@ -495,7 +535,7 @@ textarea {
 }
 
 .status-panel {
-  padding: var(--space-5);
+  padding: 20px 24px;
 }
 
 .status-badges {
@@ -507,20 +547,20 @@ textarea {
 .status-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 18px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .stat-card {
-  padding: 18px;
+  padding: 14px 16px;
   border-radius: 18px;
   background: var(--bg-surface-strong);
   border: 1px solid var(--line-soft);
 }
 
 .progress-block {
-  margin-top: 18px;
-  padding: 18px;
+  margin-top: 16px;
+  padding: 16px 18px;
   border-radius: 18px;
   background: rgba(241, 245, 251, 0.9);
   border: 1px solid var(--line-soft);
@@ -554,7 +594,7 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 20px 20px 0;
+  padding: 18px 18px 0;
 }
 
 .tab {
@@ -572,7 +612,7 @@ textarea {
 }
 
 .tab-panels {
-  padding: 20px;
+  padding: 18px;
 }
 
 .tab-panel {
@@ -797,6 +837,30 @@ code {
 
   .sidebar {
     position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  #scanForm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .subsection--primary,
+  .subsection--toggles,
+  .subsection--advanced,
+  .subsection--modules,
+  .actions--form {
+    grid-column: auto;
+  }
+
+  .subsection--primary,
+  .subsection--modules,
+  .actions--form {
+    grid-column: 1 / -1;
+  }
+
+  .module-groups {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -814,6 +878,10 @@ code {
     padding: 18px;
   }
 
+  #scanForm {
+    grid-template-columns: 1fr;
+  }
+
   .topbar,
   .topbar__actions,
   .actions {
@@ -825,6 +893,14 @@ code {
   .field-grid--two,
   .hero-metrics {
     grid-template-columns: 1fr;
+  }
+
+  .subsection--primary,
+  .subsection--toggles,
+  .subsection--advanced,
+  .subsection--modules,
+  .actions--form {
+    grid-column: auto;
   }
 
   .tabs {
