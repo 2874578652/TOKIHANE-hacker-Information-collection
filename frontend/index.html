@@ -1,1107 +1,324 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NEOSCAN // Cyber Recon Interface</title>
+    <title>TOKIHANE Recon Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=Fira+Code:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
-    <style>
-      [hidden] {
-        display: none !important;
-      }
-    </style>
   </head>
   <body>
-    <div class="noise-layer" aria-hidden="true"></div>
-    <div class="scanlines-layer" aria-hidden="true"></div>
-    <div class="vignette-layer" aria-hidden="true"></div>
-    <div class="grid-horizon" aria-hidden="true"></div>
-    <canvas id="matrixRain" class="fx-canvas matrix-rain" aria-hidden="true"></canvas>
-    <canvas id="particleField" class="fx-canvas particle-field" aria-hidden="true"></canvas>
-
-    <div class="neo-app" data-view="dashboard" data-result-tab="overview">
-      <header class="hud-navbar">
-        <div class="hud-navbar__left">
-          <a class="brand-lockup ripple-target" href="#hero" aria-label="NEOSCAN home">
-            <span class="brand-lockup__glyph" aria-hidden="true"></span>
-            <div class="brand-lockup__copy">
-              <strong class="brand-lockup__wordmark">NEOSCAN</strong>
-              <span class="brand-lockup__sub">underground recon suite</span>
-            </div>
-          </a>
-
-          <button id="mobileMenuToggle" class="circuit-toggle ripple-target" type="button" aria-expanded="false" aria-label="Open menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Recon Workspace</p>
+          <h1>面向真实后端能力的扫描工作台</h1>
+          <p class="topbar__lead">
+            基于异步扫描任务、模块化结果和可选增强能力重新设计。页面以任务发起、执行跟踪、结果解释和历史复用为主线。
+          </p>
         </div>
 
-        <div class="hud-navbar__center">
-          <label class="hud-target-bar ripple-target">
-            <span class="hud-target-bar__icon" aria-hidden="true"></span>
-            <input id="navTargetInput" type="text" placeholder="quick target // domain or ip" autocomplete="off" />
-          </label>
-          <button id="navLaunchBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-            Open Workspace
-          </button>
-        </div>
-
-        <div class="hud-navbar__right">
-          <div class="hud-chip hud-chip--wallet">
-            <span>0xNEON CREDITS</span>
-            <strong>999.00</strong>
+        <div class="topbar__actions">
+          <div class="health-pill" id="healthPill" data-tone="neutral">
+            <span class="dot"></span>
+            <span id="healthText">检查 API 中</span>
           </div>
-
-          <div class="hud-chip hud-chip--user">
-            <span>@ghost</span>
-            <strong>tier: obsidian</strong>
-          </div>
-
-          <div class="lang-switch" aria-label="language switch">
-            <button class="lang-switch__btn is-active ripple-target" type="button" data-lang="en">EN</button>
-            <button class="lang-switch__btn ripple-target" type="button" data-lang="cn">CN</button>
-          </div>
+          <button class="button button--secondary" id="refreshJobsBtn" type="button">刷新任务</button>
         </div>
       </header>
 
-      <aside id="mobileDrawer" class="mobile-drawer" hidden>
-        <a class="mobile-drawer__link ripple-target" href="#hero">Landing</a>
-        <a class="mobile-drawer__link ripple-target" href="#workspace">Ops Nexus</a>
-        <a class="mobile-drawer__link ripple-target" href="#resultsAnchor">Results</a>
-        <button class="mobile-drawer__link ripple-target" type="button" data-view-target="console">Open Console</button>
-      </aside>
-
-      <main class="page-shell">
-        <section id="hero" class="hero-section">
-          <div class="hero-section__copy">
-            <div class="hero-kicker">
-              <span class="hero-kicker__dot"></span>
-              <span>TASK API // DOMAIN · URL · IP INTAKE</span>
-            </div>
-
-            <div class="hero-tagline">QUEUE • ENUMERATE • CORRELATE</div>
-
-            <h1 class="hero-title">
-              <span>RECON WORKFLOWS</span>
-              <span>BACKED BY</span>
-              <span>REAL SCAN JOBS.</span>
-            </h1>
-
-            <p class="hero-lead">
-              NEOSCAN sits directly on top of your FastAPI reconnaissance backend: create jobs, poll status, stop long runs,
-              and explore structured reports for DNS, WHOIS, tech fingerprints, web assets, port exposure, and service risk.
-            </p>
-
-            <div class="hero-input-shell">
-              <label class="hero-input-shell__label">Target intake (domain / URL / IP)</label>
-              <div class="hero-input-shell__row">
-                <input id="heroTargetInput" class="hero-target-input" type="text" placeholder="corp.tld / 8.8.8.8 / https://target.tld" autocomplete="off" />
-                <button id="heroScanButton" class="neo-button neo-button--primary ripple-target" type="button">
-                  INITIATE SCAN
-                </button>
-              </div>
-              <div class="hero-input-shell__actions">
-                <button class="neo-button neo-button--ghost ripple-target" type="button" data-view-target="console">
-                  OPEN WORKSPACE
-                </button>
-                <button id="demoSampleBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-                  LOAD SAMPLE REPORT
-                </button>
-              </div>
-            </div>
-
-            <div class="hero-chip-row">
-              <span class="signal-chip">DNS + WHOIS baseline</span>
-              <span class="signal-chip">Optional CT / passive DNS</span>
-              <span class="signal-chip">Web assets + service risk</span>
-              <span class="signal-chip">Task queue + JSON export</span>
-            </div>
-
-            <div class="hero-stats">
-              <article class="hero-stat-panel">
-                <span>API Health</span>
-                <strong id="heroSignalIntegrity">CHECKING</strong>
-              </article>
-              <article class="hero-stat-panel">
-                <span>Risk Posture</span>
-                <strong id="heroThreatPosture">MONITORED</strong>
-              </article>
-              <article class="hero-stat-panel">
-                <span>Queue State</span>
-                <strong id="heroNodeStatus">QUEUE READY</strong>
-              </article>
-            </div>
-          </div>
-
-          <div class="hero-section__visual">
-            <div class="holo-stage">
-              <div class="holo-stage__glow"></div>
-              <div class="holo-stage__grid"></div>
-              <div class="holo-stage__core">
-                <div class="holo-stage__rings" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <div class="holo-stage__beam"></div>
-                <div class="holo-stage__target">
-                  <span class="eyebrow">CURRENT TARGET</span>
-                  <strong id="heroTargetEcho">waiting for target</strong>
-                  <p id="heroStatusLine">task intake idle // feed a target to assemble the evidence pipeline</p>
-                </div>
-              </div>
-
-              <article class="floating-panel floating-panel--top">
-                <span>Job Queue</span>
-                <strong id="heroAssetFlow">QUEUE READY</strong>
-              </article>
-
-              <article class="floating-panel floating-panel--left">
-                <span>Optional Modules</span>
-                <strong id="heroCollectorCount">00 ARMED</strong>
-              </article>
-
-              <article class="floating-panel floating-panel--right">
-                <span>Report Verdict</span>
-                <strong id="heroThreatLevel">TRACKED</strong>
-              </article>
-
-              <article class="feed-panel">
-                <div class="feed-panel__head">
-                  <span>Pipeline Stream</span>
-                  <strong id="heroFeedState">READY</strong>
-                </div>
-                <div id="heroFeed" class="feed-panel__body">
-                  <div>dns, whois, and technology profiling are part of every scan job...</div>
-                  <div>optional enrichment can add ct logs, passive dns, asn, and vt intel...</div>
-                  <div>json evidence packages stay queryable through the task api...</div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section class="capability-band">
-          <div class="section-copy">
-            <span class="eyebrow">Backend-Mapped Capabilities</span>
-            <h2>Every panel mirrors a real stage in your FastAPI reconnaissance pipeline.</h2>
-            <p>
-              The website is now structured around what the backend truly supports: baseline identity collection, optional
-              enrichment lanes, task orchestration, and structured report exploration.
-            </p>
-          </div>
-
-          <div class="capability-grid">
-            <article class="feature-card">
-              <span class="eyebrow">Baseline</span>
-              <h3>Identity foundation</h3>
-              <p>Every job parses the target, resolves DNS, pulls WHOIS ownership data, and fingerprints the visible tech stack.</p>
-              <div class="feature-card__chips">
-                <span>DNS</span>
-                <span>WHOIS</span>
-                <span>Tech detection</span>
-              </div>
-            </article>
-
-            <article class="feature-card">
-              <span class="eyebrow">Optional Intel</span>
-              <h3>Enrichment lanes</h3>
-              <p>CT logs, passive DNS, ASN expansion, and VirusTotal can be armed per job when deeper attribution is needed.</p>
-              <div class="feature-card__chips">
-                <span>CT logs</span>
-                <span>Passive DNS</span>
-                <span>ASN</span>
-                <span>VirusTotal</span>
-              </div>
-            </article>
-
-            <article class="feature-card">
-              <span class="eyebrow">Exposure</span>
-              <h3>Network and web surface</h3>
-              <p>Port scanning, crawler-based web asset discovery, JS extraction, directory probing, and sensitive path merging live in one flow.</p>
-              <div class="feature-card__chips">
-                <span>TCP / UDP</span>
-                <span>Crawler</span>
-                <span>JS extract</span>
-                <span>Directory probe</span>
-              </div>
-            </article>
-
-            <article class="feature-card">
-              <span class="eyebrow">Correlation</span>
-              <h3>Risk analysis</h3>
-              <p>Open-service inventory can be correlated into CVE lookups and weak-configuration checks, then exported as report JSON.</p>
-              <div class="feature-card__chips">
-                <span>CVE lookup</span>
-                <span>Weak checks</span>
-                <span>Job stop</span>
-                <span>JSON export</span>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="workflow-section">
-          <div class="workflow-section__head">
+      <section class="hero-grid">
+        <article class="hero-card hero-card--highlight">
+          <p class="eyebrow">Current Focus</p>
+          <h2 id="heroTarget">尚未选择目标</h2>
+          <p id="heroSummary">先输入域名、URL 或 IP，再选择需要启用的扫描模块。</p>
+          <div class="hero-metrics">
             <div>
-              <span class="eyebrow">API Workflow</span>
-              <h2>Designed around how your backend actually runs scans.</h2>
+              <span>任务状态</span>
+              <strong id="heroStatus">Idle</strong>
             </div>
-            <p>
-              The website now follows the same lifecycle as the API: submit a job, poll it, stop it if needed, then drill into the final report.
-            </p>
-          </div>
-
-          <div class="workflow-grid">
-            <div class="workflow-steps">
-              <article class="workflow-step">
-                <strong>01</strong>
-                <h3>Create Job</h3>
-                <p>Send a target and module selections to <code>POST /api/scan</code> and receive a queued job id.</p>
-              </article>
-              <article class="workflow-step">
-                <strong>02</strong>
-                <h3>Poll Status</h3>
-                <p>Read queued, running, stopping, completed, failed, or canceled states from <code>GET /api/scan/{job_id}</code>.</p>
-              </article>
-              <article class="workflow-step">
-                <strong>03</strong>
-                <h3>Control Runtime</h3>
-                <p>Abort long jobs through <code>POST /api/scan/{job_id}/stop</code> when you need to reclaim the pipeline.</p>
-              </article>
-              <article class="workflow-step">
-                <strong>04</strong>
-                <h3>Explore Report</h3>
-                <p>Review DNS, web assets, IP scan, service risk, and raw JSON in the same control surface.</p>
-              </article>
-            </div>
-
-            <aside class="workflow-api neo-card">
-              <div class="card-head">
-                <div>
-                  <span class="eyebrow">Backend Contract</span>
-                  <h3>What the frontend now honors</h3>
-                </div>
-                <span class="status-pill">fastapi</span>
-              </div>
-              <div class="workflow-api__list">
-                <div><strong>Health</strong><span><code>GET /health</code></span></div>
-                <div><strong>Create</strong><span><code>POST /api/scan</code></span></div>
-                <div><strong>Status</strong><span><code>GET /api/scan/{job_id}</code></span></div>
-                <div><strong>Stop</strong><span><code>POST /api/scan/{job_id}/stop</code></span></div>
-                <div><strong>History</strong><span><code>GET /api/jobs</code></span></div>
-              </div>
-            </aside>
-          </div>
-        </section>
-
-        <section id="workspace" class="workspace-shell">
-          <div class="workspace-shell__head">
             <div>
-              <span class="eyebrow">OPS NEXUS</span>
-              <h2>One workspace for target intake, job control, and report exploration.</h2>
-              <p>
-                The homepage now feeds directly into the same job lifecycle your backend exposes, with baseline stages,
-                optional modules, API state, and report blocks all visible in one place.
-              </p>
+              <span>已启用模块</span>
+              <strong id="heroModules">0</strong>
             </div>
-
-            <div class="workspace-switcher" role="tablist" aria-label="Main workspace views">
-              <button class="view-tab is-active ripple-target" type="button" data-view-target="dashboard">Dashboard</button>
-              <button class="view-tab ripple-target" type="button" data-view-target="console">Scan Console</button>
-              <button class="view-tab ripple-target" type="button" data-view-target="results">Results</button>
+            <div>
+              <span>打开端口</span>
+              <strong id="heroPorts">-</strong>
+            </div>
+            <div>
+              <span>风险条目</span>
+              <strong id="heroRisks">-</strong>
             </div>
           </div>
+        </article>
 
-          <div class="workspace-viewport">
-            <section class="workspace-view is-active" data-view="dashboard">
-              <div class="dashboard-grid">
-                <div class="dashboard-grid__stats">
-                  <article class="stat-card stat-card--cyan">
-                    <span>Jobs Today</span>
-                    <strong id="statScansToday">014</strong>
-                    <p>Queued and completed scan jobs observed by this workspace session.</p>
-                  </article>
+        <article class="hero-card">
+          <p class="eyebrow">Task Model</p>
+          <ul class="plain-list">
+            <li>创建任务后立即返回 `job_id`，前端需轮询状态。</li>
+            <li>任务可能经历 `queued / running / stopping / completed / failed / canceled`。</li>
+            <li>结果由 DNS、WHOIS、技术栈、IP、Web、风险等模块分段组成。</li>
+            <li>多个模块支持“未启用 / 跳过 / 空结果 / 失败 / 取消”。</li>
+          </ul>
+        </article>
+      </section>
 
-                  <article class="stat-card stat-card--magenta">
-                    <span>Unique Targets</span>
-                    <strong id="statTargetsTracked">086</strong>
-                    <p>Distinct domains, URLs, and IPs that have passed through the intake rail.</p>
-                  </article>
-
-                  <article class="stat-card stat-card--green">
-                    <span>Findings Surfaced</span>
-                    <strong id="statVulnsFound">021</strong>
-                    <p>Technology signals, service-risk matches, and exposure indicators gathered from reports.</p>
-                  </article>
-
-                  <article class="stat-card stat-card--danger">
-                    <span>Queue Depth</span>
-                    <strong id="statActiveNodes">128</strong>
-                    <p>Backend jobs currently queued, running, or waiting to finish in the task list.</p>
-                  </article>
-                </div>
-
-                <div class="dashboard-grid__table neo-card">
-                  <div class="card-head">
-                    <div>
-                      <span class="eyebrow">Recent Scans</span>
-                      <h3>Live operations ledger</h3>
-                    </div>
-                    <span class="status-pill status-pill--online">streaming</span>
-                  </div>
-
-                  <div class="table-wrap">
-                    <table class="neon-table">
-                      <thead>
-                        <tr>
-                          <th>Target</th>
-                          <th>Type</th>
-                          <th>Status</th>
-                          <th>Threat</th>
-                          <th>Last Seen</th>
-                        </tr>
-                      </thead>
-                      <tbody id="recentScansBody"></tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div class="dashboard-grid__api neo-card">
-                  <div class="card-head">
-                    <div>
-                      <span class="eyebrow">Backend State</span>
-                      <h3>API health and task channel</h3>
-                    </div>
-                    <span id="apiHealthBadge" class="status-pill">checking</span>
-                  </div>
-
-                  <div class="api-health-grid">
-                    <article class="api-health-tile">
-                      <span>Health</span>
-                      <strong id="apiHealthValue">probing</strong>
-                    </article>
-                    <article class="api-health-tile">
-                      <span>Scan Endpoint</span>
-                      <strong id="apiEndpointValue">/api/scan</strong>
-                    </article>
-                    <article class="api-health-tile">
-                      <span>Job History</span>
-                      <strong id="apiJobsCountValue">0 jobs</strong>
-                    </article>
-                  </div>
-                  <p id="apiHealthMessage" class="dashboard-support-copy">
-                    Point the workspace to your FastAPI server and the dashboard will pull health and job history.
-                  </p>
-                </div>
-
-                <div class="dashboard-grid__jobs neo-card">
-                  <div class="card-head">
-                    <div>
-                      <span class="eyebrow">Recent Jobs</span>
-                      <h3>Backend task history</h3>
-                    </div>
-                    <span class="status-pill" id="mapLocationCount">history</span>
-                  </div>
-
-                  <div class="table-wrap">
-                    <table class="neon-table neon-table--compact">
-                      <thead>
-                        <tr>
-                          <th>Job</th>
-                          <th>Status</th>
-                          <th>Mode</th>
-                          <th>Created</th>
-                        </tr>
-                      </thead>
-                      <tbody id="apiJobsBody"></tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div class="dashboard-grid__schema neo-card">
-                  <div class="card-head">
-                    <div>
-                      <span class="eyebrow">Report Schema</span>
-                      <h3>Blocks emitted by the backend</h3>
-                    </div>
-                    <span class="status-pill status-pill--online">mapped</span>
-                  </div>
-
-                  <div class="schema-grid">
-                    <article class="schema-card">
-                      <strong>Always on</strong>
-                      <span>target</span>
-                      <span>dns</span>
-                      <span>whois</span>
-                      <span>tech_stack</span>
-                    </article>
-                    <article class="schema-card">
-                      <strong>Identity+</strong>
-                      <span>certificate_transparency</span>
-                      <span>passive_dns</span>
-                      <span>asn_network</span>
-                    </article>
-                    <article class="schema-card">
-                      <strong>Exposure</strong>
-                      <span>web_assets</span>
-                      <span>ip_scan</span>
-                    </article>
-                    <article class="schema-card">
-                      <strong>Risk</strong>
-                      <span>service_risk</span>
-                      <span>virustotal</span>
-                      <span>meta</span>
-                    </article>
-                  </div>
-                </div>
+      <main class="workspace-grid">
+        <aside class="panel sidebar">
+          <section class="panel-section">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Scan Intake</p>
+                <h2>发起扫描</h2>
               </div>
-            </section>
+            </div>
 
-	            <section class="workspace-view" data-view="console">
-	              <div class="scan-workbench">
-	                <section class="neo-card scan-command-center">
-	                  <div class="scan-command-center__head">
-	                    <div class="scan-command-center__copy">
-	                      <span class="eyebrow">Scan Workspace</span>
-	                      <h3>Launch jobs, watch the pipeline, and keep the runtime under control.</h3>
-	                      <p>
-	                        This page is now a dedicated scanning workbench: target intake on the left, live execution in the
-	                        center, and module plus tuning rails on the right.
-	                      </p>
-	                    </div>
-	                    <div class="scan-command-center__chips">
-	                      <span id="consoleStatusChip" class="status-pill status-pill--online">idle</span>
-	                      <span id="consoleTargetChip" class="status-pill">no target</span>
-	                      <span id="consoleThreatChip" class="status-pill status-pill--warning">tracked</span>
-	                    </div>
-	                  </div>
-	
-	                  <div class="decrypt-bar">
-	                    <div class="decrypt-bar__track">
-	                      <div id="scanProgressBar" class="decrypt-bar__fill"></div>
-	                    </div>
-	                    <div class="decrypt-bar__meta">
-	                      <span id="scanProgressText">decrypting... 0%</span>
-	                      <span id="scanRuntimeText">runtime // 00:00</span>
-	                    </div>
-	                  </div>
-	
-	                  <div class="status-ribbon">
-	                    <article>
-	                      <span>Transport</span>
-	                      <strong id="statusTransport">API LINKED</strong>
-	                    </article>
-	                    <article>
-	                      <span>Mode</span>
-	                      <strong id="statusMode">COMMON</strong>
-	                    </article>
-	                    <article>
-	                      <span>Threat</span>
-	                      <strong id="statusThreat">LOW</strong>
-	                    </article>
-	                    <article>
-	                      <span>Jobs</span>
-	                      <strong id="statusNodes">0 active</strong>
-	                    </article>
-	                  </div>
-	                </section>
-	
-	                <div class="scan-layout">
-	                  <aside class="scan-layout__rail">
-	                    <section class="neo-card scan-target-card">
-	                      <div class="card-head">
-	                        <div>
-	                          <span class="eyebrow">Target Intake</span>
-	                          <h3>Prepare the next scan job</h3>
-	                        </div>
-	                        <span class="status-pill">input</span>
-	                      </div>
-	
-	                      <label class="field-block field-block--emphasis">
-	                        <span>Primary target</span>
-	                        <input id="consoleTargetInput" type="text" placeholder="target.tld / 203.0.113.5 / https://portal.tld" autocomplete="off" />
-	                      </label>
-	
-	                      <div class="scan-action-stack">
-	                        <button id="consoleStartBtn" class="neo-button neo-button--primary ripple-target" type="button">
-	                          Launch Scan
-	                        </button>
-	                        <button id="consoleStopBtn" class="neo-button neo-button--ghost ripple-target" type="button" disabled>
-	                          Abort
-	                        </button>
-	                        <button id="demoModeBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-	                          Ghost Mode
-	                        </button>
-	                        <button id="importReportBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-	                          Import JSON
-	                        </button>
-	                      </div>
-	
-	                      <input id="reportFileInput" type="file" accept=".json,application/json" hidden />
-	
-	                      <div id="reportMeta" class="file-meta">
-	                        <span>Report channel idle.</span>
-	                        <strong id="reportMetaName">No imported evidence</strong>
-	                      </div>
-	                    </section>
-	
-	                    <section class="neo-card scan-baseline-card">
-	                      <div class="card-head">
-	                        <div>
-	                          <span class="eyebrow">Pipeline Base</span>
-	                          <h3>Always-on stages</h3>
-	                        </div>
-	                        <span class="status-pill status-pill--online">baseline</span>
-	                      </div>
-	
-	                      <div class="scan-baseline-list">
-	                        <div>
-	                          <strong>Target parsing</strong>
-	                          <span>Domain, URL, and IP normalization before the task is queued.</span>
-	                        </div>
-	                        <div>
-	                          <strong>Identity collection</strong>
-	                          <span>DNS resolution and WHOIS ownership context are part of every backend run.</span>
-	                        </div>
-	                        <div>
-	                          <strong>Technology profile</strong>
-	                          <span>Visible frameworks and server fingerprints are always staged into the report.</span>
-	                        </div>
-	                      </div>
-	                    </section>
-	                  </aside>
-	
-	                  <main class="scan-layout__stage">
-	                    <section class="neo-card scan-visual-stage">
-	                      <div class="card-head">
-	                        <div>
-	                          <span class="eyebrow">Execution Stage</span>
-	                          <h3>Live pipeline map</h3>
-	                        </div>
-	                        <span class="status-pill">runtime</span>
-	                      </div>
-	
-	                      <div class="scan-pipeline-map">
-	                        <article class="scan-pipeline-node scan-pipeline-node--input">
-	                          <span class="eyebrow">01</span>
-	                          <strong>Intake</strong>
-	                          <p>Queue a target and freeze the input state for the job.</p>
-	                        </article>
-	                        <article class="scan-pipeline-node scan-pipeline-node--identity">
-	                          <span class="eyebrow">02</span>
-	                          <strong>Identity</strong>
-	                          <p>DNS, WHOIS, CT, and passive records fill the early graph.</p>
-	                        </article>
-	                        <article class="scan-pipeline-node scan-pipeline-node--exposure">
-	                          <span class="eyebrow">03</span>
-	                          <strong>Exposure</strong>
-	                          <p>Web assets, ports, and adjacent surfaces get enumerated.</p>
-	                        </article>
-	                        <article class="scan-pipeline-node scan-pipeline-node--risk">
-	                          <span class="eyebrow">04</span>
-	                          <strong>Risk</strong>
-	                          <p>Service risk, CVE hints, and enrichment lanes finalize the report.</p>
-	                        </article>
-	                      </div>
-	
-	                      <div class="scan-stage-notes">
-	                        <div>
-	                          <strong>Queue-aware</strong>
-	                          <span>Uses the backend job lifecycle instead of a fake one-shot scan form.</span>
-	                        </div>
-	                        <div>
-	                          <strong>Runtime-safe</strong>
-	                          <span>Long-running tasks can be stopped without leaving the workspace.</span>
-	                        </div>
-	                        <div>
-	                          <strong>Report-linked</strong>
-	                          <span>Everything on this page feeds the structured result stack below.</span>
-	                        </div>
-	                      </div>
-	                    </section>
-	
-	                    <section class="neo-card scan-terminal-card">
-	                      <div class="card-head">
-	                        <div>
-	                          <span class="eyebrow">Terminal Stream</span>
-	                          <h3>Live scan transcript</h3>
-	                        </div>
-	                        <button id="clearConsoleLogBtn" class="icon-button ripple-target" type="button">clear</button>
-	                      </div>
-	
-	                      <div class="scan-terminal-shell">
-	                        <div class="scan-terminal-shell__chrome">
-	                          <span>jobs</span>
-	                          <span>dns</span>
-	                          <span>web</span>
-	                          <span>risk</span>
-	                        </div>
-	                        <div id="scanLog" class="scan-log"></div>
-	                      </div>
-	                    </section>
-	                  </main>
-	
-	                  <aside class="scan-layout__config">
-	                    <section class="neo-card scan-modules-card">
-	                      <div class="card-head">
-	                        <div>
-	                          <span class="eyebrow">Recon Modules</span>
-	                          <h3>Optional backend switches</h3>
-	                        </div>
-	                        <span id="moduleCountChip" class="status-pill">06 armed</span>
-	                      </div>
-	
-	                      <div class="module-toggle-grid">
-	                        <label class="module-toggle ripple-target">
-	                          <input id="modulePassive" type="checkbox" checked />
-	                          <span>
-	                            <strong>Passive / Historical DNS</strong>
-	                            <small>historical subdomains and resolved IP echoes</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="moduleSubdomain" type="checkbox" checked />
-	                          <span>
-	                            <strong>Certificate Transparency</strong>
-	                            <small>ct log expansion and discovered subdomains</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="modulePort" type="checkbox" checked />
-	                          <span>
-	                            <strong>Network Port Scan</strong>
-	                            <small>nmap-backed tcp/udp service discovery</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="moduleVuln" type="checkbox" checked />
-	                          <span>
-	                            <strong>Service Risk Correlation</strong>
-	                            <small>cve lookup and weak configuration checks</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="moduleWeb" type="checkbox" checked />
-	                          <span>
-	                            <strong>Web Asset Enumeration</strong>
-	                            <small>crawler, js extraction, directory probing</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="moduleAsn" type="checkbox" />
-	                          <span>
-	                            <strong>ASN Expansion</strong>
-	                            <small>adjacent network reconnaissance</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="moduleThreat" type="checkbox" />
-	                          <span>
-	                            <strong>VirusTotal Enrichment</strong>
-	                            <small>domain and url verdict correlation</small>
-	                          </span>
-	                        </label>
-	
-	                        <label class="module-toggle ripple-target">
-	                          <input id="modulePrivate" type="checkbox" />
-	                          <span>
-	                            <strong>Private CIDR Sweep</strong>
-	                            <small>allow private ranges and attached cidr targets</small>
-	                          </span>
-	                        </label>
-	                      </div>
-	                    </section>
-	
-	                    <section class="neo-card scan-advanced-card">
-	                      <div class="card-head">
-	                        <div>
-	                          <span class="eyebrow">Advanced Controls</span>
-	                          <h3>Tuning and protocol rails</h3>
-	                        </div>
-	                        <span class="status-pill">expert</span>
-	                      </div>
-	
-	                      <div class="advanced-accordion">
-	                        <details class="holo-accordion" open>
-	                          <summary>Core transport and timing</summary>
-	                          <div class="holo-accordion__body">
-	                            <div class="field-grid">
-	                              <label class="field-block">
-	                                <span>Backend API</span>
-	                                <input id="apiUrlInput" type="text" placeholder="http://127.0.0.1:8000/api/scan" />
-	                              </label>
-	                              <label class="field-block">
-	                                <span>Timeout (s)</span>
-	                                <input id="timeoutInput" type="number" min="1" step="1" value="10" />
-	                              </label>
-	                              <label class="field-block">
-	                                <span>Port timeout (s)</span>
-	                                <input id="portTimeoutInput" type="number" min="0.1" step="0.1" value="0.8" />
-	                              </label>
-	                              <label class="field-block">
-	                                <span>Port mode</span>
-	                                <select id="portModeInput">
-	                                  <option value="common" selected>Common</option>
-	                                  <option value="full">Full</option>
-	                                  <option value="custom">Custom</option>
-	                                </select>
-	                              </label>
-	                            </div>
-	                            <label id="customPortsField" class="field-block field-block--hidden">
-	                              <span>Custom ports</span>
-	                              <input id="customPortsInput" type="text" placeholder="22,80,443,8443 or 1-1024" />
-	                            </label>
-	                          </div>
-	                        </details>
-	
-	                        <details class="holo-accordion">
-	                          <summary>Transport protocols and enrichment</summary>
-	                          <div class="holo-accordion__body">
-	                            <div class="switch-row">
-	                              <label class="mini-switch ripple-target">
-	                                <input id="tcpEnabledInput" type="checkbox" checked />
-	                                <span>TCP</span>
-	                              </label>
-	                              <label class="mini-switch ripple-target">
-	                                <input id="udpEnabledInput" type="checkbox" />
-	                                <span>UDP</span>
-	                              </label>
-	                              <label class="mini-switch ripple-target">
-	                                <input id="webCrawlerInput" type="checkbox" checked />
-	                                <span>Web crawler</span>
-	                              </label>
-	                              <label class="mini-switch ripple-target">
-	                                <input id="jsExtractInput" type="checkbox" checked />
-	                                <span>JS extract</span>
-	                              </label>
-	                            </div>
-	                          </div>
-	                        </details>
-	
-	                        <details class="holo-accordion">
-	                          <summary>Threat intel and private lanes</summary>
-	                          <div class="holo-accordion__body">
-	                            <div class="field-grid">
-	                              <label class="field-block">
-	                                <span>VirusTotal API key</span>
-	                                <input id="vtApiKeyInput" type="password" placeholder="paste your own key to arm threat intel" autocomplete="off" />
-	                              </label>
-	                              <label class="field-block">
-	                                <span>Private CIDR targets</span>
-	                                <input id="cidrTargetsInput" type="text" placeholder="10.0.0.0/24,192.168.1.0/24" />
-	                              </label>
-	                            </div>
-	                          </div>
-	                        </details>
-	                      </div>
-	                    </section>
-	                  </aside>
-	                </div>
-	              </div>
-	            </section>
+            <form id="scanForm" class="stack">
+              <label class="field">
+                <span>目标</span>
+                <input id="targetInput" name="target" type="text" placeholder="example.com / https://target.tld / 203.0.113.5" required />
+              </label>
 
-            <section id="resultsAnchor" class="workspace-view" data-view="results">
-              <div class="results-shell">
-                <section class="neo-card results-summary">
-                  <div class="card-head">
-                    <div>
-                      <span class="eyebrow">Result Stack</span>
-                      <h3>Evidence package</h3>
-                    </div>
-                    <div class="results-actions">
-                      <button id="copyOverviewBtn" class="neo-button neo-button--ghost ripple-target" type="button" data-copy-target="overviewCards">
-                        Copy Overview
-                      </button>
-                      <button id="downloadReportBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-                        Download JSON
-                      </button>
-                      <button id="darkWebExportBtn" class="neo-button neo-button--danger ripple-target" type="button">
-                        Export to Dark Web
-                      </button>
-                    </div>
-                  </div>
+              <label class="field">
+                <span>Backend API</span>
+                <input id="apiUrlInput" name="apiUrl" type="url" placeholder="http://127.0.0.1:8000/api/scan" />
+              </label>
 
-                  <div id="overviewCards" class="results-summary__grid">
-                    <article class="result-kpi">
-                      <span>Target</span>
-                      <strong id="resultTargetKpi">NO TARGET</strong>
-                    </article>
-                    <article class="result-kpi">
-                      <span>Status</span>
-                      <strong id="resultStatusKpi">STANDBY</strong>
-                    </article>
-                    <article class="result-kpi">
-                      <span>Open Ports</span>
-                      <strong id="resultOpenPortsKpi">0</strong>
-                    </article>
-                    <article class="result-kpi">
-                      <span>Tech Signals</span>
-                      <strong id="resultTechKpi">0</strong>
-                    </article>
-                    <article class="result-kpi">
-                      <span>Threat Score</span>
-                      <strong id="resultThreatScoreKpi">00</strong>
-                    </article>
-                    <article class="result-kpi">
-                      <span>Source</span>
-                      <strong id="resultSourceKpi">NO DATA</strong>
-                    </article>
-                  </div>
-                </section>
-
-                <section class="neo-card results-stack">
-                  <div class="results-tabs" role="tablist" aria-label="Results tabs">
-                    <button class="result-tab is-active ripple-target" type="button" data-result-tab="overview">Overview</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="recon">Identity &amp; DNS</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="web">Web Assets</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="network">Network Map</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="vulns">Risk &amp; Intel</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="json">Raw JSON</button>
-                  </div>
-
-                  <div class="results-panels">
-                    <section class="result-panel is-active" data-result-panel="overview">
-                      <div class="result-panel__grid">
-                        <details class="result-card" open>
-                          <summary>
-                            <span>Mission digest</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="missionDigest">copy</button>
-                          </summary>
-                          <div id="missionDigest" class="result-card__body result-list"></div>
-                        </details>
-
-                        <details class="result-card" open>
-                          <summary>
-                            <span>Signal synopsis</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="signalSynopsis">copy</button>
-                          </summary>
-                          <div id="signalSynopsis" class="result-card__body result-list"></div>
-                        </details>
-
-                        <details class="result-card" open>
-                          <summary>
-                            <span>Terminal highlights</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="terminalHighlights">copy</button>
-                          </summary>
-                          <div id="terminalHighlights" class="result-card__body result-list"></div>
-                        </details>
-                      </div>
-                    </section>
-
-                    <section class="result-panel" data-result-panel="recon">
-                      <div class="recon-grid">
-                        <div class="result-card result-card--table">
-                          <div class="result-card__table-head">
-                            <span>DNS Records</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="dnsTableBody">copy</button>
-                          </div>
-                          <table class="neon-table neon-table--compact">
-                            <thead>
-                              <tr>
-                                <th>Type</th>
-                                <th>Value</th>
-                              </tr>
-                            </thead>
-                            <tbody id="dnsTableBody"></tbody>
-                          </table>
-                        </div>
-
-                        <div class="result-card result-card--table">
-                          <div class="result-card__table-head">
-                            <span>WHOIS + OSINT</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="whoisTableBody">copy</button>
-                          </div>
-                          <table class="neon-table neon-table--compact">
-                            <thead>
-                              <tr>
-                                <th>Field</th>
-                                <th>Value</th>
-                              </tr>
-                            </thead>
-                            <tbody id="whoisTableBody"></tbody>
-                          </table>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Detected Technologies</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="techChipList">copy</button>
-                          </div>
-                          <div id="techChipList" class="chip-cloud"></div>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Resolved Targets</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="resolvedTargetsList">copy</button>
-                          </div>
-                          <div id="resolvedTargetsList" class="result-list"></div>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>CT + Passive Expansion</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="ctPassiveList">copy</button>
-                          </div>
-                          <div id="ctPassiveList" class="result-list"></div>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>ASN + Adjacent Space</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="asnRecordList">copy</button>
-                          </div>
-                          <div id="asnRecordList" class="result-list"></div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section class="result-panel" data-result-panel="web">
-                      <div class="result-panel__grid">
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Combined Endpoints</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="webEndpointList">copy</button>
-                          </div>
-                          <div id="webEndpointList" class="result-list"></div>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>JavaScript Sources</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="webJsFileList">copy</button>
-                          </div>
-                          <div id="webJsFileList" class="result-list"></div>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Sensitive Paths</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="webSensitiveList">copy</button>
-                          </div>
-                          <div id="webSensitiveList" class="result-list"></div>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Directory Probe Hits</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="webDirectoryList">copy</button>
-                          </div>
-                          <div id="webDirectoryList" class="result-list"></div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section class="result-panel" data-result-panel="network">
-                      <div class="network-grid">
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Subdomain Relationship Mesh</span>
-                            <button id="rerenderGraphBtn" class="icon-button ripple-target" type="button">refresh</button>
-                          </div>
-                          <canvas id="networkCanvas" class="network-canvas"></canvas>
-                        </div>
-
-                        <div class="result-card">
-                          <div class="result-card__table-head">
-                            <span>Node Legend</span>
-                            <button class="icon-button ripple-target" type="button" data-copy-target="nodeLegend">copy</button>
-                          </div>
-                          <div id="nodeLegend" class="result-list"></div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section class="result-panel" data-result-panel="vulns">
-                      <div id="vulnCards" class="vuln-grid"></div>
-                    </section>
-
-                    <section class="result-panel" data-result-panel="json">
-                      <div class="result-card result-card--raw">
-                        <div class="result-card__table-head">
-                          <span>Raw Intelligence Payload</span>
-                          <button class="icon-button ripple-target" type="button" data-copy-target="rawJsonView">copy</button>
-                        </div>
-                        <pre id="rawJsonView" class="raw-json"></pre>
-                      </div>
-                    </section>
-                  </div>
-                </section>
+              <div class="field-grid field-grid--two">
+                <label class="field">
+                  <span>请求超时</span>
+                  <input id="timeoutInput" name="timeout" type="number" min="1" max="300" value="10" />
+                </label>
+                <label class="field">
+                  <span>端口超时</span>
+                  <input id="portTimeoutInput" name="portTimeout" type="number" min="0.05" max="60" step="0.05" value="0.8" />
+                </label>
               </div>
-            </section>
-          </div>
+
+              <div class="field-grid field-grid--two">
+                <label class="field">
+                  <span>端口模式</span>
+                  <select id="scanModeInput" name="scanMode">
+                    <option value="common">常用端口</option>
+                    <option value="full" selected>全端口</option>
+                    <option value="custom">自定义</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>扫描引擎</span>
+                  <select id="portScannerInput" name="portScanner">
+                    <option value="auto" selected>auto</option>
+                    <option value="nmap">nmap</option>
+                    <option value="builtin">builtin</option>
+                  </select>
+                </label>
+              </div>
+
+              <label class="field" id="customPortsField" hidden>
+                <span>自定义端口</span>
+                <input id="customPortsInput" name="customPorts" type="text" placeholder="22,80,443,3306 或 1-1024" />
+              </label>
+
+              <div class="toggle-grid">
+                <label class="toggle">
+                  <input id="tcpScanInput" type="checkbox" checked />
+                  <span>TCP 扫描</span>
+                </label>
+                <label class="toggle">
+                  <input id="udpScanInput" type="checkbox" checked />
+                  <span>UDP 扫描</span>
+                </label>
+                <label class="toggle">
+                  <input id="allowPrivateIpInput" type="checkbox" />
+                  <span>允许私网 IP</span>
+                </label>
+                <label class="toggle">
+                  <input id="vtScanInput" type="checkbox" />
+                  <span>VirusTotal</span>
+                </label>
+              </div>
+
+              <label class="field">
+                <span>附加 CIDR 目标</span>
+                <textarea id="cidrTargetsInput" rows="2" placeholder="192.168.1.0/24,10.0.0.0/24"></textarea>
+              </label>
+
+              <label class="field">
+                <span>VirusTotal API Key</span>
+                <input id="vtApiKeyInput" type="password" placeholder="仅在启用 VirusTotal 时需要" />
+              </label>
+
+              <label class="field">
+                <span>NVD API Key</span>
+                <input id="nvdApiKeyInput" type="password" placeholder="仅在启用 CVE 关联时需要" />
+              </label>
+
+              <section class="subsection">
+                <div class="subsection__head">
+                  <div>
+                    <p class="eyebrow">Module Matrix</p>
+                    <h3>模块选择</h3>
+                  </div>
+                  <span class="inline-stat"><strong id="moduleCount">0</strong> 个启用</span>
+                </div>
+
+                <div class="module-groups">
+                  <div class="module-group">
+                    <h4>基础增强</h4>
+                    <label class="toggle"><input id="ctScanInput" type="checkbox" /> <span>证书透明度</span></label>
+                    <label class="toggle"><input id="passiveDnsInput" type="checkbox" /> <span>被动 DNS</span></label>
+                    <label class="toggle"><input id="asnScanInput" type="checkbox" /> <span>ASN 情报</span></label>
+                    <label class="toggle"><input id="asnExpandInput" type="checkbox" /> <span>同 C 段扩展</span></label>
+                  </div>
+
+                  <div class="module-group">
+                    <h4>Web 资产枚举</h4>
+                    <label class="toggle"><input id="webAssetScanInput" type="checkbox" checked /> <span>启用 Web 枚举</span></label>
+                    <label class="toggle"><input id="webCrawlerInput" type="checkbox" checked /> <span>站内爬取</span></label>
+                    <label class="toggle"><input id="webJsExtractInput" type="checkbox" checked /> <span>JS 接口提取</span></label>
+                    <label class="toggle"><input id="webSensitiveInput" type="checkbox" checked /> <span>敏感路径提取</span></label>
+                    <label class="toggle"><input id="webDirScanInput" type="checkbox" checked /> <span>目录探测</span></label>
+                    <label class="toggle"><input id="webDirFfufInput" type="checkbox" /> <span>优先 ffuf</span></label>
+                  </div>
+
+                  <div class="module-group">
+                    <h4>服务风险</h4>
+                    <label class="toggle"><input id="serviceRiskInput" type="checkbox" checked /> <span>启用服务风险分析</span></label>
+                    <label class="toggle"><input id="cveLookupInput" type="checkbox" checked /> <span>CVE 关联</span></label>
+                    <label class="toggle"><input id="weakChecksInput" type="checkbox" checked /> <span>弱配置检查</span></label>
+                  </div>
+                </div>
+              </section>
+
+              <div class="actions">
+                <button class="button button--primary" id="startScanBtn" type="submit">创建扫描任务</button>
+                <button class="button button--danger" id="stopScanBtn" type="button" disabled>停止当前任务</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Report Import</p>
+                <h2>导入已有结果</h2>
+              </div>
+            </div>
+            <div class="stack">
+              <input id="reportFileInput" type="file" accept=".json,application/json" />
+              <button class="button button--secondary" id="loadSampleBtn" type="button">载入样例报告</button>
+              <p class="hint" id="importHint">可以直接加载 `report.json`，用于离线查看结果结构。</p>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Job History</p>
+                <h2>历史任务</h2>
+              </div>
+            </div>
+            <div id="jobsList" class="job-list empty-state">还没有可展示的任务。</div>
+          </section>
+        </aside>
+
+        <section class="content">
+          <section class="panel status-panel">
+            <div class="status-head">
+              <div>
+                <p class="eyebrow">Execution State</p>
+                <h2>当前任务与后端状态</h2>
+              </div>
+              <div class="status-badges">
+                <span class="status-chip" id="statusChip">Idle</span>
+                <span class="status-chip status-chip--muted" id="jobIdChip">No Job</span>
+              </div>
+            </div>
+
+            <div class="status-grid">
+              <article class="stat-card">
+                <span>目标</span>
+                <strong id="currentTargetValue">-</strong>
+              </article>
+              <article class="stat-card">
+                <span>创建时间</span>
+                <strong id="createdAtValue">-</strong>
+              </article>
+              <article class="stat-card">
+                <span>运行时长</span>
+                <strong id="runtimeValue">-</strong>
+              </article>
+              <article class="stat-card">
+                <span>结果来源</span>
+                <strong id="sourceValue">-</strong>
+              </article>
+            </div>
+
+            <div class="progress-block">
+              <div class="progress-meta">
+                <span id="progressLabel">等待任务</span>
+                <strong id="progressValue">0%</strong>
+              </div>
+              <div class="progress-bar">
+                <div id="progressBar"></div>
+              </div>
+              <p class="hint" id="statusMessage">状态会根据后端任务和报告结构自动推导。</p>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="tabs" id="resultTabs">
+              <button class="tab is-active" type="button" data-tab="overview">总览</button>
+              <button class="tab" type="button" data-tab="identity">基础情报</button>
+              <button class="tab" type="button" data-tab="infrastructure">网络与资产</button>
+              <button class="tab" type="button" data-tab="web">Web 枚举</button>
+              <button class="tab" type="button" data-tab="risk">风险分析</button>
+              <button class="tab" type="button" data-tab="raw">原始 JSON</button>
+            </div>
+
+            <div class="tab-panels">
+              <section class="tab-panel is-active" data-panel="overview">
+                <div id="overviewPanel"></div>
+              </section>
+              <section class="tab-panel" data-panel="identity">
+                <div id="identityPanel"></div>
+              </section>
+              <section class="tab-panel" data-panel="infrastructure">
+                <div id="infrastructurePanel"></div>
+              </section>
+              <section class="tab-panel" data-panel="web">
+                <div id="webPanel"></div>
+              </section>
+              <section class="tab-panel" data-panel="risk">
+                <div id="riskPanel"></div>
+              </section>
+              <section class="tab-panel" data-panel="raw">
+                <pre class="raw-view" id="rawJsonView">暂无数据</pre>
+              </section>
+            </div>
+          </section>
         </section>
-
-        <footer class="site-footer">
-          <div>
-            <span class="eyebrow">NEOSCAN</span>
-            <strong>Offensive reconnaissance interface for premium operators.</strong>
-          </div>
-          <div class="site-footer__meta">
-            <span>deep black // neon signal // zero mercy</span>
-            <span>monthly tier: 999 credits</span>
-          </div>
-        </footer>
       </main>
-
-      <button id="terminalFab" class="terminal-fab ripple-target" type="button">Terminal</button>
-
-      <section id="terminalOverlay" class="terminal-overlay" hidden>
-        <div class="terminal-overlay__chrome">
-          <div>
-            <span class="eyebrow">Dark Terminal</span>
-            <h3>Ghost shell</h3>
-          </div>
-          <button id="terminalCloseBtn" class="neo-button neo-button--ghost ripple-target" type="button">Close</button>
-        </div>
-
-        <div id="terminalOverlayLog" class="terminal-overlay__log"></div>
-
-        <form id="terminalCommandForm" class="terminal-overlay__input">
-          <label class="terminal-overlay__prompt">ghost@neoscan:~$</label>
-          <input id="terminalCommandInput" type="text" autocomplete="off" spellcheck="false" placeholder="type help, status, scan example.com, view results..." />
-        </form>
-      </section>
-
-      <section id="scanOverlay" class="scan-overlay" hidden>
-        <div class="scan-overlay__panel">
-          <span class="eyebrow">Decrypting uplink</span>
-          <strong id="scanOverlayTitle">bootstrapping neon channels</strong>
-          <div class="decrypt-bar">
-            <div class="decrypt-bar__track">
-              <div id="scanOverlayProgressBar" class="decrypt-bar__fill"></div>
-            </div>
-            <div class="decrypt-bar__meta">
-              <span id="scanOverlayProgressText">decrypting... 0%</span>
-              <span id="scanOverlayStatusText">warming passive collectors</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div id="toastStack" class="toast-stack" aria-live="polite"></div>
-
-      <div class="sound-placeholders" hidden aria-hidden="true">
-        <audio id="sfxScanStart" preload="none"></audio>
-        <audio id="sfxGlitch" preload="none"></audio>
-        <audio id="sfxSuccess" preload="none"></audio>
-      </div>
     </div>
 
-    <script src="./app.js" defer></script>
+    <template id="cardTemplate">
+      <article class="data-card">
+        <div class="data-card__head">
+          <div>
+            <p class="eyebrow"></p>
+            <h3></h3>
+          </div>
+          <span class="badge"></span>
+        </div>
+        <div class="data-card__body"></div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
   </body>
 </html>

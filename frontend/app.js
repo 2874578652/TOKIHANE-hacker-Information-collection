@@ -1,2213 +1,1028 @@
 const refs = {
-  app: document.querySelector(".neo-app"),
-  navTargetInput: document.getElementById("navTargetInput"),
-  heroTargetInput: document.getElementById("heroTargetInput"),
-  consoleTargetInput: document.getElementById("consoleTargetInput"),
-  navLaunchBtn: document.getElementById("navLaunchBtn"),
-  heroScanButton: document.getElementById("heroScanButton"),
-  demoSampleBtn: document.getElementById("demoSampleBtn"),
-  heroTargetEcho: document.getElementById("heroTargetEcho"),
-  heroStatusLine: document.getElementById("heroStatusLine"),
-  heroFeed: document.getElementById("heroFeed"),
-  heroFeedState: document.getElementById("heroFeedState"),
-  heroSignalIntegrity: document.getElementById("heroSignalIntegrity"),
-  heroThreatPosture: document.getElementById("heroThreatPosture"),
-  heroNodeStatus: document.getElementById("heroNodeStatus"),
-  heroAssetFlow: document.getElementById("heroAssetFlow"),
-  heroCollectorCount: document.getElementById("heroCollectorCount"),
-  heroThreatLevel: document.getElementById("heroThreatLevel"),
-  mobileMenuToggle: document.getElementById("mobileMenuToggle"),
-  mobileDrawer: document.getElementById("mobileDrawer"),
-  viewTabs: Array.from(document.querySelectorAll("[data-view-target]")),
-  workspaceViews: Array.from(document.querySelectorAll(".workspace-view")),
-  resultTabs: Array.from(document.querySelectorAll("[data-result-tab]")),
-  resultPanels: Array.from(document.querySelectorAll("[data-result-panel]")),
-  statScansToday: document.getElementById("statScansToday"),
-  statTargetsTracked: document.getElementById("statTargetsTracked"),
-  statVulnsFound: document.getElementById("statVulnsFound"),
-  statActiveNodes: document.getElementById("statActiveNodes"),
-  recentScansBody: document.getElementById("recentScansBody"),
-  mapLocationCount: document.getElementById("mapLocationCount"),
-  apiHealthBadge: document.getElementById("apiHealthBadge"),
-  apiHealthValue: document.getElementById("apiHealthValue"),
-  apiEndpointValue: document.getElementById("apiEndpointValue"),
-  apiJobsCountValue: document.getElementById("apiJobsCountValue"),
-  apiHealthMessage: document.getElementById("apiHealthMessage"),
-  apiJobsBody: document.getElementById("apiJobsBody"),
-  reportFileInput: document.getElementById("reportFileInput"),
-  importReportBtn: document.getElementById("importReportBtn"),
-  reportMeta: document.getElementById("reportMeta"),
-  reportMetaName: document.getElementById("reportMetaName"),
-  consoleStartBtn: document.getElementById("consoleStartBtn"),
-  consoleStopBtn: document.getElementById("consoleStopBtn"),
-  demoModeBtn: document.getElementById("demoModeBtn"),
-  clearConsoleLogBtn: document.getElementById("clearConsoleLogBtn"),
-  scanLog: document.getElementById("scanLog"),
-  consoleStatusChip: document.getElementById("consoleStatusChip"),
-  consoleTargetChip: document.getElementById("consoleTargetChip"),
-  consoleThreatChip: document.getElementById("consoleThreatChip"),
-  statusTransport: document.getElementById("statusTransport"),
-  statusMode: document.getElementById("statusMode"),
-  statusThreat: document.getElementById("statusThreat"),
-  statusNodes: document.getElementById("statusNodes"),
-  scanProgressBar: document.getElementById("scanProgressBar"),
-  scanProgressText: document.getElementById("scanProgressText"),
-  scanRuntimeText: document.getElementById("scanRuntimeText"),
+  healthPill: document.getElementById("healthPill"),
+  healthText: document.getElementById("healthText"),
+  refreshJobsBtn: document.getElementById("refreshJobsBtn"),
+  heroTarget: document.getElementById("heroTarget"),
+  heroSummary: document.getElementById("heroSummary"),
+  heroStatus: document.getElementById("heroStatus"),
+  heroModules: document.getElementById("heroModules"),
+  heroPorts: document.getElementById("heroPorts"),
+  heroRisks: document.getElementById("heroRisks"),
+  scanForm: document.getElementById("scanForm"),
+  targetInput: document.getElementById("targetInput"),
   apiUrlInput: document.getElementById("apiUrlInput"),
   timeoutInput: document.getElementById("timeoutInput"),
   portTimeoutInput: document.getElementById("portTimeoutInput"),
-  portModeInput: document.getElementById("portModeInput"),
+  scanModeInput: document.getElementById("scanModeInput"),
+  portScannerInput: document.getElementById("portScannerInput"),
   customPortsField: document.getElementById("customPortsField"),
   customPortsInput: document.getElementById("customPortsInput"),
-  tcpEnabledInput: document.getElementById("tcpEnabledInput"),
-  udpEnabledInput: document.getElementById("udpEnabledInput"),
-  webCrawlerInput: document.getElementById("webCrawlerInput"),
-  jsExtractInput: document.getElementById("jsExtractInput"),
-  vtApiKeyInput: document.getElementById("vtApiKeyInput"),
+  tcpScanInput: document.getElementById("tcpScanInput"),
+  udpScanInput: document.getElementById("udpScanInput"),
+  allowPrivateIpInput: document.getElementById("allowPrivateIpInput"),
+  vtScanInput: document.getElementById("vtScanInput"),
   cidrTargetsInput: document.getElementById("cidrTargetsInput"),
-  moduleCountChip: document.getElementById("moduleCountChip"),
-  resultTargetKpi: document.getElementById("resultTargetKpi"),
-  resultStatusKpi: document.getElementById("resultStatusKpi"),
-  resultOpenPortsKpi: document.getElementById("resultOpenPortsKpi"),
-  resultTechKpi: document.getElementById("resultTechKpi"),
-  resultThreatScoreKpi: document.getElementById("resultThreatScoreKpi"),
-  resultSourceKpi: document.getElementById("resultSourceKpi"),
-  missionDigest: document.getElementById("missionDigest"),
-  signalSynopsis: document.getElementById("signalSynopsis"),
-  terminalHighlights: document.getElementById("terminalHighlights"),
-  dnsTableBody: document.getElementById("dnsTableBody"),
-  whoisTableBody: document.getElementById("whoisTableBody"),
-  techChipList: document.getElementById("techChipList"),
-  resolvedTargetsList: document.getElementById("resolvedTargetsList"),
-  ctPassiveList: document.getElementById("ctPassiveList"),
-  asnRecordList: document.getElementById("asnRecordList"),
-  webEndpointList: document.getElementById("webEndpointList"),
-  webJsFileList: document.getElementById("webJsFileList"),
-  webSensitiveList: document.getElementById("webSensitiveList"),
-  webDirectoryList: document.getElementById("webDirectoryList"),
-  networkCanvas: document.getElementById("networkCanvas"),
-  nodeLegend: document.getElementById("nodeLegend"),
-  rerenderGraphBtn: document.getElementById("rerenderGraphBtn"),
-  vulnCards: document.getElementById("vulnCards"),
+  vtApiKeyInput: document.getElementById("vtApiKeyInput"),
+  nvdApiKeyInput: document.getElementById("nvdApiKeyInput"),
+  ctScanInput: document.getElementById("ctScanInput"),
+  passiveDnsInput: document.getElementById("passiveDnsInput"),
+  asnScanInput: document.getElementById("asnScanInput"),
+  asnExpandInput: document.getElementById("asnExpandInput"),
+  webAssetScanInput: document.getElementById("webAssetScanInput"),
+  webCrawlerInput: document.getElementById("webCrawlerInput"),
+  webJsExtractInput: document.getElementById("webJsExtractInput"),
+  webSensitiveInput: document.getElementById("webSensitiveInput"),
+  webDirScanInput: document.getElementById("webDirScanInput"),
+  webDirFfufInput: document.getElementById("webDirFfufInput"),
+  serviceRiskInput: document.getElementById("serviceRiskInput"),
+  cveLookupInput: document.getElementById("cveLookupInput"),
+  weakChecksInput: document.getElementById("weakChecksInput"),
+  moduleCount: document.getElementById("moduleCount"),
+  startScanBtn: document.getElementById("startScanBtn"),
+  stopScanBtn: document.getElementById("stopScanBtn"),
+  reportFileInput: document.getElementById("reportFileInput"),
+  loadSampleBtn: document.getElementById("loadSampleBtn"),
+  importHint: document.getElementById("importHint"),
+  jobsList: document.getElementById("jobsList"),
+  statusChip: document.getElementById("statusChip"),
+  jobIdChip: document.getElementById("jobIdChip"),
+  currentTargetValue: document.getElementById("currentTargetValue"),
+  createdAtValue: document.getElementById("createdAtValue"),
+  runtimeValue: document.getElementById("runtimeValue"),
+  sourceValue: document.getElementById("sourceValue"),
+  progressLabel: document.getElementById("progressLabel"),
+  progressValue: document.getElementById("progressValue"),
+  progressBar: document.getElementById("progressBar"),
+  statusMessage: document.getElementById("statusMessage"),
+  overviewPanel: document.getElementById("overviewPanel"),
+  identityPanel: document.getElementById("identityPanel"),
+  infrastructurePanel: document.getElementById("infrastructurePanel"),
+  webPanel: document.getElementById("webPanel"),
+  riskPanel: document.getElementById("riskPanel"),
   rawJsonView: document.getElementById("rawJsonView"),
-  downloadReportBtn: document.getElementById("downloadReportBtn"),
-  darkWebExportBtn: document.getElementById("darkWebExportBtn"),
-  terminalFab: document.getElementById("terminalFab"),
-  terminalOverlay: document.getElementById("terminalOverlay"),
-  terminalCloseBtn: document.getElementById("terminalCloseBtn"),
-  terminalOverlayLog: document.getElementById("terminalOverlayLog"),
-  terminalCommandForm: document.getElementById("terminalCommandForm"),
-  terminalCommandInput: document.getElementById("terminalCommandInput"),
-  scanOverlay: document.getElementById("scanOverlay"),
-  scanOverlayTitle: document.getElementById("scanOverlayTitle"),
-  scanOverlayProgressBar: document.getElementById("scanOverlayProgressBar"),
-  scanOverlayProgressText: document.getElementById("scanOverlayProgressText"),
-  scanOverlayStatusText: document.getElementById("scanOverlayStatusText"),
-  toastStack: document.getElementById("toastStack"),
-  matrixRain: document.getElementById("matrixRain"),
-  particleField: document.getElementById("particleField"),
-  langButtons: Array.from(document.querySelectorAll(".lang-switch__btn")),
-  copyButtons: Array.from(document.querySelectorAll("[data-copy-target]")),
-};
-
-const moduleDefs = [
-  { id: "modulePassive", label: "Passive DNS", payload: "passive_dns_scan", defaultChecked: true },
-  { id: "moduleSubdomain", label: "Certificate Transparency", payload: "ct_scan", defaultChecked: true },
-  { id: "modulePort", label: "Port Scan", payload: "port_scan", defaultChecked: true },
-  { id: "moduleVuln", label: "Service Risk", payload: "service_risk_scan", defaultChecked: true },
-  { id: "moduleWeb", label: "Web Assets", payload: "web_asset_scan", defaultChecked: true },
-  { id: "moduleAsn", label: "ASN Expansion", payload: "asn_scan", defaultChecked: false },
-  { id: "moduleThreat", label: "VirusTotal", payload: "vt_scan", defaultChecked: false },
-  { id: "modulePrivate", label: "Private CIDR", payload: "allow_private_ip", defaultChecked: false },
-].map((item) => ({ ...item, input: document.getElementById(item.id) }));
-
-const heroFeedPool = [
-  "dns resolution, whois collection, and tech detection are baseline stages...",
-  "optional lanes can add ct logs, passive dns, asn expansion, and vt verdicts...",
-  "web asset enumeration merges crawler, js extraction, and directory probe signals...",
-  "service risk analysis correlates open services into cve and weak-check evidence...",
-  "task ids remain queryable through the scan api until the report is complete...",
-  "json evidence packages can be imported back into the workspace at any time...",
-];
-
-const WORLD_POINTS = [
-  { label: "Neo-Tokyo", x: "82%", y: "38%" },
-  { label: "Night City", x: "18%", y: "43%" },
-  { label: "Seoul Grid", x: "77%", y: "34%" },
-  { label: "Berlin Relay", x: "51%", y: "30%" },
-  { label: "Lagos Ghost Hub", x: "49%", y: "56%" },
-  { label: "Sao Flux", x: "31%", y: "71%" },
-  { label: "Sydney Rift", x: "84%", y: "74%" },
-  { label: "Dubai Veil", x: "59%", y: "42%" },
-];
-
-const translations = {
-  en: {
-    navLaunch: "Open Workspace",
-    heroScan: "INITIATE SCAN",
-    openConsole: "OPEN WORKSPACE",
-    demoSample: "LOAD SAMPLE REPORT",
-    terminal: "Terminal",
-    navPlaceholder: "quick target // domain or ip",
-    heroPlaceholder: "corp.tld / 8.8.8.8 / https://target.tld",
-    consolePlaceholder: "target.tld / 203.0.113.5 / https://portal.tld",
-    terminalPlaceholder: "type help, status, scan example.com, view results...",
-  },
-  cn: {
-    navLaunch: "打开工作台",
-    heroScan: "开始扫描",
-    openConsole: "打开工作台",
-    demoSample: "载入样例报告",
-    terminal: "终端",
-    navPlaceholder: "快速目标 // 域名或 IP",
-    heroPlaceholder: "corp.tld / 8.8.8.8 / https://target.tld",
-    consolePlaceholder: "target.tld / 203.0.113.5 / https://portal.tld",
-    terminalPlaceholder: "输入 help、status、scan example.com、view results ...",
-  },
+  tabs: Array.from(document.querySelectorAll(".tab")),
+  panels: Array.from(document.querySelectorAll(".tab-panel")),
 };
 
 const state = {
-  view: "dashboard",
-  resultTab: "overview",
-  target: "",
-  language: "en",
-  scanning: false,
-  scanSource: "idle",
-  currentJobId: null,
-  latestReport: null,
-  latestSource: "NO DATA",
-  progress: 0,
-  runtimeSeconds: 0,
-  progressTimer: null,
-  runtimeTimer: null,
+  currentJob: null,
+  currentReport: null,
+  currentSource: "idle",
+  currentStatus: "idle",
   pollTimer: null,
-  ghostTimer: null,
-  logTimer: null,
-  overlayTimer: null,
-  heroFeedTimer: null,
-  ambientTimer: null,
-  backendTimer: null,
-  recentScans: [],
-  currentScanEntryId: null,
-  currentThreat: "LOW",
-  apiJobs: [],
-  apiHealth: "checking",
+  jobsTimer: null,
+  healthTimer: null,
+  activeTab: "overview",
 };
 
-let audioContext = null;
-
 function inferDefaultApiUrl() {
-  const host = window.location.hostname;
-  if (host === "localhost" || host === "127.0.0.1") {
+  const { protocol, hostname, origin } = window.location;
+  if (protocol === "file:") {
     return "http://127.0.0.1:8000/api/scan";
   }
-  return `${window.location.origin}/api/scan`;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return "http://127.0.0.1:8000/api/scan";
+  }
+  return `${origin}/api/scan`;
 }
 
 function getApiScanUrl() {
-  return normalizeTarget(refs.apiUrlInput?.value) || inferDefaultApiUrl();
+  return String(refs.apiUrlInput.value || "").trim() || inferDefaultApiUrl();
 }
 
-function getApiRootUrl(apiScanUrl = getApiScanUrl()) {
-  return apiScanUrl.replace(/\/+$/, "").replace(/\/scan$/, "");
+function getApiRootUrl() {
+  return getApiScanUrl().replace(/\/+$/, "").replace(/\/scan$/, "");
 }
 
-function getHealthUrl(apiScanUrl = getApiScanUrl()) {
-  const apiRoot = getApiRootUrl(apiScanUrl);
-  return apiRoot.endsWith("/api") ? `${apiRoot.slice(0, -4)}/health` : `${apiRoot}/health`;
+function getHealthUrl() {
+  const root = getApiRootUrl();
+  return root.endsWith("/api") ? `${root.slice(0, -4)}/health` : `${root}/health`;
 }
 
-function getJobsUrl(apiScanUrl = getApiScanUrl()) {
-  return `${getApiRootUrl(apiScanUrl)}/jobs`;
+function getJobsUrl() {
+  return `${getApiRootUrl()}/jobs`;
 }
 
-function setElementVisibility(node, visible, displayValue = "block") {
-  if (!node) {
-    return;
-  }
-  node.hidden = !visible;
-  node.style.display = visible ? displayValue : "none";
+function formatDateTime(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(date);
 }
 
-function hashString(value) {
-  const text = String(value || "");
-  let hash = 0;
-  for (let index = 0; index < text.length; index += 1) {
-    hash = (hash << 5) - hash + text.charCodeAt(index);
-    hash |= 0;
-  }
-  return Math.abs(hash);
+function formatRuntime(job) {
+  if (!job) return "-";
+  const start = job.started_at || job.created_at;
+  if (!start) return "-";
+  const end = job.finished_at || new Date().toISOString();
+  const seconds = Math.max(0, Math.round((new Date(end) - new Date(start)) / 1000));
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  if (h > 0) return `${h}h ${m}m ${s}s`;
+  if (m > 0) return `${m}m ${s}s`;
+  return `${s}s`;
 }
 
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value));
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
-function pickFrom(items, seed) {
-  return items[seed % items.length];
+function safeArray(value) {
+  return Array.isArray(value) ? value : [];
 }
 
-function formatNumber(value) {
-  return String(value).padStart(2, "0");
-}
-
-function normalizeTarget(value) {
-  return String(value || "").trim();
-}
-
-function parseTarget(target) {
-  const input = normalizeTarget(target);
-  if (!input) {
-    return {
-      input: "",
-      domain: "",
-      scheme: "",
-      port: "",
-      path: "",
-      query: "",
-      normalizedUrl: "",
-      label: "NO TARGET",
-      type: "unknown",
-    };
-  }
-
-  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(input)) {
-    return {
-      input,
-      domain: input,
-      scheme: "",
-      port: "",
-      path: "",
-      query: "",
-      normalizedUrl: input,
-      label: input,
-      type: "ip",
-    };
-  }
-
-  if (/^https?:\/\//i.test(input)) {
-    try {
-      const url = new URL(input);
-      return {
-        input,
-        domain: url.hostname,
-        scheme: url.protocol.replace(":", ""),
-        port: url.port,
-        path: url.pathname,
-        query: url.search.replace(/^\?/, ""),
-        normalizedUrl: url.toString(),
-        label: url.hostname,
-        type: "url",
-      };
-    } catch (_error) {}
-  }
-
-  if (input.includes("@") || (!input.includes(".") && !input.includes("/"))) {
-    const clean = input.replace(/^@/, "");
-    return {
-      input,
-      domain: `${clean}.ghost`,
-      scheme: "profile",
-      port: "",
-      path: "",
-      query: "",
-      normalizedUrl: clean,
-      label: clean,
-      type: "username",
-    };
-  }
-
-  return {
-    input,
-    domain: input.replace(/^https?:\/\//i, "").replace(/\/.*$/, ""),
-    scheme: "https",
-    port: "",
-    path: "",
-    query: "",
-    normalizedUrl: `https://${input.replace(/^https?:\/\//i, "")}`,
-    label: input.replace(/^https?:\/\//i, ""),
-    type: "domain",
-  };
-}
-
-function syntheticIp(seed, offset = 0) {
-  const base = hashString(`${seed}:${offset}`);
-  return `203.${(base % 180) + 10}.${(Math.floor(base / 7) % 200) + 10}.${(Math.floor(base / 11) % 220) + 20}`;
-}
-
-function uniqueList(items) {
-  return Array.from(new Set(items.filter(Boolean)));
-}
-
-function getEnabledModules() {
-  return moduleDefs.filter((item) => item.input?.checked);
-}
-
-function getModuleCount() {
-  return getEnabledModules().length;
-}
-
-function isThreatIntelEnabled() {
-  return !!document.getElementById("moduleThreat")?.checked;
-}
-
-function isPortScanEnabled() {
-  return !!document.getElementById("modulePort")?.checked;
-}
-
-function deriveThreatLabel(score) {
-  if (score >= 78) {
-    return "CRITICAL";
-  }
-  if (score >= 54) {
-    return "ELEVATED";
-  }
-  if (score >= 28) {
-    return "TRACKED";
-  }
-  return "LOW";
-}
-
-function countOpenPorts(report) {
-  const ipScan = report?.ip_scan || {};
-  let total = 0;
-  Object.values(ipScan.results || {}).forEach((result) => {
-    const tcp = Array.isArray(result?.tcp?.open_ports) ? result.tcp.open_ports.length : Number(result?.tcp?.open_port_count || 0);
-    const udp = Array.isArray(result?.udp?.open_ports) ? result.udp.open_ports.length : Number(result?.udp?.open_port_count || 0);
-    total += tcp + udp;
-  });
-  return total;
-}
-
-function countTechSignals(report) {
-  const tech = Array.isArray(report?.tech_stack?.detected_technologies) ? report.tech_stack.detected_technologies.length : 0;
-  const cves = Array.isArray(report?.service_risk?.cve_lookup?.matches) ? report.service_risk.cve_lookup.matches.length : 0;
-  const weak = Array.isArray(report?.service_risk?.weak_checks?.findings) ? report.service_risk.weak_checks.findings.length : 0;
-  return tech + cves + weak;
-}
-
-function computeThreatScore(report) {
-  const vtStats = report?.virustotal?.domain?.last_analysis_stats || {};
-  const malicious = Number(vtStats.malicious || 0);
-  const suspicious = Number(vtStats.suspicious || 0);
-  const cveMatches = Array.isArray(report?.service_risk?.cve_lookup?.matches) ? report.service_risk.cve_lookup.matches.length : 0;
-  const weakFindings = Array.isArray(report?.service_risk?.weak_checks?.findings) ? report.service_risk.weak_checks.findings.length : 0;
-  const ports = countOpenPorts(report);
-  const tech = countTechSignals(report);
-  const score = malicious * 32 + suspicious * 12 + cveMatches * 14 + weakFindings * 8 + ports * 2 + tech;
-  return clamp(score, 0, 99);
-}
-
-function buildSyntheticReport(rawTarget) {
-  const target = parseTarget(rawTarget || "blackvault.neon");
-  const seed = hashString(target.label);
-  const domain = target.domain || `${target.label}.ghost`;
-  const ips = uniqueList([syntheticIp(seed, 1), syntheticIp(seed, 2), syntheticIp(seed, 3)].slice(0, seed % 2 === 0 ? 2 : 3));
-  const subdomains = uniqueList([
-    `api.${domain}`,
-    `edge.${domain}`,
-    `cdn.${domain}`,
-    `auth.${domain}`,
-    `vault.${domain}`,
-  ].slice(0, 3 + (seed % 2)));
-  const techs = uniqueList([
-    pickFrom(["nginx", "Cloudflare", "Next.js", "Node.js", "FastAPI", "React"], seed),
-    pickFrom(["PostgreSQL", "Redis", "Tailwind", "Traefik", "Express"], seed + 1),
-    pickFrom(["JWT", "GraphQL", "Vite", "Kubernetes", "Gunicorn"], seed + 2),
-  ]);
-  const openPorts = [22, 80, 443, 8080, 8443, 3306, 6379].slice(0, 2 + (seed % 4));
-  const cves = openPorts.includes(8080)
-    ? [
-        {
-          id: "CVE-2024-1312",
-          severity: "high",
-          product: "reverse proxy",
-          description: "Header normalization bypass pattern detected in exposed edge tier.",
-        },
-      ]
-    : [];
-  const weakFindings = openPorts.includes(22)
-    ? [
-        {
-          title: "SSH exposure",
-          detail: "Administrative port responds on the public edge. Manual validation recommended.",
-        },
-      ]
-    : [];
-  const malicious = seed % 7 === 0 ? 1 : 0;
-  const suspicious = 1 + (seed % 3);
-
-  const results = {};
-  ips.forEach((ip, index) => {
-    const assignedPorts = openPorts.slice(index, openPorts.length).filter((_, portIndex) => portIndex % ips.length === index % ips.length);
-    results[ip] = {
-      tcp: {
-        open_port_count: assignedPorts.length,
-        open_ports: assignedPorts.map((port) => ({
-          port,
-          protocol: "tcp",
-          service: pickFrom(["ssh", "http", "https", "jetty", "mysql", "redis"], seed + port),
-        })),
-      },
-      udp: {
-        open_port_count: 0,
-        open_ports: [],
-      },
-    };
-  });
-
-  return {
-    target: {
-      input: target.input,
-      domain,
-      scheme: target.scheme || "https",
-      port: target.port,
-      path: target.path || "/",
-      query: target.query,
-      normalized_url: target.normalizedUrl || `https://${domain}`,
-    },
-    dns: {
-      A: ips,
-      AAAA: [],
-      MX: [`mail.${domain}`],
-      NS: [`ns1.${domain}`, `ns2.${domain}`],
-      TXT: [`v=spf1 include:_spf.${domain} ~all`],
-      CNAME: subdomains.slice(0, 1),
-      SOA: [`ns1.${domain} hostmaster.${domain}`],
-    },
-    whois: {
-      domain_name: domain,
-      registrar: pickFrom(["GHOST REGISTRY", "NEONIC LTD", "BLACKBOX DOMAINS"], seed),
-      whois_server: "whois.ghost-registry.neon",
-      creation_date: "2023-02-14T02:22:00Z",
-      expiration_date: "2027-02-14T02:22:00Z",
-      updated_date: new Date().toISOString(),
-      name_servers: [`ns1.${domain}`, `ns2.${domain}`],
-      status: ["clientTransferProhibited", "serverUpdateProhibited"],
-      emails: [`ops@${domain}`],
-      dnssec: "unsigned",
-    },
-    tech_stack: {
-      url: `https://${domain}`,
-      status_code: openPorts.includes(443) ? 200 : 403,
-      server_headers: {
-        server: techs[0],
-        "x-powered-by": techs[1] || "node",
-      },
-      detected_technologies: techs,
-    },
-    certificate_transparency: {
-      enabled: !!document.getElementById("moduleSubdomain")?.checked,
-      discovered_subdomains: subdomains,
-    },
-    passive_dns: {
-      enabled: !!document.getElementById("modulePassive")?.checked,
-      historical_subdomains: subdomains.slice().reverse(),
-      resolved_ips: ips,
-    },
-    asn_network: {
-      enabled: !!document.getElementById("moduleAsn")?.checked,
-      records: [{ asn: `AS${65000 + (seed % 999)}`, prefix: `${ips[0].split(".").slice(0, 3).join(".")}.0/24` }],
-      expanded_c_segment_hosts: !!document.getElementById("moduleAsn")?.checked ? ips.map((ip, index) => `${ip.split(".").slice(0, 3).join(".")}.${50 + index}`) : [],
-    },
-    web_assets: {
-      enabled: !!document.getElementById("moduleWeb")?.checked,
-      base_url: `https://${domain}`,
-      crawler: {
-        enabled: !!document.getElementById("moduleWeb")?.checked,
-        js_files: [`https://${domain}/cdn/app.js`, `https://${domain}/assets/runtime.js`],
-        discovered_endpoints: [`https://${domain}/login`, `https://${domain}/api/v1/session`],
-        sensitive_paths: [`https://${domain}/.env`],
-      },
-      js_extraction: {
-        enabled: !!document.getElementById("moduleWeb")?.checked,
-        endpoints: [`https://${domain}/api/internal/audit`, `https://${domain}/api/v1/session`],
-        sensitive_paths: [`https://${domain}/backup.sql`],
-      },
-      combined_endpoints: [`https://${domain}/login`, `https://${domain}/api/v1/session`, `https://${domain}/cdn/app.js`],
-      sensitive_paths: {
-        enabled: !!document.getElementById("moduleWeb")?.checked,
-        count: 2,
-        items: [`https://${domain}/.env`, `https://${domain}/backup.sql`],
-      },
-      directory_probe: {
-        enabled: !!document.getElementById("moduleWeb")?.checked,
-        hit_count: 2,
-        hits: [
-          { url: `https://${domain}/admin` },
-          { url: `https://${domain}/private` },
-        ],
-      },
-    },
-    service_risk: {
-      enabled: !!document.getElementById("moduleVuln")?.checked,
-      cve_lookup: {
-        matches: cves,
-      },
-      weak_checks: {
-        findings: weakFindings,
-      },
-    },
-    ip_scan: {
-      enabled: isPortScanEnabled(),
-      scan_performed: isPortScanEnabled(),
-      targets: ips,
-      resolved_ips: ips,
-      skipped_non_public_ips: [],
-      skip_reason: "",
-      warnings: [],
-      scanner: "ghost-emulator",
-      port_range: isPortScanEnabled() ? (refs.portModeInput.value === "full" ? "1-65535" : refs.portModeInput.value === "custom" ? normalizeTarget(refs.customPortsInput.value) || "custom" : "common") : "disabled",
-      results,
-    },
-    virustotal: {
-      enabled: isThreatIntelEnabled(),
-      domain: {
-        last_analysis_stats: {
-          malicious,
-          suspicious,
-          harmless: 62,
-          undetected: 15,
-        },
-      },
-      url: {
-        last_analysis_stats: {
-          malicious: 0,
-          suspicious: suspicious > 1 ? 1 : 0,
-          harmless: 48,
-          undetected: 24,
-        },
-      },
-    },
-    meta: {
-      generated_at: new Date().toISOString(),
-      target_input: target.input,
-      scan_mode: isPortScanEnabled() ? refs.portModeInput.value : "intel-only",
-      requested_port_range: refs.portModeInput.value === "custom" ? normalizeTarget(refs.customPortsInput.value) || "custom" : refs.portModeInput.value,
-      source: "ghost",
-    },
-  };
-}
-
-function createRipple(event) {
-  const target = event.currentTarget;
-  if (!(target instanceof HTMLElement)) {
-    return;
-  }
-  const rect = target.getBoundingClientRect();
-  const ripple = document.createElement("span");
-  ripple.className = "ripple-effect";
-  ripple.style.left = `${event.clientX - rect.left}px`;
-  ripple.style.top = `${event.clientY - rect.top}px`;
-  target.appendChild(ripple);
-  ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
-}
-
-function bindRipples() {
-  document.querySelectorAll(".ripple-target, .neo-button, .view-tab, .result-tab, .icon-button, .terminal-fab, .circuit-toggle").forEach((node) => {
-    node.addEventListener("pointerdown", createRipple);
-  });
-}
-
-function getAudioContext() {
-  if (!audioContext) {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) {
-      return null;
-    }
-    audioContext = new AudioCtx();
-  }
-  return audioContext;
-}
-
-function playSfx(type) {
-  const ctx = getAudioContext();
-  if (!ctx) {
-    return;
-  }
-
-  if (ctx.state === "suspended") {
-    ctx.resume().catch(() => {});
-  }
-
-  const profiles = {
-    scan: [240, 360, 520],
-    glitch: [660, 420, 760],
-    success: [440, 660, 880],
-    error: [220, 180, 160],
-  };
-
-  const tones = profiles[type] || profiles.glitch;
-  tones.forEach((frequency, index) => {
-    const oscillator = ctx.createOscillator();
-    const gain = ctx.createGain();
-    oscillator.type = index % 2 === 0 ? "triangle" : "square";
-    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
-    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.02, ctx.currentTime + 0.02 + index * 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12 + index * 0.04);
-    oscillator.connect(gain);
-    gain.connect(ctx.destination);
-    oscillator.start(ctx.currentTime + index * 0.04);
-    oscillator.stop(ctx.currentTime + 0.16 + index * 0.04);
-  });
-}
-
-function showToast(title, message, type = "info") {
-  if (!refs.toastStack) {
-    return;
-  }
-  const toast = document.createElement("div");
-  toast.className = `toast ${type === "success" ? "toast--success" : type === "error" ? "toast--error" : ""}`.trim();
-  toast.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
-  refs.toastStack.appendChild(toast);
-  window.setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(-6px)";
-    window.setTimeout(() => toast.remove(), 200);
-  }, 3200);
-}
-
-function setActiveView(view, options = {}) {
-  state.view = view;
-  refs.app?.setAttribute("data-view", view);
-
-  refs.workspaceViews.forEach((panel) => {
-    panel.classList.toggle("is-active", panel.dataset.view === view);
-  });
-
-  refs.viewTabs.forEach((tab) => {
-    if (tab.classList.contains("view-tab")) {
-      tab.classList.toggle("is-active", tab.dataset.viewTarget === view);
-    }
-  });
-
-  if (options.scroll) {
-    document.getElementById("workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
-function setResultTab(tab) {
-  state.resultTab = tab;
-  refs.app?.setAttribute("data-result-tab", tab);
-
-  refs.resultTabs.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.resultTab === tab);
-  });
-
-  refs.resultPanels.forEach((panel) => {
-    panel.classList.toggle("is-active", panel.dataset.resultPanel === tab);
-  });
-
-  if (tab === "network" && state.latestReport) {
-    window.requestAnimationFrame(() => renderGraph(state.latestReport));
-  }
-}
-
-function setTarget(value, source = null) {
-  const nextTarget = normalizeTarget(value);
-  state.target = nextTarget;
-
-  [refs.navTargetInput, refs.heroTargetInput, refs.consoleTargetInput].forEach((input) => {
-    if (!input || input === source) {
-      return;
-    }
-    if (input.value !== nextTarget) {
-      input.value = nextTarget;
-    }
-  });
-
-  const parsed = parseTarget(nextTarget);
-  refs.heroTargetEcho.textContent = parsed.label;
-  refs.consoleTargetChip.textContent = parsed.label.toLowerCase() === "no target" ? "no target" : parsed.label;
-  refs.heroStatusLine.textContent = nextTarget
-    ? state.scanning
-      ? `job active // building report blocks for ${parsed.label}`
-      : state.latestReport
-        ? `evidence package cached for ${parsed.label}`
-        : `target staged in memory // ready to create a scan job`
-    : "task intake idle // feed a target to assemble the evidence pipeline";
-}
-
-function updateLanguage(lang) {
-  state.language = lang;
-  refs.langButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.lang === lang));
-
-  const t = translations[lang];
-  refs.navLaunchBtn.textContent = t.navLaunch;
-  refs.heroScanButton.textContent = t.heroScan;
-  document.querySelectorAll('[data-view-target="console"]:not(.view-tab)').forEach((button) => {
-    button.textContent = t.openConsole;
-  });
-  refs.demoSampleBtn.textContent = t.demoSample;
-  refs.terminalFab.textContent = t.terminal;
-  refs.navTargetInput.placeholder = t.navPlaceholder;
-  refs.heroTargetInput.placeholder = t.heroPlaceholder;
-  refs.consoleTargetInput.placeholder = t.consolePlaceholder;
-  refs.terminalCommandInput.placeholder = t.terminalPlaceholder;
-}
-
-function renderFeedLine(container, message, max = 3) {
-  if (!container) {
-    return;
-  }
-  const row = document.createElement("div");
-  row.textContent = message;
-  container.prepend(row);
-  while (container.children.length > max) {
-    container.removeChild(container.lastElementChild);
-  }
-}
-
-function buildStatusBadge(status) {
-  const normalized = String(status || "idle").toLowerCase();
-  const label = normalized.toUpperCase();
-  const cls = normalized === "scanning" || normalized === "running"
-    ? "table-status table-status--scanning"
-    : normalized === "completed" || normalized === "imported"
-      ? "table-status table-status--ok"
-      : normalized === "failed" || normalized === "aborted"
-        ? "table-status table-status--danger"
-        : "table-status";
-  return `<span class="${cls}">${label}</span>`;
-}
-
-function derivePoint(seed) {
-  return WORLD_POINTS[seed % WORLD_POINTS.length];
-}
-
-function seedRecentScans() {
-  state.recentScans = [
-    {
-      id: "seed-1",
-      target: "night.market",
-      type: "Passive Recon",
-      status: "SCANNING",
-      threat: "ELEVATED",
-      timestamp: Date.now() - 1000 * 60 * 2,
-      point: derivePoint(1),
-    },
-    {
-      id: "seed-2",
-      target: "veil-sector.io",
-      type: "Port Fingerprint",
-      status: "COMPLETED",
-      threat: "TRACKED",
-      timestamp: Date.now() - 1000 * 60 * 8,
-      point: derivePoint(3),
-    },
-    {
-      id: "seed-3",
-      target: "203.0.113.77",
-      type: "Threat Intel",
-      status: "SCANNING",
-      threat: "LOW",
-      timestamp: Date.now() - 1000 * 60 * 14,
-      point: derivePoint(5),
-    },
-    {
-      id: "seed-4",
-      target: "vault-shadow.net",
-      type: "Web Crawl",
-      status: "COMPLETED",
-      threat: "CRITICAL",
-      timestamp: Date.now() - 1000 * 60 * 29,
-      point: derivePoint(7),
-    },
+function countEnabledModules() {
+  const inputs = [
+    refs.tcpScanInput,
+    refs.udpScanInput,
+    refs.vtScanInput,
+    refs.ctScanInput,
+    refs.passiveDnsInput,
+    refs.asnScanInput,
+    refs.asnExpandInput,
+    refs.webAssetScanInput,
+    refs.webCrawlerInput,
+    refs.webJsExtractInput,
+    refs.webSensitiveInput,
+    refs.webDirScanInput,
+    refs.webDirFfufInput,
+    refs.serviceRiskInput,
+    refs.cveLookupInput,
+    refs.weakChecksInput,
+    refs.allowPrivateIpInput,
   ];
+  return inputs.filter((input) => input.checked).length;
 }
 
-function updateDashboardStats() {
-  const scansToday = state.recentScans.length + (state.latestReport ? 1 : 0);
-  const uniqueTargets = new Set(state.recentScans.map((entry) => entry.target));
-  const activeJobs = state.apiJobs.filter((job) => !["completed", "failed", "canceled"].includes(String(job.status || "").toLowerCase())).length;
-  if (state.latestReport?.target?.input) {
-    uniqueTargets.add(state.latestReport.target.input);
-  }
-  const vulnBase = state.latestReport ? countTechSignals(state.latestReport) : 21;
-  refs.statScansToday.textContent = String(scansToday).padStart(3, "0");
-  refs.statTargetsTracked.textContent = String(uniqueTargets.size).padStart(3, "0");
-  refs.statVulnsFound.textContent = String(clamp(vulnBase, 0, 99)).padStart(3, "0");
-  refs.statActiveNodes.textContent = String(activeJobs).padStart(3, "0");
-}
-
-function renderRecentScans() {
-  if (!refs.recentScansBody) {
-    return;
-  }
-
-  refs.recentScansBody.innerHTML = "";
-  state.recentScans
-    .slice()
-    .sort((left, right) => right.timestamp - left.timestamp)
-    .slice(0, 8)
-    .forEach((entry) => {
-      const row = document.createElement("tr");
-      const minutes = Math.max(1, Math.round((Date.now() - entry.timestamp) / 60000));
-      row.innerHTML = `
-        <td>${entry.target}</td>
-        <td>${entry.type}</td>
-        <td>${buildStatusBadge(entry.status)}</td>
-        <td><span class="threat-pill threat-pill--${String(entry.threat).toLowerCase()}">${entry.threat}</span></td>
-        <td>${minutes}m ago</td>
-      `;
-      refs.recentScansBody.appendChild(row);
-    });
-}
-
-function applyStatusTone(node, tone = "default", label = "") {
-  if (!node) {
-    return;
-  }
-  node.className = "status-pill";
-  if (tone === "online") {
-    node.classList.add("status-pill--online");
-  } else if (tone === "warning") {
-    node.classList.add("status-pill--warning");
-  } else if (tone === "danger") {
-    node.classList.add("status-pill--danger");
-  }
-  if (label) {
-    node.textContent = label;
-  }
-}
-
-function renderApiHealth(status, message, apiUrl = getApiScanUrl()) {
-  state.apiHealth = status;
-  refs.apiEndpointValue.textContent = apiUrl;
-  refs.apiHealthValue.textContent = status === "online" ? "online" : status === "offline" ? "offline" : "checking";
-  refs.apiHealthMessage.textContent = message;
-  applyStatusTone(
-    refs.apiHealthBadge,
-    status === "online" ? "online" : status === "offline" ? "danger" : "warning",
-    status === "online" ? "api ready" : status === "offline" ? "api offline" : "checking"
-  );
-  refs.heroSignalIntegrity.textContent = status === "online" ? "API READY" : status === "offline" ? "API OFFLINE" : "CHECKING";
-}
-
-function renderApiJobs() {
-  if (!refs.apiJobsBody) {
-    return;
-  }
-  refs.apiJobsBody.innerHTML = "";
-  const jobs = state.apiJobs.slice(0, 6);
-  refs.apiJobsCountValue.textContent = `${state.apiJobs.length} jobs`;
-  refs.mapLocationCount.textContent = jobs.length ? `${jobs.length} rows` : "history";
-
-  if (!jobs.length) {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="4">No backend jobs loaded yet.</td>`;
-    refs.apiJobsBody.appendChild(row);
-    return;
-  }
-
-  jobs.forEach((job) => {
-    const row = document.createElement("tr");
-    const created = job.created_at ? new Date(job.created_at).toLocaleTimeString("zh-CN", { hour12: false }) : "--:--:--";
-    row.innerHTML = `
-      <td>${String(job.job_id || "unknown").slice(0, 8)}</td>
-      <td>${buildStatusBadge(job.status || "unknown")}</td>
-      <td>${job.result?.meta?.scan_mode || "legacy"}</td>
-      <td>${created}</td>
-    `;
-    refs.apiJobsBody.appendChild(row);
-  });
-}
-
-async function probeApiHealth() {
-  const apiUrl = getApiScanUrl();
-  try {
-    const response = await fetch(getHealthUrl(apiUrl));
-    if (!response.ok) {
-      throw new Error(`health check failed with HTTP ${response.status}`);
-    }
-    renderApiHealth("online", "FastAPI health check responded successfully. Job endpoints are ready to accept traffic.", apiUrl);
-    return true;
-  } catch (error) {
-    renderApiHealth("offline", `Unable to reach backend health endpoint. ${String(error.message || error)}`, apiUrl);
-    return false;
-  }
-}
-
-async function fetchApiJobs() {
-  try {
-    const response = await fetch(getJobsUrl(getApiScanUrl()));
-    if (!response.ok) {
-      throw new Error(`job history failed with HTTP ${response.status}`);
-    }
-    const data = await response.json();
-    state.apiJobs = Array.isArray(data?.jobs) ? data.jobs : [];
-  } catch (_error) {
-    state.apiJobs = [];
-  }
-  renderApiJobs();
-  updateDashboardStats();
-}
-
-async function refreshBackendState() {
-  const isOnline = await probeApiHealth();
-  if (isOnline) {
-    await fetchApiJobs();
-    return;
-  }
-  state.apiJobs = [];
-  renderApiJobs();
-  updateDashboardStats();
-}
-
-function addRecentScanEntry(target, type = "Deep Recon") {
-  const entry = {
-    id: `scan-${Date.now()}`,
-    target,
-    type,
-    status: "SCANNING",
-    threat: "TRACKED",
-    timestamp: Date.now(),
-    point: derivePoint(hashString(target)),
-  };
-  state.currentScanEntryId = entry.id;
-  state.recentScans.unshift(entry);
-  state.recentScans = state.recentScans.slice(0, 10);
-  renderRecentScans();
-  updateDashboardStats();
-}
-
-function updateRecentScanEntry(patch) {
-  if (!state.currentScanEntryId) {
-    return;
-  }
-  state.recentScans = state.recentScans.map((entry) => {
-    if (entry.id !== state.currentScanEntryId) {
-      return entry;
-    }
-    return { ...entry, ...patch };
-  });
-  renderRecentScans();
-  updateDashboardStats();
-}
-
-function appendLog(message, level = "info") {
-  if (!refs.scanLog || !message) {
-    return;
-  }
-
-  const line = document.createElement("div");
-  line.className = `scan-log__line scan-log__line--${level === "success" ? "ok" : level === "error" ? "error" : level === "warn" ? "warn" : "info"}`;
-  line.textContent = `[${new Date().toLocaleTimeString("zh-CN", { hour12: false })}] ${message}`;
-  refs.scanLog.appendChild(line);
-  refs.scanLog.scrollTop = refs.scanLog.scrollHeight;
-
-  if (refs.terminalOverlayLog) {
-    const clone = line.cloneNode(true);
-    refs.terminalOverlayLog.appendChild(clone);
-    refs.terminalOverlayLog.scrollTop = refs.terminalOverlayLog.scrollHeight;
-  }
-}
-
-function clearScanLog() {
-  refs.scanLog.innerHTML = "";
-}
-
-function ensureTerminalBoot() {
-  if (!refs.terminalOverlayLog || refs.terminalOverlayLog.children.length) {
-    return;
-  }
-  [
-    "ghost shell mounted // type help for command list",
-    "available commands: help, status, scan <target>, view dashboard|console|results, load demo, clear",
-    "uplink sound placeholders wired through WebAudio synth beeps",
-  ].forEach((text) => appendLog(text, "info"));
-}
-
-function updateModuleCountChip() {
-  const count = getModuleCount();
-  refs.moduleCountChip.textContent = `${String(count).padStart(2, "0")} armed`;
-}
-
-function syncCustomPortField() {
-  const isCustom = refs.portModeInput.value === "custom";
-  refs.customPortsField.classList.toggle("field-block--hidden", !isCustom);
-}
-
-function showOverlay(title, statusText) {
-  if (!refs.scanOverlay) {
-    return;
-  }
-  setElementVisibility(refs.scanOverlay, true, "grid");
-  refs.scanOverlayTitle.textContent = title;
-  refs.scanOverlayStatusText.textContent = statusText;
-}
-
-function hideOverlay(delay = 0) {
-  window.clearTimeout(state.overlayTimer);
-  state.overlayTimer = window.setTimeout(() => {
-    setElementVisibility(refs.scanOverlay, false, "grid");
-  }, delay);
-}
-
-function setProgress(value, message, overlayStatus) {
-  state.progress = clamp(Math.round(value), 0, 100);
-  const text = message || `decrypting... ${state.progress}%`;
-  refs.scanProgressBar.style.width = `${state.progress}%`;
-  refs.scanProgressText.textContent = text;
-  refs.scanOverlayProgressBar.style.width = `${state.progress}%`;
-  refs.scanOverlayProgressText.textContent = text;
-  if (overlayStatus) {
-    refs.scanOverlayStatusText.textContent = overlayStatus;
-  }
-}
-
-function setThreatLabel(label) {
-  state.currentThreat = label;
-  refs.consoleThreatChip.textContent = label.toLowerCase();
-  refs.statusThreat.textContent = label;
-  refs.heroThreatLevel.textContent = label;
-  refs.heroThreatPosture.textContent = label === "LOW" ? "MONITORED" : label;
-}
-
-function updateStatusUi() {
-  const parsed = parseTarget(state.target || state.latestReport?.target?.input || "");
-  const activeJobs = state.apiJobs.filter((job) => !["completed", "failed", "canceled"].includes(String(job.status || "").toLowerCase())).length;
-  refs.consoleTargetChip.textContent = parsed.label;
-  refs.heroTargetEcho.textContent = parsed.label;
-  refs.resultTargetKpi.textContent = parsed.label;
-  refs.consoleStartBtn.disabled = state.scanning;
-  refs.consoleStopBtn.disabled = !state.scanning;
-  refs.consoleStatusChip.textContent = state.scanning ? "scanning" : state.latestReport ? "ready" : "idle";
-  refs.resultStatusKpi.textContent = state.scanning ? "SCANNING" : state.latestReport ? "READY" : "STANDBY";
-  refs.statusNodes.textContent = `${state.scanning ? Math.max(activeJobs, 1) : activeJobs} active`;
-  refs.heroNodeStatus.textContent = state.scanning ? "JOB RUNNING" : activeJobs ? `${activeJobs} ACTIVE` : "QUEUE READY";
-  refs.heroFeedState.textContent = state.scanning ? "TRACKING" : "READY";
-  refs.statusMode.textContent = isPortScanEnabled() ? refs.portModeInput.value.toUpperCase() : "INTEL";
-
-  if (!state.target && !state.latestReport) {
-    refs.heroStatusLine.textContent = "task intake idle // feed a target to assemble the evidence pipeline";
-  } else if (state.scanning) {
-    refs.heroStatusLine.textContent = `job active // building report blocks for ${parsed.label}`;
-  } else if (state.latestReport) {
-    refs.heroStatusLine.textContent = `evidence package compiled for ${parsed.label}`;
-  } else {
-    refs.heroStatusLine.textContent = `target staged in memory // ready to create a scan job`;
-  }
-}
-
-function stopAllTimers() {
-  ["progressTimer", "runtimeTimer", "pollTimer", "ghostTimer", "logTimer"].forEach((key) => {
-    if (state[key]) {
-      window.clearInterval(state[key]);
-      state[key] = null;
-    }
-  });
-}
-
-function startRuntimeTimer() {
-  if (state.runtimeTimer) {
-    window.clearInterval(state.runtimeTimer);
-  }
-  state.runtimeSeconds = 0;
-  refs.scanRuntimeText.textContent = "runtime // 00:00";
-  state.runtimeTimer = window.setInterval(() => {
-    state.runtimeSeconds += 1;
-    const minutes = formatNumber(Math.floor(state.runtimeSeconds / 60));
-    const seconds = formatNumber(state.runtimeSeconds % 60);
-    refs.scanRuntimeText.textContent = `runtime // ${minutes}:${seconds}`;
-  }, 1000);
-}
-
-function beginProgressPulse() {
-  if (state.progressTimer) {
-    window.clearInterval(state.progressTimer);
-  }
-  state.progressTimer = window.setInterval(() => {
-    if (!state.scanning) {
-      return;
-    }
-    if (state.progress < 92) {
-      setProgress(state.progress + (state.progress < 38 ? 6 : state.progress < 68 ? 4 : 2), `decrypting... ${clamp(state.progress + 1, 0, 99)}%`);
-    }
-  }, 900);
-}
-
-function appendPhaseLogs(target) {
-  const activeModules = getEnabledModules().map((item) => item.label);
-  const script = [
-    `uplink primed for ${target}`,
-    `loading module lattice: ${activeModules.join(", ")}`,
-    `passive traces ghosting around ${target}`,
-    `dns residue being extracted from public record mirrors`,
-    `service mesh fingerprinting phase armed`,
-    `dark export channels waiting for encrypted evidence`,
-  ];
-
-  let index = 0;
-  if (state.logTimer) {
-    window.clearInterval(state.logTimer);
-  }
-  state.logTimer = window.setInterval(() => {
-    if (!state.scanning) {
-      return;
-    }
-    appendLog(script[index % script.length], index % 4 === 1 ? "warn" : "info");
-    index += 1;
-  }, 950);
-}
-
-function buildPayload(target) {
-  const portMode = refs.portModeInput.value;
-  const portEnabled = isPortScanEnabled();
-  const threatIntelAllowed = isThreatIntelEnabled() && normalizeTarget(refs.vtApiKeyInput.value);
-
-  if (isThreatIntelEnabled() && !threatIntelAllowed) {
-    appendLog("threat intel key absent // live API run will skip VirusTotal lane", "warn");
-  }
-
+function collectPayload() {
   return {
-    target,
+    target: refs.targetInput.value.trim(),
     timeout: Number(refs.timeoutInput.value || 10),
     port_timeout: Number(refs.portTimeoutInput.value || 0.8),
-    port_scanner: "auto",
-    full_port_scan: portEnabled && portMode === "full",
-    tcp_scan: portEnabled ? !!refs.tcpEnabledInput.checked : false,
-    udp_scan: portEnabled ? !!refs.udpEnabledInput.checked : false,
-    vt_scan: !!threatIntelAllowed,
-    vt_api_key: threatIntelAllowed ? normalizeTarget(refs.vtApiKeyInput.value) : null,
-    allow_private_ip: !!document.getElementById("modulePrivate")?.checked,
-    cidr_targets: document.getElementById("modulePrivate")?.checked ? normalizeTarget(refs.cidrTargetsInput.value) : "",
-    ct_scan: !!document.getElementById("moduleSubdomain")?.checked,
-    passive_dns_scan: !!document.getElementById("modulePassive")?.checked,
-    asn_scan: !!document.getElementById("moduleAsn")?.checked,
-    asn_expand_c_segment: !!document.getElementById("moduleAsn")?.checked,
-    web_asset_scan: !!document.getElementById("moduleWeb")?.checked,
-    web_crawler: !!document.getElementById("moduleWeb")?.checked && !!refs.webCrawlerInput.checked,
-    web_js_extract: !!document.getElementById("moduleWeb")?.checked && !!refs.jsExtractInput.checked,
-    web_sensitive_path_extract: !!document.getElementById("moduleWeb")?.checked,
-    web_dir_scan: !!document.getElementById("moduleWeb")?.checked,
-    web_dir_use_ffuf: false,
-    service_risk_scan: !!document.getElementById("moduleVuln")?.checked,
-    cve_lookup: !!document.getElementById("moduleVuln")?.checked,
-    weak_nmap_checks: !!document.getElementById("moduleVuln")?.checked,
-    scan_mode: portEnabled ? portMode : null,
-    custom_ports: portEnabled && portMode === "custom" ? normalizeTarget(refs.customPortsInput.value) : null,
+    port_scanner: refs.portScannerInput.value,
+    scan_mode: refs.scanModeInput.value,
+    custom_ports: refs.customPortsInput.value.trim() || null,
+    tcp_scan: refs.tcpScanInput.checked,
+    udp_scan: refs.udpScanInput.checked,
+    allow_private_ip: refs.allowPrivateIpInput.checked,
+    vt_scan: refs.vtScanInput.checked,
+    vt_api_key: refs.vtApiKeyInput.value.trim() || null,
+    nvd_api_key: refs.nvdApiKeyInput.value.trim() || null,
+    cidr_targets: refs.cidrTargetsInput.value.trim(),
+    ct_scan: refs.ctScanInput.checked,
+    passive_dns_scan: refs.passiveDnsInput.checked,
+    asn_scan: refs.asnScanInput.checked,
+    asn_expand_c_segment: refs.asnExpandInput.checked,
+    web_asset_scan: refs.webAssetScanInput.checked,
+    web_crawler: refs.webCrawlerInput.checked,
+    web_js_extract: refs.webJsExtractInput.checked,
+    web_sensitive_path_extract: refs.webSensitiveInput.checked,
+    web_dir_scan: refs.webDirScanInput.checked,
+    web_dir_use_ffuf: refs.webDirFfufInput.checked,
+    service_risk_scan: refs.serviceRiskInput.checked,
+    cve_lookup: refs.cveLookupInput.checked,
+    weak_nmap_checks: refs.weakChecksInput.checked,
   };
 }
 
-function beginScanSession(source) {
-  state.scanning = true;
-  state.scanSource = source;
-  state.currentJobId = null;
-  state.latestSource = "NO DATA";
-  refs.statusTransport.textContent = source === "ghost" ? "GHOST MODE" : "LIVE API";
-  setProgress(4, "decrypting... 4%", "warming passive collectors");
-  showOverlay(source === "ghost" ? "bootstrapping ghost simulation" : "bootstrapping live uplink", "warming passive collectors");
-  hideOverlay(2200);
-  startRuntimeTimer();
-  beginProgressPulse();
-  appendPhaseLogs(state.target);
-  setThreatLabel("TRACKED");
-  updateStatusUi();
-  refreshBackendState();
-  playSfx("scan");
-}
-
-function finishScan(report, source = "LIVE API") {
-  state.scanning = false;
-  state.currentJobId = null;
-  state.latestReport = report;
-  state.latestSource = source.toUpperCase();
-  stopAllTimers();
-  setProgress(100, "decrypting... 100%", "evidence package complete");
-  setThreatLabel(deriveThreatLabel(computeThreatScore(report)));
-  refs.resultSourceKpi.textContent = state.latestSource;
-  refs.statusTransport.textContent = source === "ghost" ? "GHOST MODE" : source === "IMPORTED" ? "IMPORTED" : "LIVE API";
-  renderReport(report);
-  updateRecentScanEntry({
-    status: source === "IMPORTED" ? "IMPORTED" : "COMPLETED",
-    threat: deriveThreatLabel(computeThreatScore(report)),
-  });
-  updateStatusUi();
-  updateDashboardStats();
-  appendLog(`scan complete // evidence package forged via ${source.toLowerCase()}`, "success");
-  setActiveView("results", { scroll: true });
-  window.requestAnimationFrame(() => renderGraph(report));
-  hideOverlay();
-  playSfx("success");
-  showToast("NEOSCAN", source === "IMPORTED" ? "Imported report injected into the results stack." : "Recon evidence package is ready.", "success");
-  refreshBackendState();
-}
-
-function failScan(message) {
-  state.scanning = false;
-  stopAllTimers();
-  state.currentJobId = null;
-  refs.statusTransport.textContent = "LINK FAULT";
-  setThreatLabel("LOW");
-  setProgress(0, "decrypting... 0%", "uplink failure");
-  updateRecentScanEntry({ status: "FAILED", threat: "LOW" });
-  updateStatusUi();
-  hideOverlay();
-  appendLog(message, "error");
-  playSfx("error");
-  showToast("NEOSCAN", message, "error");
-  refreshBackendState();
-}
-
-function startGhostMode(target) {
-  const phases = [
-    { progress: 12, message: "probing passive mirrors", overlay: "collecting passive residue" },
-    { progress: 28, message: "enumerating records", overlay: "walking dns and whois shadows" },
-    { progress: 46, message: "fingerprinting services", overlay: "mapping exposed surfaces" },
-    { progress: 66, message: "cross-linking technology stack", overlay: "fusing technology signatures" },
-    { progress: 84, message: "packaging evidence", overlay: "forging dark export bundle" },
-    { progress: 100, message: "ghost package complete", overlay: "evidence ready" },
+function getProgressPercent(status, report) {
+  const map = {
+    queued: 10,
+    running: 62,
+    stopping: 78,
+    completed: 100,
+    failed: 100,
+    canceled: 100,
+    idle: 0,
+  };
+  if (status !== "completed" || !report) return map[status] ?? 0;
+  const modules = [
+    report.dns,
+    report.whois,
+    report.tech_stack,
+    report.virustotal,
+    report.certificate_transparency,
+    report.passive_dns,
+    report.asn_network,
+    report.web_assets,
+    report.ip_scan,
+    report.service_risk,
   ];
-
-  let phaseIndex = 0;
-  if (state.ghostTimer) {
-    window.clearInterval(state.ghostTimer);
-  }
-
-  state.ghostTimer = window.setInterval(() => {
-    if (!state.scanning) {
-      return;
-    }
-    const phase = phases[phaseIndex];
-    setProgress(phase.progress, `decrypting... ${phase.progress}%`, phase.overlay);
-    appendLog(`${phase.message} // ${target}`, phase.progress >= 84 ? "warn" : "info");
-    phaseIndex += 1;
-    if (phaseIndex >= phases.length) {
-      window.clearInterval(state.ghostTimer);
-      state.ghostTimer = null;
-      const report = buildSyntheticReport(target);
-      finishScan(report, "GHOST");
-    }
-  }, 1300);
+  const filled = modules.filter(Boolean).length;
+  return Math.max(map.completed, Math.round((filled / modules.length) * 100));
 }
 
-async function createRemoteScan(target) {
-  const apiUrl = normalizeTarget(refs.apiUrlInput.value) || inferDefaultApiUrl();
-  refs.apiUrlInput.value = apiUrl;
-  const payload = buildPayload(target);
+function getStatusTone(status) {
+  if (status === "completed") return "success";
+  if (status === "failed" || status === "canceled") return "danger";
+  if (status === "running" || status === "stopping") return "running";
+  if (status === "queued") return "warning";
+  return "neutral";
+}
 
-  if (isPortScanEnabled() && !refs.tcpEnabledInput.checked && !refs.udpEnabledInput.checked) {
-    throw new Error("Enable at least one transport protocol before launching a live scan.");
+function getModuleState(module) {
+  if (!module) return { tone: "neutral", label: "无数据", detail: "模块尚未返回结果。" };
+  if (module.error) return { tone: "danger", label: "失败", detail: module.error };
+  if (module.canceled) return { tone: "warning", label: "已取消", detail: module.message || "任务已取消。" };
+  if (module.enabled === false) return { tone: "neutral", label: "未启用", detail: module.message || "该模块未启用。" };
+  if (module.scan_performed === false) return { tone: "warning", label: "已跳过", detail: module.message || module.skip_reason || "本阶段未执行。" };
+  if (module.message && !module.count && !module.total_records && !module.page_count && !module.service_count) {
+    return { tone: "neutral", label: "提示", detail: module.message };
   }
+  return { tone: "success", label: "完成", detail: "已返回模块结果。" };
+}
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+function fetchJson(url, options) {
+  return fetch(url, options).then(async (response) => {
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch (_error) {
+      payload = null;
+    }
+
+    if (!response.ok) {
+      const detail = payload?.detail || payload?.message || `HTTP ${response.status}`;
+      throw new Error(detail);
+    }
+    return payload;
   });
-
-  if (!response.ok) {
-    throw new Error(`uplink rejected with HTTP ${response.status}`);
-  }
-
-  const data = await response.json();
-  if (!data?.job_id) {
-    throw new Error("backend did not return a valid job id");
-  }
-
-  state.currentJobId = data.job_id;
-  appendLog(`live uplink established // job ${data.job_id}`, "success");
-  refs.scanOverlayTitle.textContent = "live uplink established";
-  refreshBackendState();
-  pollRemoteScan(apiUrl, data.job_id);
 }
 
-function pollRemoteScan(apiUrl, jobId) {
+function setHealth(text, tone) {
+  refs.healthText.textContent = text;
+  refs.healthPill.dataset.tone = tone;
+}
+
+async function refreshHealth() {
+  try {
+    const payload = await fetchJson(getHealthUrl());
+    setHealth(payload.status === "ok" ? "API 正常" : "API 未知状态", payload.status === "ok" ? "success" : "warning");
+  } catch (error) {
+    setHealth(`API 不可达: ${error.message}`, "danger");
+  }
+}
+
+function setCurrentJob(job, source = state.currentSource) {
+  state.currentJob = job;
+  state.currentStatus = job?.status || "idle";
+  state.currentReport = job?.result || null;
+  state.currentSource = source;
+  syncView();
+}
+
+function setCurrentReport(report, source = "imported", status = "completed") {
+  state.currentReport = report;
+  state.currentSource = source;
+  state.currentStatus = report?.canceled ? "canceled" : status;
+  state.currentJob = null;
+  syncView();
+}
+
+async function refreshJobs() {
+  try {
+    const payload = await fetchJson(getJobsUrl());
+    renderJobs(payload.jobs || []);
+  } catch (error) {
+    refs.jobsList.innerHTML = `<div class="notice" data-tone="danger">${escapeHtml(`无法读取任务列表：${error.message}`)}</div>`;
+  }
+}
+
+function stopPolling() {
   if (state.pollTimer) {
     window.clearInterval(state.pollTimer);
+    state.pollTimer = null;
   }
+}
 
+function startPolling(jobId) {
+  stopPolling();
   state.pollTimer = window.setInterval(async () => {
-    if (!state.scanning) {
-      return;
-    }
-
     try {
-      const response = await fetch(`${apiUrl.replace(/\/+$/, "")}/${jobId}`);
-      if (!response.ok) {
-        throw new Error(`status poll failed with HTTP ${response.status}`);
-      }
-      const data = await response.json();
-      const status = String(data?.status || "unknown").toLowerCase();
-
-      if (status === "queued") {
-        appendLog(`job ${jobId} queued in uplink tunnel`, "info");
-        setProgress(Math.max(state.progress, 16), `decrypting... ${Math.max(state.progress, 16)}%`, "queueing reconnaissance workers");
-        return;
-      }
-
-      if (status === "running" || status === "stopping") {
-        appendLog(`job ${jobId} status // ${status}`, status === "stopping" ? "warn" : "info");
-        setProgress(Math.max(state.progress, status === "stopping" ? 90 : 26), `decrypting... ${Math.max(state.progress, status === "stopping" ? 90 : 26)}%`);
-        return;
-      }
-
-      if (status === "completed") {
-        finishScan(data.result || buildSyntheticReport(state.target), "LIVE API");
-        return;
-      }
-
-      if (status === "canceled") {
-        failScan("remote job was canceled before package completion.");
-        updateRecentScanEntry({ status: "ABORTED", threat: "LOW" });
-        return;
-      }
-
-      if (status === "failed") {
-        failScan(`remote scan failed: ${data.error || "unknown fault"}`);
+      const payload = await fetchJson(`${getApiScanUrl().replace(/\/+$/, "")}/${jobId}`);
+      setCurrentJob(payload, "live");
+      if (!["queued", "running", "stopping"].includes(payload.status)) {
+        stopPolling();
+        refreshJobs();
       }
     } catch (error) {
-      failScan(String(error.message || error));
+      refs.statusMessage.textContent = `轮询任务失败：${error.message}`;
+      stopPolling();
     }
-  }, 1400);
+  }, 2000);
 }
 
-async function startScan({ demo = false } = {}) {
-  if (state.scanning) {
-    showToast("NEOSCAN", "An uplink is already active. Abort it first.", "error");
+async function createScan(event) {
+  event.preventDefault();
+  const payload = collectPayload();
+
+  if (!payload.target) {
+    refs.statusMessage.textContent = "请输入目标后再创建任务。";
+    refs.targetInput.focus();
     return;
   }
 
-  const target = normalizeTarget(refs.consoleTargetInput.value || refs.heroTargetInput.value || refs.navTargetInput.value);
-  if (!target) {
-    showToast("NEOSCAN", "Feed a domain, IP, URL, or username into the target channel first.", "error");
-    playSfx("error");
+  if (payload.scan_mode === "custom" && !payload.custom_ports) {
+    refs.statusMessage.textContent = "端口模式为自定义时，必须填写自定义端口。";
+    refs.customPortsInput.focus();
     return;
   }
 
-  setTarget(target);
-  clearScanLog();
-  appendLog(`target locked // ${target}`, "success");
-  addRecentScanEntry(target, isPortScanEnabled() ? "Deep Recon" : "Passive Recon");
-  setActiveView("console", { scroll: true });
-
-  if (demo) {
-    beginScanSession("ghost");
-    startGhostMode(target);
+  if (payload.vt_scan && !payload.vt_api_key) {
+    refs.statusMessage.textContent = "启用 VirusTotal 时必须提供 API Key。";
+    refs.vtApiKeyInput.focus();
     return;
   }
 
-  beginScanSession("api");
+  refs.startScanBtn.disabled = true;
+  refs.statusMessage.textContent = "正在创建扫描任务...";
+
   try {
-    await createRemoteScan(target);
+    const response = await fetchJson(getApiScanUrl(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    setCurrentJob(
+      {
+        job_id: response.job_id,
+        status: response.status,
+        created_at: response.created_at,
+        result: null,
+      },
+      "live"
+    );
+    refs.stopScanBtn.disabled = false;
+    refs.statusMessage.textContent = "任务已创建，正在等待后端执行。";
+    await refreshJobs();
+    startPolling(response.job_id);
   } catch (error) {
-    appendLog(`live uplink failed // ${error.message}. falling back to ghost mode.`, "warn");
-    refs.statusTransport.textContent = "GHOST FALLBACK";
-    state.scanSource = "ghost";
-    startGhostMode(target);
+    refs.statusMessage.textContent = `创建任务失败：${error.message}`;
+  } finally {
+    refs.startScanBtn.disabled = false;
   }
 }
 
-async function abortScan() {
-  if (!state.scanning) {
-    showToast("NEOSCAN", "No live uplink to abort.", "error");
-    return;
-  }
-
-  if (state.scanSource === "api" && state.currentJobId) {
-    const apiUrl = normalizeTarget(refs.apiUrlInput.value) || inferDefaultApiUrl();
-    try {
-      await fetch(`${apiUrl.replace(/\/+$/, "")}/${state.currentJobId}/stop`, { method: "POST" });
-      appendLog(`abort signal transmitted // ${state.currentJobId}`, "warn");
-      showToast("NEOSCAN", "Abort signal transmitted to remote uplink.", "success");
-      refreshBackendState();
-    } catch (error) {
-      failScan(`abort request failed: ${error.message}`);
-    }
-    return;
-  }
-
-  state.scanning = false;
-  stopAllTimers();
-  setProgress(0, "decrypting... 0%", "ghost uplink aborted");
-  updateRecentScanEntry({ status: "ABORTED", threat: "LOW" });
-  updateStatusUi();
-  hideOverlay();
-  appendLog("ghost uplink aborted by operator", "warn");
-  playSfx("error");
-  refreshBackendState();
-}
-
-function summarizeReport(report) {
-  const target = report?.target?.input || report?.meta?.target_input || "unknown";
-  const domain = report?.target?.domain || "n/a";
-  const dnsA = Array.isArray(report?.dns?.A) ? report.dns.A.join(", ") : "n/a";
-  const registrar = report?.whois?.registrar || "n/a";
-  const techs = Array.isArray(report?.tech_stack?.detected_technologies) ? report.tech_stack.detected_technologies.join(", ") : "n/a";
-  const openPorts = countOpenPorts(report);
-  const techCount = countTechSignals(report);
-  const score = computeThreatScore(report);
-  const vtStats = report?.virustotal?.domain?.last_analysis_stats;
-
-  return {
-    missionDigest: [
-      `target input :: ${target}`,
-      `domain :: ${domain}`,
-      `generated :: ${report?.meta?.generated_at || new Date().toISOString()}`,
-      `scan mode :: ${report?.meta?.scan_mode || refs.portModeInput.value || "common"}`,
-      `source :: ${state.latestSource}`,
-    ],
-    signalSynopsis: [
-      `dns A :: ${dnsA}`,
-      `registrar :: ${registrar}`,
-      `technologies :: ${techs}`,
-      `open ports :: ${openPorts}`,
-      `threat score :: ${score}`,
-      vtStats ? `vt stats :: malicious ${vtStats.malicious || 0} / suspicious ${vtStats.suspicious || 0}` : "vt stats :: unavailable",
-    ],
-    target,
-    openPorts,
-    techCount,
-    score,
-  };
-}
-
-function fillList(container, items, emptyMessage) {
-  if (!container) {
-    return;
-  }
-  container.innerHTML = "";
-  const list = (items || []).filter(Boolean);
-  const source = list.length ? list : [emptyMessage];
-  source.forEach((text) => {
-    const row = document.createElement("div");
-    row.textContent = text;
-    container.appendChild(row);
-  });
-}
-
-function renderDnsTable(report) {
-  refs.dnsTableBody.innerHTML = "";
-  const dns = report?.dns || {};
-  const rows = [];
-  Object.entries(dns).forEach(([type, value]) => {
-    if (Array.isArray(value)) {
-      value.forEach((item) => rows.push([type, item]));
-    } else if (value) {
-      rows.push([type, value]);
-    }
-  });
-  if (!rows.length) {
-    rows.push(["DNS", "No records surfaced."]);
-  }
-  rows.forEach(([type, value]) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${type}</td><td>${value}</td>`;
-    refs.dnsTableBody.appendChild(row);
-  });
-}
-
-function renderWhoisTable(report) {
-  refs.whoisTableBody.innerHTML = "";
-  const whois = report?.whois || {};
-  const rows = [
-    ["Registrar", whois.registrar || "n/a"],
-    ["Creation", whois.creation_date || "n/a"],
-    ["Expiration", whois.expiration_date || "n/a"],
-    ["Updated", whois.updated_date || "n/a"],
-    ["Name servers", Array.isArray(whois.name_servers) ? whois.name_servers.join(", ") : "n/a"],
-    ["Status", Array.isArray(whois.status) ? whois.status.join(", ") : whois.status || "n/a"],
-  ];
-  rows.forEach(([field, value]) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${field}</td><td>${value}</td>`;
-    refs.whoisTableBody.appendChild(row);
-  });
-}
-
-function renderTechChips(report) {
-  refs.techChipList.innerHTML = "";
-  const techs = Array.isArray(report?.tech_stack?.detected_technologies) ? report.tech_stack.detected_technologies : [];
-  const list = techs.length ? techs : ["No strong fingerprints"];
-  list.forEach((item) => {
-    const chip = document.createElement("span");
-    chip.textContent = item;
-    refs.techChipList.appendChild(chip);
-  });
-}
-
-function renderResolvedTargets(report) {
-  const ips = Array.isArray(report?.ip_scan?.resolved_ips) ? report.ip_scan.resolved_ips : [];
-  const passive = Array.isArray(report?.passive_dns?.historical_subdomains) ? report.passive_dns.historical_subdomains : [];
-  const ct = Array.isArray(report?.certificate_transparency?.discovered_subdomains) ? report.certificate_transparency.discovered_subdomains : [];
-  fillList(refs.resolvedTargetsList, [...ips, ...passive, ...ct], "No passive relationships surfaced.");
-}
-
-function renderIdentityExpansion(report) {
-  const ct = Array.isArray(report?.certificate_transparency?.discovered_subdomains) ? report.certificate_transparency.discovered_subdomains : [];
-  const passiveSubs = Array.isArray(report?.passive_dns?.historical_subdomains) ? report.passive_dns.historical_subdomains : [];
-  const passiveIps = Array.isArray(report?.passive_dns?.resolved_ips) ? report.passive_dns.resolved_ips : [];
-  const asnRecords = Array.isArray(report?.asn_network?.records) ? report.asn_network.records : [];
-  const expandedHosts = Array.isArray(report?.asn_network?.expanded_c_segment_hosts) ? report.asn_network.expanded_c_segment_hosts : [];
-
-  fillList(
-    refs.ctPassiveList,
-    [
-      ...ct.map((item) => `ct :: ${item}`),
-      ...passiveSubs.map((item) => `passive subdomain :: ${item}`),
-      ...passiveIps.map((item) => `passive ip :: ${item}`),
-    ],
-    "CT logs and passive DNS are disabled or did not return any records."
-  );
-
-  fillList(
-    refs.asnRecordList,
-    [
-      ...asnRecords.map((row) => `asn :: ${row.asn || "n/a"} // prefix :: ${row.prefix || "n/a"}`),
-      ...expandedHosts.map((item) => `expanded host :: ${item}`),
-    ],
-    "ASN expansion is disabled or no adjacent network space was returned."
-  );
-}
-
-function renderWebAssets(report) {
-  const webAssets = report?.web_assets || {};
-  const combinedEndpoints = Array.isArray(webAssets.combined_endpoints) ? webAssets.combined_endpoints : [];
-  const jsFiles = Array.isArray(webAssets?.crawler?.js_files)
-    ? webAssets.crawler.js_files
-    : Array.isArray(webAssets?.js_extraction?.js_files)
-      ? webAssets.js_extraction.js_files
-      : [];
-  const sensitive = Array.isArray(webAssets?.sensitive_paths?.items)
-    ? webAssets.sensitive_paths.items
-    : Array.isArray(webAssets?.sensitive_paths?.hits)
-      ? webAssets.sensitive_paths.hits
-      : [];
-  const directoryHits = Array.isArray(webAssets?.directory_probe?.hits)
-    ? webAssets.directory_probe.hits.map((row) => (typeof row === "string" ? row : row.url || JSON.stringify(row)))
-    : [];
-
-  fillList(refs.webEndpointList, combinedEndpoints, "Web asset enumeration returned no combined endpoints.");
-  fillList(refs.webJsFileList, jsFiles, "No JavaScript source files were collected.");
-  fillList(refs.webSensitiveList, sensitive, "No sensitive paths were merged from crawler, JS, or directory probe.");
-  fillList(refs.webDirectoryList, directoryHits, "Directory probing is disabled or returned no hits.");
-}
-
-function buildGraph(report) {
-  const target = report?.target?.domain || report?.target?.input || "target";
-  const nodes = [{ id: "target", label: target, type: "target" }];
-  const links = [];
-
-  const addNodes = (items, type) => {
-    items.forEach((item, index) => {
-      const id = `${type}-${index}-${item}`;
-      nodes.push({ id, label: item, type });
-      links.push({ from: "target", to: id });
+async function stopCurrentScan() {
+  if (!state.currentJob?.job_id) return;
+  refs.stopScanBtn.disabled = true;
+  try {
+    const payload = await fetchJson(`${getApiScanUrl().replace(/\/+$/, "")}/${state.currentJob.job_id}/stop`, {
+      method: "POST",
     });
-  };
-
-  addNodes((report?.dns?.A || []).slice(0, 3), "ip");
-  addNodes((report?.certificate_transparency?.discovered_subdomains || []).slice(0, 4), "subdomain");
-  addNodes((report?.tech_stack?.detected_technologies || []).slice(0, 3), "tech");
-
-  return { nodes, links };
+    refs.statusMessage.textContent = payload.message || "已发送停止请求。";
+    state.currentStatus = payload.status || "stopping";
+    syncView();
+    startPolling(state.currentJob.job_id);
+  } catch (error) {
+    refs.statusMessage.textContent = `停止任务失败：${error.message}`;
+    refs.stopScanBtn.disabled = false;
+  }
 }
 
-function renderGraph(report) {
-  const canvas = refs.networkCanvas;
-  if (!canvas) {
+function renderJobs(jobs) {
+  if (!jobs.length) {
+    refs.jobsList.className = "job-list empty-state";
+    refs.jobsList.textContent = "还没有可展示的任务。";
     return;
   }
 
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return;
-  }
+  refs.jobsList.className = "job-list";
+  refs.jobsList.innerHTML = jobs
+    .slice(0, 12)
+    .map((job) => {
+      const target = job.result?.target?.input || job.result?.meta?.target_input || "-";
+      return `
+        <article class="job-item">
+          <div class="job-item__meta">
+            <strong>${escapeHtml(target)}</strong>
+            <span class="badge" data-tone="${escapeHtml(getStatusTone(job.status))}">${escapeHtml(job.status)}</span>
+          </div>
+          <div class="job-item__meta">
+            <span class="muted">${escapeHtml(formatDateTime(job.created_at))}</span>
+            <button type="button" data-job-id="${escapeHtml(job.job_id)}">查看详情</button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
 
-  const rect = canvas.getBoundingClientRect();
-  const width = Math.max(320, rect.width || 640);
-  const height = Math.max(360, rect.height || 420);
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = Math.floor(width * dpr);
-  canvas.height = Math.floor(height * dpr);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, width, height);
-
-  const graph = buildGraph(report);
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const orbit = Math.min(width, height) * 0.28;
-  const positions = {};
-
-  graph.nodes.forEach((node, index) => {
-    if (node.type === "target") {
-      positions[node.id] = { x: centerX, y: centerY };
-      return;
-    }
-    const angle = ((Math.PI * 2) / (graph.nodes.length - 1 || 1)) * index;
-    const radius = orbit + (node.type === "tech" ? 34 : node.type === "ip" ? -18 : 0);
-    positions[node.id] = {
-      x: centerX + Math.cos(angle) * radius,
-      y: centerY + Math.sin(angle) * radius,
-    };
-  });
-
-  graph.links.forEach((link) => {
-    const from = positions[link.from];
-    const to = positions[link.to];
-    if (!from || !to) {
-      return;
-    }
-    const gradient = ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-    gradient.addColorStop(0, "rgba(0,240,255,0.45)");
-    gradient.addColorStop(1, "rgba(255,0,170,0.24)");
-    ctx.strokeStyle = gradient;
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(from.x, from.y);
-    ctx.lineTo(to.x, to.y);
-    ctx.stroke();
-  });
-
-  graph.nodes.forEach((node) => {
-    const pos = positions[node.id];
-    if (!pos) {
-      return;
-    }
-    ctx.beginPath();
-    ctx.fillStyle = node.type === "target" ? "#00f0ff" : node.type === "ip" ? "#ff00aa" : node.type === "tech" ? "#00ff9f" : "#9ce7ff";
-    ctx.shadowBlur = node.type === "target" ? 22 : 14;
-    ctx.shadowColor = ctx.fillStyle;
-    ctx.arc(pos.x, pos.y, node.type === "target" ? 10 : 7, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#e7feff";
-    ctx.font = `600 ${node.type === "target" ? 13 : 11}px Orbitron`;
-    ctx.textAlign = "center";
-    ctx.fillText(node.label.slice(0, 16), pos.x, pos.y + (node.type === "target" ? 30 : 24));
-  });
-
-  fillList(
-    refs.nodeLegend,
-    graph.nodes.map((node) => `${node.type} :: ${node.label}`),
-    "No graph nodes available."
-  );
-}
-
-function renderVulnCards(report) {
-  refs.vulnCards.innerHTML = "";
-  const cards = [];
-  const vtStats = report?.virustotal?.domain?.last_analysis_stats;
-  const cves = Array.isArray(report?.service_risk?.cve_lookup?.matches) ? report.service_risk.cve_lookup.matches : [];
-  const weak = Array.isArray(report?.service_risk?.weak_checks?.findings) ? report.service_risk.weak_checks.findings : [];
-  const ipScan = report?.ip_scan?.results || {};
-
-  if (vtStats && (vtStats.malicious || vtStats.suspicious)) {
-    cards.push({
-      title: "Threat Intel Hit",
-      severity: vtStats.malicious ? "critical" : "tracked",
-      items: [
-        `malicious verdicts :: ${vtStats.malicious || 0}`,
-        `suspicious verdicts :: ${vtStats.suspicious || 0}`,
-        "recommendation :: enrich with external reputation telemetry",
-      ],
-    });
-  }
-
-  if (cves.length) {
-    cards.push({
-      title: "CVE Correlation",
-      severity: "critical",
-      items: cves.map((item) => `${item.id} // ${item.product || "unknown product"} // ${item.description || item.severity || "high signal"}`),
-    });
-  }
-
-  if (weak.length) {
-    cards.push({
-      title: "Weak Configuration Surface",
-      severity: "elevated",
-      items: weak.map((item) => `${item.title || "weak finding"} // ${item.detail || "manual validation required"}`),
-    });
-  }
-
-  const exposed = [];
-  Object.entries(ipScan).forEach(([ip, result]) => {
-    (result?.tcp?.open_ports || []).forEach((row) => {
-      if ([22, 3389, 3306, 6379].includes(Number(row.port))) {
-        exposed.push(`${ip}:${row.port}/${row.protocol || "tcp"} // ${row.service || "service"} exposed on public edge`);
+  refs.jobsList.querySelectorAll("[data-job-id]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      try {
+        const payload = await fetchJson(`${getApiScanUrl().replace(/\/+$/, "")}/${button.dataset.jobId}`);
+        setCurrentJob(payload, "history");
+        if (["queued", "running", "stopping"].includes(payload.status)) {
+          startPolling(payload.job_id);
+        } else {
+          stopPolling();
+        }
+      } catch (error) {
+        refs.statusMessage.textContent = `读取任务详情失败：${error.message}`;
       }
     });
   });
-  if (exposed.length) {
-    cards.push({
-      title: "Edge Exposure",
-      severity: "tracked",
-      items: exposed,
-    });
-  }
+}
 
-  if (!cards.length) {
-    cards.push({
-      title: "No Direct Vuln Hits",
-      severity: "low",
-      items: [
-        "no confirmed exploitable fingerprints were emitted by automated lanes",
-        "manual verification remains recommended for auth, upload, and hidden routes",
-        "consider rerunning with deeper port and web asset expansion",
-      ],
-    });
-  }
+function renderNotice(message, tone = "neutral") {
+  return `<div class="notice" data-tone="${escapeHtml(tone)}">${escapeHtml(message)}</div>`;
+}
 
-  cards.forEach((card) => {
-    const article = document.createElement("article");
-    article.className = "vuln-card";
-    article.innerHTML = `
-      <div class="vuln-card__head">
-        <strong>${card.title}</strong>
-        <span class="threat-pill threat-pill--${card.severity}">${card.severity.toUpperCase()}</span>
+function renderChips(items) {
+  const values = safeArray(items);
+  if (!values.length) return renderNotice("暂无可展示条目。");
+  return `<div class="pill-row">${values.map((item) => `<span class="chip">${escapeHtml(item)}</span>`).join("")}</div>`;
+}
+
+function renderKVTable(rows) {
+  const filtered = rows.filter(([, value]) => value !== undefined && value !== null && value !== "");
+  if (!filtered.length) return renderNotice("暂无字段可展示。");
+  return `
+    <table class="kv-table">
+      <tbody>
+        ${filtered
+          .map(
+            ([label, value]) => `
+              <tr>
+                <td>${escapeHtml(label)}</td>
+                <td>${Array.isArray(value) ? escapeHtml(value.join(", ")) : escapeHtml(value)}</td>
+              </tr>
+            `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderTable(headers, rows) {
+  if (!rows.length) return renderNotice("暂无数据。");
+  return `
+    <table class="data-table">
+      <thead>
+        <tr>${headers.map((item) => `<th>${escapeHtml(item)}</th>`).join("")}</tr>
+      </thead>
+      <tbody>
+        ${rows
+          .map(
+            (row) => `
+              <tr>${row.map((cell) => `<td>${escapeHtml(cell ?? "-")}</td>`).join("")}</tr>
+            `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function card(title, eyebrow, badge, body, tone = "neutral") {
+  return `
+    <article class="data-card">
+      <div class="data-card__head">
+        <div>
+          <p class="eyebrow">${escapeHtml(eyebrow)}</p>
+          <h3>${escapeHtml(title)}</h3>
+        </div>
+        <span class="badge" data-tone="${escapeHtml(tone)}">${escapeHtml(badge)}</span>
       </div>
-      <ul>${card.items.map((item) => `<li>${item}</li>`).join("")}</ul>
-    `;
-    refs.vulnCards.appendChild(article);
-  });
+      <div class="data-card__body">${body}</div>
+    </article>
+  `;
 }
 
-function renderReport(report) {
-  const summary = summarizeReport(report);
-  const score = summary.score;
-  const threat = deriveThreatLabel(score);
+function computeOpenPorts(report) {
+  const ipScan = report?.ip_scan;
+  if (!ipScan?.results) return 0;
+  return Object.values(ipScan.results).reduce((sum, record) => {
+    const tcp = Number(record?.tcp?.open_port_count || 0);
+    const udp = Number(record?.udp?.open_port_count || 0);
+    return sum + tcp + udp;
+  }, 0);
+}
 
-  refs.resultTargetKpi.textContent = report?.target?.input || report?.meta?.target_input || "NO TARGET";
-  refs.resultStatusKpi.textContent = "READY";
-  refs.resultOpenPortsKpi.textContent = String(summary.openPorts);
-  refs.resultTechKpi.textContent = String(summary.techCount);
-  refs.resultThreatScoreKpi.textContent = String(score).padStart(2, "0");
-  refs.resultSourceKpi.textContent = state.latestSource;
+function computeRiskCount(report) {
+  const risk = report?.service_risk;
+  const cveMatches = safeArray(risk?.cve_lookup?.matches);
+  const cves = cveMatches.reduce((sum, row) => sum + safeArray(row?.cves).length, 0);
+  const weak = Object.values(risk?.weak_checks?.per_ip || {}).reduce((sum, row) => {
+    return sum + Number(row?.ftp_anonymous_check?.finding_count || 0) + Number(row?.tls_cipher_check?.finding_count || 0);
+  }, 0);
+  return cves + weak;
+}
 
-  fillList(refs.missionDigest, summary.missionDigest, "No mission digest available.");
-  fillList(refs.signalSynopsis, summary.signalSynopsis, "No signal synopsis available.");
-  fillList(
-    refs.terminalHighlights,
-    Array.from(refs.scanLog.children).slice(-6).map((line) => line.textContent),
-    "Terminal highlights will appear after the first live operation."
+function updateHero() {
+  const report = state.currentReport;
+  const target =
+    state.currentJob?.result?.target?.input ||
+    report?.target?.input ||
+    state.currentJob?.job_id ||
+    refs.targetInput.value.trim() ||
+    "尚未选择目标";
+
+  refs.heroTarget.textContent = target;
+  refs.heroStatus.textContent = state.currentStatus || "idle";
+  refs.heroModules.textContent = String(countEnabledModules());
+  refs.heroPorts.textContent = report ? String(computeOpenPorts(report)) : "-";
+  refs.heroRisks.textContent = report ? String(computeRiskCount(report)) : "-";
+
+  if (!report) {
+    refs.heroSummary.textContent = "扫描尚未完成。该工作台会根据真实模块结果自动生成基础情报、网络资产、Web 枚举与风险视图。";
+    return;
+  }
+
+  const techCount = safeArray(report.tech_stack?.detected_technologies).length;
+  const endpointCount = safeArray(report.web_assets?.combined_endpoints).length;
+  refs.heroSummary.textContent = `当前报告包含 ${techCount} 个技术指纹、${computeOpenPorts(report)} 个开放端口、${endpointCount} 个接口或路径线索。`;
+}
+
+function renderOverview(report) {
+  if (!report) {
+    refs.overviewPanel.innerHTML = renderNotice("还没有可展示的报告。可以创建任务，或导入本地 JSON 报告。");
+    return;
+  }
+
+  const summaryRows = [
+    ["目标输入", report.target?.input],
+    ["规范化 URL", report.target?.normalized_url],
+    ["扫描模式", report.meta?.scan_mode],
+    ["端口引擎", report.meta?.requested_port_scanner],
+    ["启用 VirusTotal", report.meta?.vt_scan_enabled ? "是" : "否"],
+    ["启用 Web 枚举", report.meta?.web_asset_scan_enabled ? "是" : "否"],
+    ["启用服务风险", report.meta?.service_risk_scan_enabled ? "是" : "否"],
+  ];
+
+  const moduleCards = [
+    ["DNS", report.dns],
+    ["WHOIS", report.whois],
+    ["Tech Stack", report.tech_stack],
+    ["VirusTotal", report.virustotal],
+    ["Certificate Transparency", report.certificate_transparency],
+    ["Passive DNS", report.passive_dns],
+    ["ASN", report.asn_network],
+    ["Web Assets", report.web_assets],
+    ["IP Scan", report.ip_scan],
+    ["Service Risk", report.service_risk],
+  ]
+    .map(([label, data]) => {
+      const moduleState = getModuleState(data);
+      return `
+        <div class="metric-row">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(moduleState.label)}</strong>
+        </div>
+      `;
+    })
+    .join("");
+
+  refs.overviewPanel.innerHTML = `
+    <div class="overview-grid">
+      ${card(
+        "报告摘要",
+        "Report Summary",
+        state.currentSource,
+        `
+          ${renderKVTable(summaryRows)}
+          <div class="metric-list" style="margin-top:16px">
+            <div class="metric-row"><span>开放端口总数</span><strong>${computeOpenPorts(report)}</strong></div>
+            <div class="metric-row"><span>风险条目总数</span><strong>${computeRiskCount(report)}</strong></div>
+            <div class="metric-row"><span>技术指纹</span><strong>${safeArray(report.tech_stack?.detected_technologies).length}</strong></div>
+            <div class="metric-row"><span>Web 端点线索</span><strong>${safeArray(report.web_assets?.combined_endpoints).length}</strong></div>
+          </div>
+        `,
+        "概览"
+      )}
+      ${card("模块执行情况", "Module State", "后端返回", moduleCards, "success")}
+    </div>
+  `;
+}
+
+function renderIdentity(report) {
+  if (!report) {
+    refs.identityPanel.innerHTML = renderNotice("暂无基础情报数据。");
+    return;
+  }
+
+  const dnsRows = Object.entries(report.dns || {}).map(([type, value]) => [
+    type,
+    Array.isArray(value) ? value.join(", ") : value?.error || "-",
+  ]);
+
+  refs.identityPanel.innerHTML = `
+    <div class="info-grid">
+      ${card("目标解析", "Target", "核心实体", renderKVTable([
+        ["输入", report.target?.input],
+        ["域名", report.target?.domain],
+        ["协议", report.target?.scheme],
+        ["端口", report.target?.port],
+        ["路径", report.target?.path],
+        ["查询参数", report.target?.query],
+        ["规范化 URL", report.target?.normalized_url],
+      ]), "success")}
+      ${card("WHOIS", "Ownership", getModuleState(report.whois).label, renderKVTable([
+        ["域名", report.whois?.domain_name],
+        ["注册商", report.whois?.registrar],
+        ["WHOIS 服务器", report.whois?.whois_server],
+        ["创建时间", report.whois?.creation_date],
+        ["过期时间", report.whois?.expiration_date],
+        ["更新时间", report.whois?.updated_date],
+        ["DNSSEC", report.whois?.dnssec],
+      ]), getModuleState(report.whois).tone)}
+      ${card("DNS 记录", "DNS", "基础情报", renderTable(["类型", "值 / 状态"], dnsRows), "success")}
+      ${card("技术指纹", "Tech Detection", getModuleState(report.tech_stack).label, `
+        ${renderKVTable([
+          ["请求 URL", report.tech_stack?.url],
+          ["状态码", report.tech_stack?.status_code],
+        ])}
+        <div style="margin-top:16px">${renderChips(report.tech_stack?.detected_technologies)}</div>
+      `, getModuleState(report.tech_stack).tone)}
+      ${card("VirusTotal", "Threat Intel", getModuleState(report.virustotal).label, renderVirusTotal(report.virustotal), getModuleState(report.virustotal).tone)}
+    </div>
+  `;
+}
+
+function renderVirusTotal(vt) {
+  if (!vt) return renderNotice("未返回 VirusTotal 结果。");
+  const stateInfo = getModuleState(vt);
+  if (stateInfo.label !== "完成") return renderNotice(stateInfo.detail, stateInfo.tone);
+
+  const domainStats = vt.domain?.last_analysis_stats || {};
+  const urlStats = vt.url?.last_analysis_stats || {};
+  return `
+    ${renderKVTable([
+      ["Domain reputation", vt.domain?.reputation],
+      ["URL reputation", vt.url?.reputation],
+      ["Domain malicious", domainStats.malicious ?? 0],
+      ["URL malicious", urlStats.malicious ?? 0],
+    ])}
+    <div style="margin-top:16px">
+      ${renderChips(Object.entries(vt.domain?.categories || {}).map(([vendor, category]) => `${vendor}: ${category}`))}
+    </div>
+  `;
+}
+
+function renderInfrastructure(report) {
+  if (!report) {
+    refs.infrastructurePanel.innerHTML = renderNotice("暂无网络与资产数据。");
+    return;
+  }
+
+  refs.infrastructurePanel.innerHTML = `
+    <div class="panel-grid panel-grid--two">
+      ${card("证书透明度", "CT Logs", getModuleState(report.certificate_transparency).label, renderCt(report.certificate_transparency), getModuleState(report.certificate_transparency).tone)}
+      ${card("被动 DNS", "Passive DNS", getModuleState(report.passive_dns).label, renderPassiveDns(report.passive_dns), getModuleState(report.passive_dns).tone)}
+      ${card("ASN 与网络扩展", "ASN", getModuleState(report.asn_network).label, renderAsn(report.asn_network), getModuleState(report.asn_network).tone)}
+      ${card("IP / Port 扫描", "IP Scan", getModuleState(report.ip_scan).label, renderIpScan(report.ip_scan), getModuleState(report.ip_scan).tone)}
+    </div>
+  `;
+}
+
+function renderCt(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return `
+    ${renderKVTable([
+      ["数据源", module.source],
+      ["总记录数", module.total_records],
+      ["发现子域名", safeArray(module.discovered_subdomains).length],
+    ])}
+    <div style="margin-top:16px">${renderChips(safeArray(module.discovered_subdomains).slice(0, 24))}</div>
+  `;
+}
+
+function renderPassiveDns(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return `
+    ${renderKVTable([
+      ["解析 IP 数", safeArray(module.resolved_ips).length],
+      ["历史子域名数", safeArray(module.historical_subdomains).length],
+      ["来源数", Object.keys(module.sources || {}).length],
+    ])}
+    <div style="margin-top:16px">${renderChips(safeArray(module.resolved_ips).slice(0, 16))}</div>
+    <div style="margin-top:16px">${renderChips(safeArray(module.historical_subdomains).slice(0, 16))}</div>
+  `;
+}
+
+function renderAsn(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return renderTable(
+    ["IP", "ASN", "名称", "Prefix", "国家"],
+    safeArray(module.records).map((row) => [row.ip, row.asn, row.asn_name, row.prefix, row.country_code])
   );
-
-  renderDnsTable(report);
-  renderWhoisTable(report);
-  renderTechChips(report);
-  renderResolvedTargets(report);
-  renderIdentityExpansion(report);
-  renderWebAssets(report);
-  renderGraph(report);
-  renderVulnCards(report);
-  refs.rawJsonView.textContent = JSON.stringify(report, null, 2);
-  setThreatLabel(threat);
 }
 
-async function copyTargetContent(targetId) {
-  const node = document.getElementById(targetId);
-  if (!node) {
+function renderIpScan(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成" && moduleState.label !== "已跳过") return renderNotice(moduleState.detail, moduleState.tone);
+
+  const rows = [];
+  Object.entries(module?.results || {}).forEach(([ip, record]) => {
+    safeArray(record?.tcp?.open_ports).forEach((row) => rows.push([ip, "tcp", row.port, row.service, row.state, row.banner]));
+    safeArray(record?.udp?.open_ports).forEach((row) => rows.push([ip, "udp", row.port, row.service, row.state, row.banner]));
+  });
+
+  return `
+    ${renderKVTable([
+      ["扫描是否执行", module?.scan_performed ? "是" : "否"],
+      ["扫描引擎", module?.scanner],
+      ["请求引擎", module?.requested_scanner],
+      ["端口范围", module?.port_range],
+      ["目标 IP 数", safeArray(module?.targets).length],
+      ["跳过原因", module?.skip_reason],
+    ])}
+    <div style="margin-top:16px">${renderTable(["IP", "协议", "端口", "服务", "状态", "Banner"], rows)}</div>
+  `;
+}
+
+function renderWeb(report) {
+  if (!report) {
+    refs.webPanel.innerHTML = renderNotice("暂无 Web 枚举数据。");
     return;
   }
 
-  const text = node.innerText.trim();
-  if (!text) {
-    showToast("NEOSCAN", "Nothing to copy from that panel yet.", "error");
+  const web = report.web_assets;
+  refs.webPanel.innerHTML = `
+    <div class="panel-grid panel-grid--two">
+      ${card("Web 枚举总览", "Web Assets", getModuleState(web).label, renderWebOverview(web), getModuleState(web).tone)}
+      ${card("站内爬取", "Crawler", getModuleState(web?.crawler).label, renderCrawler(web?.crawler), getModuleState(web?.crawler).tone)}
+      ${card("JS 提取", "JS Extraction", getModuleState(web?.js_extraction).label, renderJsExtraction(web?.js_extraction), getModuleState(web?.js_extraction).tone)}
+      ${card("目录探测", "Directory Probe", getModuleState(web?.directory_probe).label, renderDirectoryProbe(web?.directory_probe), getModuleState(web?.directory_probe).tone)}
+      ${card("敏感路径", "Sensitive Paths", getModuleState(web?.sensitive_paths).label, renderSensitivePaths(web?.sensitive_paths), getModuleState(web?.sensitive_paths).tone)}
+    </div>
+  `;
+}
+
+function renderWebOverview(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return `
+    ${renderKVTable([
+      ["基础 URL", module.base_url],
+      ["组合端点数", safeArray(module.combined_endpoints).length],
+      ["敏感路径数", module.sensitive_paths?.count],
+    ])}
+    <div style="margin-top:16px">${renderChips(safeArray(module.combined_endpoints).slice(0, 20))}</div>
+  `;
+}
+
+function renderCrawler(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return `
+    ${renderKVTable([
+      ["页面数", module.page_count],
+      ["JS 文件", safeArray(module.js_files).length],
+      ["发现端点", safeArray(module.discovered_endpoints).length],
+    ])}
+    <div style="margin-top:16px">${renderChips(safeArray(module.pages).slice(0, 12).map((row) => `${row.status_code || "ERR"} ${row.url}`))}</div>
+  `;
+}
+
+function renderJsExtraction(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return `
+    ${renderKVTable([
+      ["端点数", safeArray(module.endpoints).length],
+      ["敏感路径数", safeArray(module.sensitive_paths).length],
+      ["样本数", safeArray(module.samples).length],
+    ])}
+    <div style="margin-top:16px">${renderChips(safeArray(module.endpoints).slice(0, 20))}</div>
+  `;
+}
+
+function renderDirectoryProbe(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return renderTable(
+    ["URL", "状态码", "长度", "内容类型"],
+    safeArray(module.hits).slice(0, 40).map((row) => [row.url, row.status_code, row.length, row.content_type || row.redirectlocation])
+  );
+}
+
+function renderSensitivePaths(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return renderChips(safeArray(module.items).slice(0, 30));
+}
+
+function renderRisk(report) {
+  if (!report) {
+    refs.riskPanel.innerHTML = renderNotice("暂无风险分析数据。");
     return;
   }
 
-  try {
-    await navigator.clipboard.writeText(text);
-    playSfx("glitch");
-    showToast("NEOSCAN", "Panel content copied to clipboard.", "success");
-  } catch (_error) {
-    showToast("NEOSCAN", "Clipboard channel is blocked in this environment.", "error");
+  const risk = report.service_risk;
+  refs.riskPanel.innerHTML = `
+    <div class="panel-grid panel-grid--two">
+      ${card("服务清单", "Service Inventory", getModuleState(risk).label, renderServiceInventory(risk), getModuleState(risk).tone)}
+      ${card("CVE 关联", "CVE Lookup", getModuleState(risk?.cve_lookup).label, renderCveLookup(risk?.cve_lookup), getModuleState(risk?.cve_lookup).tone)}
+      ${card("弱配置检查", "Weak Checks", getModuleState(risk?.weak_checks).label, renderWeakChecks(risk?.weak_checks), getModuleState(risk?.weak_checks).tone)}
+    </div>
+  `;
+}
+
+function renderServiceInventory(module) {
+  const moduleState = getModuleState(module);
+  if (moduleState.label !== "完成") return renderNotice(moduleState.detail, moduleState.tone);
+  return renderTable(
+    ["IP", "端口", "协议", "服务", "状态", "CPE"],
+    safeArray(module.services).slice(0, 60).map((row) => [row.ip, row.port, row.protocol, row.service, row.state, safeArray(row.cpe).join(", ")])
+  );
+}
+
+function renderCveLookup(module) {
+  const moduleState = getModuleState(module);
+  if (module?.enabled === false) return renderNotice(module.message || "CVE 关联未启用。");
+  const rows = [];
+  safeArray(module?.matches).forEach((match) => {
+    safeArray(match.cves).forEach((cve) => rows.push([match.cpe, cve.id, cve.severity, cve.base_score, cve.published]));
+  });
+  return `
+    ${renderKVTable([
+      ["CPE 数量", module?.cpe_count],
+      ["匹配项", rows.length],
+      ["说明", module?.message],
+    ])}
+    <div style="margin-top:16px">${renderTable(["CPE", "CVE", "Severity", "Score", "Published"], rows.slice(0, 50))}</div>
+  `;
+}
+
+function renderWeakChecks(module) {
+  if (module?.enabled === false) return renderNotice(module.message || "弱配置检查未启用。");
+  const rows = [];
+  Object.entries(module?.per_ip || {}).forEach(([ip, row]) => {
+    safeArray(row?.ftp_anonymous_check?.findings).forEach((finding) => rows.push([ip, "ftp-anon", finding.port, finding.output]));
+    safeArray(row?.tls_cipher_check?.findings).forEach((finding) => rows.push([ip, "ssl-enum-ciphers", finding.port, finding.output]));
+  });
+  return `
+    ${renderKVTable([
+      ["检查 IP 数", Object.keys(module?.per_ip || {}).length],
+      ["发现数", rows.length],
+      ["说明", module?.message],
+    ])}
+    <div style="margin-top:16px">${renderTable(["IP", "检查项", "端口", "输出"], rows.slice(0, 30))}</div>
+  `;
+}
+
+function syncStatusPanel() {
+  const report = state.currentReport;
+  const job = state.currentJob;
+  const status = job?.status || state.currentStatus || "idle";
+  const tone = getStatusTone(status);
+  const progress = getProgressPercent(status, report);
+
+  refs.statusChip.textContent = status;
+  refs.statusChip.className = "status-chip";
+  refs.statusChip.dataset.tone = tone;
+  refs.jobIdChip.textContent = job?.job_id ? `Job ${job.job_id.slice(0, 8)}` : "No Job";
+  refs.currentTargetValue.textContent = report?.target?.input || refs.targetInput.value.trim() || "-";
+  refs.createdAtValue.textContent = formatDateTime(job?.created_at || report?.meta?.generated_at);
+  refs.runtimeValue.textContent = formatRuntime(job);
+  refs.sourceValue.textContent = state.currentSource;
+  refs.progressLabel.textContent = status === "completed" ? "报告已完成" : status === "failed" ? "任务失败" : status === "canceled" ? "任务已取消" : "任务进行中";
+  refs.progressValue.textContent = `${progress}%`;
+  refs.progressBar.style.width = `${progress}%`;
+  refs.stopScanBtn.disabled = !job || !["queued", "running", "stopping"].includes(status);
+
+  if (job?.error) {
+    refs.statusMessage.textContent = `任务失败：${job.error}`;
+  } else if (report?.error) {
+    refs.statusMessage.textContent = `报告错误：${report.error}`;
+  } else if (report?.canceled) {
+    refs.statusMessage.textContent = report.message || "任务已取消。";
+  } else if (job?.result?.meta) {
+    refs.statusMessage.textContent = `最后生成时间：${formatDateTime(job.result.meta.generated_at)}。`;
   }
 }
 
-function downloadLatestReport() {
-  if (!state.latestReport) {
-    showToast("NEOSCAN", "No evidence package has been generated yet.", "error");
-    return;
-  }
-  const blob = new Blob([JSON.stringify(state.latestReport, null, 2)], { type: "application/json;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `neoscan-${Date.now()}.json`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  URL.revokeObjectURL(url);
-  playSfx("success");
-  showToast("NEOSCAN", "Evidence package downloaded.", "success");
+function syncView() {
+  updateHero();
+  syncStatusPanel();
+  renderOverview(state.currentReport);
+  renderIdentity(state.currentReport);
+  renderInfrastructure(state.currentReport);
+  renderWeb(state.currentReport);
+  renderRisk(state.currentReport);
+  refs.rawJsonView.textContent = state.currentReport ? JSON.stringify(state.currentReport, null, 2) : "暂无数据";
 }
 
-function exportToDarkWeb() {
-  playSfx("glitch");
-  appendLog("onion uplink rejected // human approval required for off-grid export", "warn");
-  showToast("Dark Web Relay", "Fake export button engaged. Human approval required for off-grid transfer.", "success");
-}
-
-function handleImportedReport(file) {
+function handleReportFile(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
     try {
-      const report = JSON.parse(String(reader.result));
-      setTarget(report?.target?.input || report?.meta?.target_input || state.target || file.name);
-      refs.reportMetaName.textContent = file.name;
-      refs.reportMeta.firstElementChild.textContent = `report imported // ${(file.size / 1024).toFixed(1)} KB`;
-      state.latestReport = report;
-      state.latestSource = "IMPORTED";
-      finishScan(report, "IMPORTED");
-    } catch (_error) {
-      refs.reportMetaName.textContent = file.name;
-      refs.reportMeta.firstElementChild.textContent = "import failed // invalid json";
-      showToast("NEOSCAN", "Selected file is not valid JSON.", "error");
-      playSfx("error");
+      const report = JSON.parse(String(reader.result || "{}"));
+      setCurrentReport(report, "imported-file");
+      refs.importHint.textContent = `已导入 ${file.name}`;
+      stopPolling();
+    } catch (error) {
+      refs.importHint.textContent = `解析文件失败：${error.message}`;
     }
   };
   reader.readAsText(file, "utf-8");
 }
 
-function updateAmbientHud() {
-  const activeJobs = state.apiJobs.filter((job) => !["completed", "failed", "canceled"].includes(String(job.status || "").toLowerCase())).length;
-  refs.heroCollectorCount.textContent = `${String(getModuleCount()).padStart(2, "0")} ARMED`;
-  refs.heroAssetFlow.textContent = activeJobs ? `${String(activeJobs).padStart(2, "0")} ACTIVE` : "QUEUE READY";
-}
-
-function initAmbientLoops() {
-  updateAmbientHud();
-  state.heroFeedTimer = window.setInterval(() => {
-    heroFeedPool.push(heroFeedPool.shift());
-    renderFeedLine(refs.heroFeed, heroFeedPool[0], 3);
-  }, 2800);
-
-  state.ambientTimer = window.setInterval(updateAmbientHud, 1400);
-}
-
-function initMatrixRain() {
-  const canvas = refs.matrixRain;
-  if (!canvas) {
-    return;
-  }
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return;
-  }
-
-  const glyphs = "01NEOSCAN";
-  let width = 0;
-  let height = 0;
-  let columns = [];
-  let fontSize = 16;
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    const count = Math.max(1, Math.floor(width / fontSize));
-    columns = Array.from({ length: count }, () => Math.random() * height);
-  }
-
-  function draw() {
-    ctx.fillStyle = "rgba(2, 3, 10, 0.08)";
-    ctx.fillRect(0, 0, width, height);
-    ctx.font = `${fontSize}px Fira Code`;
-
-    columns.forEach((y, index) => {
-      const x = index * fontSize;
-      const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
-      ctx.fillStyle = Math.random() > 0.92 ? "rgba(255,0,170,0.35)" : "rgba(0,240,255,0.22)";
-      ctx.fillText(glyph, x, y);
-      columns[index] = y > height + fontSize ? 0 : y + fontSize * (0.6 + Math.random() * 0.5);
-    });
-    requestAnimationFrame(draw);
-  }
-
-  resize();
-  window.addEventListener("resize", resize);
-  requestAnimationFrame(draw);
-}
-
-function initParticleField() {
-  const canvas = refs.particleField;
-  if (!canvas) {
-    return;
-  }
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return;
-  }
-
-  let width = 0;
-  let height = 0;
-  let particles = [];
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    particles = Array.from({ length: 32 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      r: 1 + Math.random() * 2.2,
-    }));
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-    particles.forEach((particle) => {
-      particle.x += particle.vx;
-      particle.y += particle.vy;
-      if (particle.x < 0 || particle.x > width) {
-        particle.vx *= -1;
-      }
-      if (particle.y < 0 || particle.y > height) {
-        particle.vy *= -1;
-      }
-
-      ctx.beginPath();
-      ctx.fillStyle = "rgba(0,240,255,0.4)";
-      ctx.shadowBlur = 18;
-      ctx.shadowColor = "rgba(0,240,255,0.3)";
-      ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    });
-
-    for (let i = 0; i < particles.length; i += 1) {
-      for (let j = i + 1; j < particles.length; j += 1) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const distance = Math.hypot(dx, dy);
-        if (distance < 160) {
-          ctx.strokeStyle = `rgba(0,240,255,${0.08 - distance / 2400})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    requestAnimationFrame(draw);
-  }
-
-  resize();
-  window.addEventListener("resize", resize);
-  requestAnimationFrame(draw);
-}
-
-function toggleTerminal(open) {
-  setElementVisibility(refs.terminalOverlay, open, "flex");
-  if (open) {
-    ensureTerminalBoot();
-    refs.terminalCommandInput.focus();
-  }
-}
-
-function handleTerminalCommand(command) {
-  const input = normalizeTarget(command);
-  if (!input) {
-    return;
-  }
-
-  appendLog(`shell command // ${input}`, "info");
-  const [verb, ...args] = input.split(/\s+/);
-  const argString = args.join(" ");
-
-  if (verb === "help") {
-    appendLog("commands :: help | status | clear | scan <target> | load demo | view dashboard|console|results | export", "success");
-    return;
-  }
-
-  if (verb === "status") {
-    appendLog(`status :: ${state.scanning ? "SCANNING" : state.latestReport ? "READY" : "IDLE"} // source ${state.latestSource}`, "success");
-    return;
-  }
-
-  if (verb === "clear") {
-    refs.terminalOverlayLog.innerHTML = "";
-    return;
-  }
-
-  if (verb === "view") {
-    if (["dashboard", "console", "results"].includes(argString)) {
-      setActiveView(argString, { scroll: true });
-      appendLog(`view switched :: ${argString}`, "success");
+async function loadSampleReport() {
+  const candidates = ["../report.json", "/report.json", "./report.json"];
+  for (const url of candidates) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      const report = await response.json();
+      setCurrentReport(report, "sample-report");
+      refs.importHint.textContent = `已载入样例报告：${url}`;
+      stopPolling();
       return;
+    } catch (_error) {
+      continue;
     }
-    appendLog("invalid view target. use dashboard, console, or results.", "error");
-    return;
   }
-
-  if (verb === "scan") {
-    const target = argString || state.target;
-    setTarget(target);
-    startScan();
-    return;
-  }
-
-  if (verb === "load" && argString === "demo") {
-    if (!state.target) {
-      setTarget("blackvault.neon");
-    }
-    startScan({ demo: true });
-    return;
-  }
-
-  if (verb === "export") {
-    downloadLatestReport();
-    return;
-  }
-
-  appendLog(`unknown command :: ${input}`, "error");
+  refs.importHint.textContent = "未能加载样例报告，请确认 `report.json` 可被当前静态服务访问。";
 }
 
-function initCopyButtons() {
-  refs.copyButtons.forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      copyTargetContent(button.dataset.copyTarget);
+function syncFormDependencies() {
+  const customMode = refs.scanModeInput.value === "custom";
+  refs.customPortsField.hidden = !customMode;
+  refs.asnExpandInput.disabled = !refs.asnScanInput.checked;
+  refs.webCrawlerInput.disabled = !refs.webAssetScanInput.checked;
+  refs.webJsExtractInput.disabled = !refs.webAssetScanInput.checked;
+  refs.webSensitiveInput.disabled = !refs.webAssetScanInput.checked;
+  refs.webDirScanInput.disabled = !refs.webAssetScanInput.checked;
+  refs.webDirFfufInput.disabled = !refs.webAssetScanInput.checked || !refs.webDirScanInput.checked;
+  refs.cveLookupInput.disabled = !refs.serviceRiskInput.checked;
+  refs.weakChecksInput.disabled = !refs.serviceRiskInput.checked;
+  refs.moduleCount.textContent = String(countEnabledModules());
+  refs.heroModules.textContent = String(countEnabledModules());
+}
+
+function bindTabs() {
+  refs.tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      state.activeTab = tab.dataset.tab;
+      refs.tabs.forEach((item) => item.classList.toggle("is-active", item === tab));
+      refs.panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === state.activeTab));
     });
   });
 }
 
-function initBindings() {
-  setElementVisibility(refs.mobileDrawer, false, "grid");
-  setElementVisibility(refs.terminalOverlay, false, "flex");
-  setElementVisibility(refs.scanOverlay, false, "grid");
-  bindRipples();
-  updateLanguage("en");
-  seedRecentScans();
-  renderRecentScans();
-  renderApiJobs();
-  updateDashboardStats();
-  updateModuleCountChip();
-  syncCustomPortField();
-  updateStatusUi();
+function init() {
   refs.apiUrlInput.value = inferDefaultApiUrl();
-  refs.resultSourceKpi.textContent = "NO DATA";
-  refs.resultStatusKpi.textContent = "STANDBY";
-  refs.resultTargetKpi.textContent = "NO TARGET";
-  refs.rawJsonView.textContent = "{\n  \"status\": \"no evidence package yet\"\n}";
+  bindTabs();
+  syncFormDependencies();
+  syncView();
 
-  [refs.navTargetInput, refs.heroTargetInput, refs.consoleTargetInput].forEach((input) => {
-    input?.addEventListener("input", (event) => setTarget(event.target.value, event.target));
-  });
+  refs.scanForm.addEventListener("submit", createScan);
+  refs.stopScanBtn.addEventListener("click", stopCurrentScan);
+  refs.reportFileInput.addEventListener("change", handleReportFile);
+  refs.loadSampleBtn.addEventListener("click", loadSampleReport);
+  refs.refreshJobsBtn.addEventListener("click", refreshJobs);
 
-  refs.navLaunchBtn?.addEventListener("click", () => {
-    setTarget(refs.navTargetInput.value || state.target);
-    setActiveView("console", { scroll: true });
-  });
+  [
+    refs.scanModeInput,
+    refs.tcpScanInput,
+    refs.udpScanInput,
+    refs.allowPrivateIpInput,
+    refs.vtScanInput,
+    refs.ctScanInput,
+    refs.passiveDnsInput,
+    refs.asnScanInput,
+    refs.asnExpandInput,
+    refs.webAssetScanInput,
+    refs.webCrawlerInput,
+    refs.webJsExtractInput,
+    refs.webSensitiveInput,
+    refs.webDirScanInput,
+    refs.webDirFfufInput,
+    refs.serviceRiskInput,
+    refs.cveLookupInput,
+    refs.weakChecksInput,
+  ].forEach((input) => input.addEventListener("change", syncFormDependencies));
 
-  refs.heroScanButton?.addEventListener("click", () => startScan());
-  refs.consoleStartBtn?.addEventListener("click", () => startScan());
-  refs.demoModeBtn?.addEventListener("click", () => startScan({ demo: true }));
-  refs.demoSampleBtn?.addEventListener("click", () => {
-    if (!state.target) {
-      setTarget("blackvault.neon");
+  refreshHealth();
+  refreshJobs();
+  state.healthTimer = window.setInterval(refreshHealth, 15000);
+  state.jobsTimer = window.setInterval(refreshJobs, 20000);
+  window.setInterval(() => {
+    if (state.currentJob && ["queued", "running", "stopping"].includes(state.currentStatus)) {
+      syncStatusPanel();
     }
-    startScan({ demo: true });
-  });
-  refs.consoleStopBtn?.addEventListener("click", abortScan);
-  refs.clearConsoleLogBtn?.addEventListener("click", clearScanLog);
-
-  refs.viewTabs.forEach((button) => {
-    button.addEventListener("click", () => setActiveView(button.dataset.viewTarget, { scroll: button.classList.contains("view-tab") }));
-  });
-
-  refs.resultTabs.forEach((button) => {
-    button.addEventListener("click", () => setResultTab(button.dataset.resultTab));
-  });
-
-  refs.portModeInput?.addEventListener("change", syncCustomPortField);
-  moduleDefs.forEach((module) => {
-    module.input?.addEventListener("change", () => {
-      updateModuleCountChip();
-      refs.statusMode.textContent = isPortScanEnabled() ? refs.portModeInput.value.toUpperCase() : "INTEL";
-    });
-  });
-
-  refs.importReportBtn?.addEventListener("click", () => refs.reportFileInput?.click());
-  refs.reportFileInput?.addEventListener("change", (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleImportedReport(file);
-    }
-  });
-
-  refs.downloadReportBtn?.addEventListener("click", downloadLatestReport);
-  refs.darkWebExportBtn?.addEventListener("click", exportToDarkWeb);
-  refs.rerenderGraphBtn?.addEventListener("click", () => {
-    if (state.latestReport) {
-      renderGraph(state.latestReport);
-    }
-  });
-
-  refs.terminalFab?.addEventListener("click", () => toggleTerminal(true));
-  refs.terminalCloseBtn?.addEventListener("click", () => toggleTerminal(false));
-  refs.terminalCommandForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const command = refs.terminalCommandInput.value;
-    refs.terminalCommandInput.value = "";
-    handleTerminalCommand(command);
-  });
-
-  refs.mobileMenuToggle?.addEventListener("click", () => {
-    const next = refs.mobileDrawer.hidden;
-    setElementVisibility(refs.mobileDrawer, next, "grid");
-    refs.mobileMenuToggle.setAttribute("aria-expanded", String(next));
-  });
-
-  refs.mobileDrawer?.querySelectorAll("a, button").forEach((node) => {
-    node.addEventListener("click", () => {
-      setElementVisibility(refs.mobileDrawer, false, "grid");
-      refs.mobileMenuToggle?.setAttribute("aria-expanded", "false");
-    });
-  });
-
-  refs.langButtons.forEach((button) => {
-    button.addEventListener("click", () => updateLanguage(button.dataset.lang));
-  });
-
-  window.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      toggleTerminal(false);
-      setElementVisibility(refs.mobileDrawer, false, "grid");
-    }
-  });
-
-  window.addEventListener("resize", () => {
-    if (state.latestReport) {
-      renderGraph(state.latestReport);
-    }
-  });
-
-  initCopyButtons();
-  initAmbientLoops();
-  initMatrixRain();
-  initParticleField();
-  refreshBackendState();
-  state.backendTimer = window.setInterval(refreshBackendState, 15000);
-
-  refs.apiUrlInput?.addEventListener("change", () => {
-    refreshBackendState();
-  });
-
-  const params = new URLSearchParams(window.location.search);
-  const initialTarget = normalizeTarget(params.get("target"));
-  const initialView = normalizeTarget(params.get("view")).toLowerCase();
-  const initialTab = normalizeTarget(params.get("tab")).toLowerCase();
-
-  if (initialTarget) {
-    setTarget(initialTarget);
-  }
-  if (["dashboard", "console", "results"].includes(initialView)) {
-    setActiveView(initialView, { scroll: false });
-  }
-  if (["overview", "recon", "web", "network", "vulns", "json"].includes(initialTab)) {
-    setResultTab(initialTab);
-  }
+  }, 1000);
 }
 
-initBindings();
+init();
