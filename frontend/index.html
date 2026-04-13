@@ -7,20 +7,43 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="scene scene--grid" aria-hidden="true"></div>
+    <div class="scene scene--scanlines" aria-hidden="true"></div>
+    <div class="scene scene--noise" aria-hidden="true"></div>
+    <div class="scene scene--glow scene--glow-a" aria-hidden="true"></div>
+    <div class="scene scene--glow scene--glow-b" aria-hidden="true"></div>
+
     <div class="app-shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Recon Workspace</p>
-          <h1>面向真实后端能力的扫描工作台</h1>
-          <p class="topbar__lead">
-            基于异步扫描任务、模块化结果和可选增强能力重新设计。页面以任务发起、执行跟踪、结果解释和历史复用为主线。
-          </p>
+      <header class="topbar hud-panel">
+        <div class="topbar__main">
+          <div class="brand-block">
+            <p class="eyebrow">TOKIHANE / Recon Workspace</p>
+            <h1>授权侦察任务控制台</h1>
+            <p class="topbar__lead">
+              围绕异步扫描任务、能力编排、实时回执与证据视图重建的网络侦察控制台。页面保持现有后端逻辑不变，但视觉系统全面重构为安全作战终端。
+            </p>
+          </div>
+
+          <div class="signal-strip" aria-hidden="true">
+            <div class="signal-chip">
+              <span>async jobs</span>
+              <strong>task queue</strong>
+            </div>
+            <div class="signal-chip">
+              <span>module fabric</span>
+              <strong>scan lanes</strong>
+            </div>
+            <div class="signal-chip">
+              <span>evidence mode</span>
+              <strong>live report</strong>
+            </div>
+          </div>
         </div>
 
         <div class="topbar__actions">
@@ -33,52 +56,72 @@
       </header>
 
       <section class="hero-grid">
-        <article class="hero-card hero-card--highlight">
-          <p class="eyebrow">Current Focus</p>
-          <h2 id="heroTarget">尚未选择目标</h2>
-          <p id="heroSummary">先输入域名、URL 或 IP，再选择需要启用的扫描模块。</p>
-          <div class="hero-metrics">
+        <article class="hero-card hero-card--highlight hud-panel">
+          <div class="hero-card__head">
             <div>
+              <p class="eyebrow">Current Focus / Target Lock</p>
+              <h2 id="heroTarget">尚未锁定目标</h2>
+            </div>
+            <div class="hero-lock">
+              <span class="hero-lock__label">scan posture</span>
+              <strong>armed</strong>
+            </div>
+          </div>
+
+          <p class="hero-summary" id="heroSummary">先输入域名、URL 或 IP，再装配能力模块并发起任务。</p>
+
+          <div class="hero-metrics">
+            <div class="metric-tile">
               <span>任务状态</span>
               <strong id="heroStatus">Idle</strong>
             </div>
-            <div>
+            <div class="metric-tile">
               <span>已启用模块</span>
               <strong id="heroModules">0</strong>
             </div>
-            <div>
-              <span>打开端口</span>
+            <div class="metric-tile">
+              <span>开放端口</span>
               <strong id="heroPorts">-</strong>
             </div>
-            <div>
+            <div class="metric-tile">
               <span>风险条目</span>
               <strong id="heroRisks">-</strong>
             </div>
           </div>
         </article>
 
-        <article class="hero-card">
-          <p class="eyebrow">Task Model</p>
+        <article class="hero-card hero-card--briefing hud-panel">
+          <div class="hero-card__head">
+            <div>
+              <p class="eyebrow">Mission Brief / Task Model</p>
+              <h3>扫描任务如何运行</h3>
+            </div>
+            <span class="briefing-tag">backend-mapped</span>
+          </div>
+
           <ul class="plain-list">
-            <li>创建任务后立即返回 `job_id`，前端需轮询状态。</li>
-            <li>任务可能经历 `queued / running / stopping / completed / failed / canceled`。</li>
+            <li>创建任务后立即返回 `job_id`，前端通过轮询追踪任务状态。</li>
+            <li>状态真实存在 `queued / running / stopping / completed / failed / canceled`。</li>
             <li>结果由 DNS、WHOIS、技术栈、IP、Web、风险等模块分段组成。</li>
-            <li>多个模块支持“未启用 / 跳过 / 空结果 / 失败 / 取消”。</li>
+            <li>模块既可能完成，也可能未启用、跳过、失败、取消或返回空结果。</li>
           </ul>
         </article>
       </section>
 
-      <main class="workspace-grid">
-        <aside class="panel sidebar">
-          <section class="panel-section panel-section--form">
+      <main class="workspace-shell">
+        <section class="workspace-band workspace-band--control">
+          <section class="panel console-panel console-panel--scan">
             <div class="section-head">
               <div>
-                <p class="eyebrow">Scan Intake</p>
+                <p class="eyebrow">Scan Intake / Parameter Injection</p>
                 <h2>发起扫描</h2>
+              </div>
+              <div class="panel-flags">
+                <span class="console-flag">task injection</span>
               </div>
             </div>
 
-            <form id="scanForm" class="stack">
+            <form id="scanForm" class="scan-form">
               <section class="subsection subsection--compact subsection--primary">
                 <div class="subsection__head">
                   <div>
@@ -197,7 +240,7 @@
                 <div class="subsection__head">
                   <div>
                     <p class="eyebrow">Module Matrix</p>
-                    <h3>增强模块</h3>
+                    <h3>能力挂载区</h3>
                   </div>
                   <span class="inline-stat">按需展开</span>
                 </div>
@@ -258,36 +301,10 @@
             </form>
           </section>
 
-          <section class="panel-section panel-section--utility">
+          <section class="panel status-panel console-panel">
             <div class="section-head">
               <div>
-                <p class="eyebrow">Report Import</p>
-                <h2>导入已有结果</h2>
-              </div>
-            </div>
-            <div class="stack">
-              <input id="reportFileInput" type="file" accept=".json,application/json" />
-              <button class="button button--secondary" id="loadSampleBtn" type="button">载入样例报告</button>
-              <p class="hint" id="importHint">可以直接加载 `report.json`，用于离线查看结果结构。</p>
-            </div>
-          </section>
-
-          <section class="panel-section panel-section--utility">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Job History</p>
-                <h2>历史任务</h2>
-              </div>
-            </div>
-            <div id="jobsList" class="job-list empty-state">还没有可展示的任务。</div>
-          </section>
-        </aside>
-
-        <section class="content">
-          <section class="panel status-panel">
-            <div class="status-head">
-              <div>
-                <p class="eyebrow">Execution State</p>
+                <p class="eyebrow">Execution State / Live Console</p>
                 <h2>当前任务与后端状态</h2>
               </div>
               <div class="status-badges">
@@ -323,41 +340,84 @@
               <div class="progress-bar">
                 <div id="progressBar"></div>
               </div>
-              <p class="hint" id="statusMessage">状态会根据后端任务和报告结构自动推导。</p>
+              <p class="hint console-log" id="statusMessage">状态会根据后端任务和报告结构自动推导。</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="workspace-band workspace-band--support">
+          <section class="panel utility-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Report Import / Evidence Load</p>
+                <h2>导入已有结果</h2>
+              </div>
+              <div class="panel-flags">
+                <span class="console-flag">offline review</span>
+              </div>
+            </div>
+
+            <div class="stack">
+              <input id="reportFileInput" type="file" accept=".json,application/json" />
+              <button class="button button--secondary" id="loadSampleBtn" type="button">载入样例报告</button>
+              <p class="hint console-log console-log--muted" id="importHint">可以直接加载 `report.json`，用于离线查看结果结构。</p>
             </div>
           </section>
 
-          <section class="panel">
-            <div class="tabs" id="resultTabs">
-              <button class="tab is-active" type="button" data-tab="overview">总览</button>
-              <button class="tab" type="button" data-tab="identity">基础情报</button>
-              <button class="tab" type="button" data-tab="infrastructure">网络与资产</button>
-              <button class="tab" type="button" data-tab="web">Web 枚举</button>
-              <button class="tab" type="button" data-tab="risk">风险分析</button>
-              <button class="tab" type="button" data-tab="raw">原始 JSON</button>
+          <section class="panel utility-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Job History / Ops Ledger</p>
+                <h2>历史任务</h2>
+              </div>
+              <div class="panel-flags">
+                <span class="console-flag">last missions</span>
+              </div>
             </div>
-
-            <div class="tab-panels">
-              <section class="tab-panel is-active" data-panel="overview">
-                <div id="overviewPanel"></div>
-              </section>
-              <section class="tab-panel" data-panel="identity">
-                <div id="identityPanel"></div>
-              </section>
-              <section class="tab-panel" data-panel="infrastructure">
-                <div id="infrastructurePanel"></div>
-              </section>
-              <section class="tab-panel" data-panel="web">
-                <div id="webPanel"></div>
-              </section>
-              <section class="tab-panel" data-panel="risk">
-                <div id="riskPanel"></div>
-              </section>
-              <section class="tab-panel" data-panel="raw">
-                <pre class="raw-view" id="rawJsonView">暂无数据</pre>
-              </section>
-            </div>
+            <div id="jobsList" class="job-list empty-state">还没有可展示的任务。</div>
           </section>
+        </section>
+
+        <section class="panel intelligence-panel">
+          <div class="section-head section-head--intelligence">
+            <div>
+              <p class="eyebrow">Intelligence Deck / Evidence Matrix</p>
+              <h2>分析结果与证据视图</h2>
+            </div>
+            <div class="panel-flags">
+              <span class="console-flag">report matrix</span>
+            </div>
+          </div>
+
+          <div class="tabs" id="resultTabs">
+            <button class="tab is-active" type="button" data-tab="overview">总览</button>
+            <button class="tab" type="button" data-tab="identity">基础情报</button>
+            <button class="tab" type="button" data-tab="infrastructure">网络与资产</button>
+            <button class="tab" type="button" data-tab="web">Web 枚举</button>
+            <button class="tab" type="button" data-tab="risk">风险分析</button>
+            <button class="tab" type="button" data-tab="raw">原始 JSON</button>
+          </div>
+
+          <div class="tab-panels">
+            <section class="tab-panel is-active" data-panel="overview">
+              <div id="overviewPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="identity">
+              <div id="identityPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="infrastructure">
+              <div id="infrastructurePanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="web">
+              <div id="webPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="risk">
+              <div id="riskPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="raw">
+              <pre class="raw-view" id="rawJsonView">暂无数据</pre>
+            </section>
+          </div>
         </section>
       </main>
     </div>

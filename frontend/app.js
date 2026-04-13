@@ -267,10 +267,23 @@ function setHealth(text, tone) {
   refs.healthPill.dataset.tone = tone;
 }
 
+function setStatusMessage(message, tone = "neutral") {
+  refs.statusMessage.textContent = message;
+  refs.statusMessage.dataset.tone = tone;
+}
+
+function setImportMessage(message, tone = "neutral") {
+  refs.importHint.textContent = message;
+  refs.importHint.dataset.tone = tone;
+}
+
 async function refreshHealth() {
   try {
     const payload = await fetchJson(getHealthUrl());
-    setHealth(payload.status === "ok" ? "API 正常" : "API 未知状态", payload.status === "ok" ? "success" : "warning");
+    if (!payload || typeof payload !== "object") {
+      throw new Error("invalid response payload");
+    }
+    setHealth(payload.status === "ok" ? "API 链路稳定" : "API 响应异常", payload.status === "ok" ? "success" : "warning");
   } catch (error) {
     setHealth(`API 不可达: ${error.message}`, "danger");
   }
@@ -319,7 +332,7 @@ function startPolling(jobId) {
         refreshJobs();
       }
     } catch (error) {
-      refs.statusMessage.textContent = `轮询任务失败：${error.message}`;
+      setStatusMessage(`轮询任务失败：${error.message}`, "danger");
       stopPolling();
     }
   }, 2000);
@@ -330,25 +343,25 @@ async function createScan(event) {
   const payload = collectPayload();
 
   if (!payload.target) {
-    refs.statusMessage.textContent = "请输入目标后再创建任务。";
+    setStatusMessage("请输入目标后再创建任务。", "warning");
     refs.targetInput.focus();
     return;
   }
 
   if (payload.scan_mode === "custom" && !payload.custom_ports) {
-    refs.statusMessage.textContent = "端口模式为自定义时，必须填写自定义端口。";
+    setStatusMessage("端口模式为自定义时，必须填写自定义端口。", "warning");
     refs.customPortsInput.focus();
     return;
   }
 
   if (payload.vt_scan && !payload.vt_api_key) {
-    refs.statusMessage.textContent = "启用 VirusTotal 时必须提供 API Key。";
+    setStatusMessage("启用 VirusTotal 时必须提供 API Key。", "warning");
     refs.vtApiKeyInput.focus();
     return;
   }
 
   refs.startScanBtn.disabled = true;
-  refs.statusMessage.textContent = "正在创建扫描任务...";
+  setStatusMessage("正在创建扫描任务...", "running");
 
   try {
     const response = await fetchJson(getApiScanUrl(), {
@@ -366,11 +379,11 @@ async function createScan(event) {
       "live"
     );
     refs.stopScanBtn.disabled = false;
-    refs.statusMessage.textContent = "任务已创建，正在等待后端执行。";
+    setStatusMessage("任务已创建，正在等待后端执行。", "running");
     await refreshJobs();
     startPolling(response.job_id);
   } catch (error) {
-    refs.statusMessage.textContent = `创建任务失败：${error.message}`;
+    setStatusMessage(`创建任务失败：${error.message}`, "danger");
   } finally {
     refs.startScanBtn.disabled = false;
   }
@@ -383,12 +396,12 @@ async function stopCurrentScan() {
     const payload = await fetchJson(`${getApiScanUrl().replace(/\/+$/, "")}/${state.currentJob.job_id}/stop`, {
       method: "POST",
     });
-    refs.statusMessage.textContent = payload.message || "已发送停止请求。";
+    setStatusMessage(payload.message || "已发送停止请求。", "warning");
     state.currentStatus = payload.status || "stopping";
     syncView();
     startPolling(state.currentJob.job_id);
   } catch (error) {
-    refs.statusMessage.textContent = `停止任务失败：${error.message}`;
+    setStatusMessage(`停止任务失败：${error.message}`, "danger");
     refs.stopScanBtn.disabled = false;
   }
 }
@@ -405,16 +418,18 @@ function renderJobs(jobs) {
     .slice(0, 12)
     .map((job) => {
       const target = job.result?.target?.input || job.result?.meta?.target_input || "-";
+      const tone = getStatusTone(job.status);
       return `
-        <article class="job-item">
+        <article class="job-item" data-tone="${escapeHtml(tone)}">
           <div class="job-item__meta">
-            <strong>${escapeHtml(target)}</strong>
-            <span class="badge" data-tone="${escapeHtml(getStatusTone(job.status))}">${escapeHtml(job.status)}</span>
+            <strong class="job-item__target">${escapeHtml(target)}</strong>
+            <span class="badge" data-tone="${escapeHtml(tone)}">${escapeHtml(job.status)}</span>
           </div>
           <div class="job-item__meta">
             <span class="muted">${escapeHtml(formatDateTime(job.created_at))}</span>
-            <button type="button" data-job-id="${escapeHtml(job.job_id)}">查看详情</button>
+            <span class="job-item__id">#${escapeHtml(job.job_id.slice(0, 8))}</span>
           </div>
+          <button class="job-item__action" type="button" data-job-id="${escapeHtml(job.job_id)}">查看详情</button>
         </article>
       `;
     })
@@ -431,7 +446,7 @@ function renderJobs(jobs) {
           stopPolling();
         }
       } catch (error) {
-        refs.statusMessage.textContent = `读取任务详情失败：${error.message}`;
+        setStatusMessage(`读取任务详情失败：${error.message}`, "danger");
       }
     });
   });
@@ -490,7 +505,7 @@ function renderTable(headers, rows) {
 
 function card(title, eyebrow, badge, body, tone = "neutral") {
   return `
-    <article class="data-card">
+    <article class="data-card" data-tone="${escapeHtml(tone)}">
       <div class="data-card__head">
         <div>
           <p class="eyebrow">${escapeHtml(eyebrow)}</p>
@@ -595,14 +610,14 @@ function renderOverview(report) {
         state.currentSource,
         `
           ${renderKVTable(summaryRows)}
-          <div class="metric-list" style="margin-top:16px">
+          <div class="metric-list block-offset">
             <div class="metric-row"><span>开放端口总数</span><strong>${computeOpenPorts(report)}</strong></div>
             <div class="metric-row"><span>风险条目总数</span><strong>${computeRiskCount(report)}</strong></div>
             <div class="metric-row"><span>技术指纹</span><strong>${safeArray(report.tech_stack?.detected_technologies).length}</strong></div>
             <div class="metric-row"><span>Web 端点线索</span><strong>${safeArray(report.web_assets?.combined_endpoints).length}</strong></div>
           </div>
         `,
-        "概览"
+        "neutral"
       )}
       ${card("模块执行情况", "Module State", "后端返回", moduleCards, "success")}
     </div>
@@ -646,7 +661,7 @@ function renderIdentity(report) {
           ["请求 URL", report.tech_stack?.url],
           ["状态码", report.tech_stack?.status_code],
         ])}
-        <div style="margin-top:16px">${renderChips(report.tech_stack?.detected_technologies)}</div>
+        <div class="block-offset">${renderChips(report.tech_stack?.detected_technologies)}</div>
       `, getModuleState(report.tech_stack).tone)}
       ${card("VirusTotal", "Threat Intel", getModuleState(report.virustotal).label, renderVirusTotal(report.virustotal), getModuleState(report.virustotal).tone)}
     </div>
@@ -667,7 +682,7 @@ function renderVirusTotal(vt) {
       ["Domain malicious", domainStats.malicious ?? 0],
       ["URL malicious", urlStats.malicious ?? 0],
     ])}
-    <div style="margin-top:16px">
+    <div class="block-offset">
       ${renderChips(Object.entries(vt.domain?.categories || {}).map(([vendor, category]) => `${vendor}: ${category}`))}
     </div>
   `;
@@ -698,7 +713,7 @@ function renderCt(module) {
       ["总记录数", module.total_records],
       ["发现子域名", safeArray(module.discovered_subdomains).length],
     ])}
-    <div style="margin-top:16px">${renderChips(safeArray(module.discovered_subdomains).slice(0, 24))}</div>
+    <div class="block-offset">${renderChips(safeArray(module.discovered_subdomains).slice(0, 24))}</div>
   `;
 }
 
@@ -711,8 +726,8 @@ function renderPassiveDns(module) {
       ["历史子域名数", safeArray(module.historical_subdomains).length],
       ["来源数", Object.keys(module.sources || {}).length],
     ])}
-    <div style="margin-top:16px">${renderChips(safeArray(module.resolved_ips).slice(0, 16))}</div>
-    <div style="margin-top:16px">${renderChips(safeArray(module.historical_subdomains).slice(0, 16))}</div>
+    <div class="block-offset">${renderChips(safeArray(module.resolved_ips).slice(0, 16))}</div>
+    <div class="block-offset">${renderChips(safeArray(module.historical_subdomains).slice(0, 16))}</div>
   `;
 }
 
@@ -744,7 +759,7 @@ function renderIpScan(module) {
       ["目标 IP 数", safeArray(module?.targets).length],
       ["跳过原因", module?.skip_reason],
     ])}
-    <div style="margin-top:16px">${renderTable(["IP", "协议", "端口", "服务", "状态", "Banner"], rows)}</div>
+    <div class="block-offset">${renderTable(["IP", "协议", "端口", "服务", "状态", "Banner"], rows)}</div>
   `;
 }
 
@@ -775,7 +790,7 @@ function renderWebOverview(module) {
       ["组合端点数", safeArray(module.combined_endpoints).length],
       ["敏感路径数", module.sensitive_paths?.count],
     ])}
-    <div style="margin-top:16px">${renderChips(safeArray(module.combined_endpoints).slice(0, 20))}</div>
+    <div class="block-offset">${renderChips(safeArray(module.combined_endpoints).slice(0, 20))}</div>
   `;
 }
 
@@ -788,7 +803,7 @@ function renderCrawler(module) {
       ["JS 文件", safeArray(module.js_files).length],
       ["发现端点", safeArray(module.discovered_endpoints).length],
     ])}
-    <div style="margin-top:16px">${renderChips(safeArray(module.pages).slice(0, 12).map((row) => `${row.status_code || "ERR"} ${row.url}`))}</div>
+    <div class="block-offset">${renderChips(safeArray(module.pages).slice(0, 12).map((row) => `${row.status_code || "ERR"} ${row.url}`))}</div>
   `;
 }
 
@@ -801,7 +816,7 @@ function renderJsExtraction(module) {
       ["敏感路径数", safeArray(module.sensitive_paths).length],
       ["样本数", safeArray(module.samples).length],
     ])}
-    <div style="margin-top:16px">${renderChips(safeArray(module.endpoints).slice(0, 20))}</div>
+    <div class="block-offset">${renderChips(safeArray(module.endpoints).slice(0, 20))}</div>
   `;
 }
 
@@ -858,7 +873,7 @@ function renderCveLookup(module) {
       ["匹配项", rows.length],
       ["说明", module?.message],
     ])}
-    <div style="margin-top:16px">${renderTable(["CPE", "CVE", "Severity", "Score", "Published"], rows.slice(0, 50))}</div>
+    <div class="block-offset">${renderTable(["CPE", "CVE", "Severity", "Score", "Published"], rows.slice(0, 50))}</div>
   `;
 }
 
@@ -875,7 +890,7 @@ function renderWeakChecks(module) {
       ["发现数", rows.length],
       ["说明", module?.message],
     ])}
-    <div style="margin-top:16px">${renderTable(["IP", "检查项", "端口", "输出"], rows.slice(0, 30))}</div>
+    <div class="block-offset">${renderTable(["IP", "检查项", "端口", "输出"], rows.slice(0, 30))}</div>
   `;
 }
 
@@ -894,19 +909,37 @@ function syncStatusPanel() {
   refs.createdAtValue.textContent = formatDateTime(job?.created_at || report?.meta?.generated_at);
   refs.runtimeValue.textContent = formatRuntime(job);
   refs.sourceValue.textContent = state.currentSource;
-  refs.progressLabel.textContent = status === "completed" ? "报告已完成" : status === "failed" ? "任务失败" : status === "canceled" ? "任务已取消" : "任务进行中";
+  refs.progressLabel.textContent =
+    status === "queued"
+      ? "任务排队中"
+      : status === "running"
+        ? "任务执行中"
+        : status === "stopping"
+          ? "任务停止中"
+          : status === "completed"
+            ? "报告已完成"
+            : status === "failed"
+              ? "任务失败"
+              : status === "canceled"
+                ? "任务已取消"
+                : "等待任务";
   refs.progressValue.textContent = `${progress}%`;
   refs.progressBar.style.width = `${progress}%`;
+  refs.progressBar.dataset.tone = tone;
   refs.stopScanBtn.disabled = !job || !["queued", "running", "stopping"].includes(status);
 
   if (job?.error) {
-    refs.statusMessage.textContent = `任务失败：${job.error}`;
+    setStatusMessage(`任务失败：${job.error}`, "danger");
   } else if (report?.error) {
-    refs.statusMessage.textContent = `报告错误：${report.error}`;
+    setStatusMessage(`报告错误：${report.error}`, "danger");
   } else if (report?.canceled) {
-    refs.statusMessage.textContent = report.message || "任务已取消。";
+    setStatusMessage(report.message || "任务已取消。", "warning");
+  } else if (status === "running" || status === "queued" || status === "stopping") {
+    setStatusMessage("后端正在执行扫描阶段与轮询更新。", "running");
   } else if (job?.result?.meta) {
-    refs.statusMessage.textContent = `最后生成时间：${formatDateTime(job.result.meta.generated_at)}。`;
+    setStatusMessage(`最后生成时间：${formatDateTime(job.result.meta.generated_at)}。`, "success");
+  } else {
+    setStatusMessage("等待创建扫描任务。", "neutral");
   }
 }
 
@@ -929,10 +962,10 @@ function handleReportFile(event) {
     try {
       const report = JSON.parse(String(reader.result || "{}"));
       setCurrentReport(report, "imported-file");
-      refs.importHint.textContent = `已导入 ${file.name}`;
+      setImportMessage(`已导入 ${file.name}`, "success");
       stopPolling();
     } catch (error) {
-      refs.importHint.textContent = `解析文件失败：${error.message}`;
+      setImportMessage(`解析文件失败：${error.message}`, "danger");
     }
   };
   reader.readAsText(file, "utf-8");
@@ -946,14 +979,14 @@ async function loadSampleReport() {
       if (!response.ok) continue;
       const report = await response.json();
       setCurrentReport(report, "sample-report");
-      refs.importHint.textContent = `已载入样例报告：${url}`;
+      setImportMessage(`已载入样例报告：${url}`, "success");
       stopPolling();
       return;
     } catch (_error) {
       continue;
     }
   }
-  refs.importHint.textContent = "未能加载样例报告，请确认 `report.json` 可被当前静态服务访问。";
+  setImportMessage("未能加载样例报告，请确认 `report.json` 可被当前静态服务访问。", "warning");
 }
 
 function syncFormDependencies() {
@@ -985,6 +1018,7 @@ function init() {
   refs.apiUrlInput.value = inferDefaultApiUrl();
   bindTabs();
   syncFormDependencies();
+  setImportMessage(refs.importHint.textContent, "neutral");
   syncView();
 
   refs.scanForm.addEventListener("submit", createScan);
