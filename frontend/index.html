@@ -11,6 +11,11 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <style>
+      [hidden] {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <div class="noise-layer" aria-hidden="true"></div>
@@ -44,7 +49,7 @@
             <input id="navTargetInput" type="text" placeholder="quick target // domain or ip" autocomplete="off" />
           </label>
           <button id="navLaunchBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-            Prime Console
+            Open Workspace
           </button>
         </div>
 
@@ -78,59 +83,59 @@
           <div class="hero-section__copy">
             <div class="hero-kicker">
               <span class="hero-kicker__dot"></span>
-              <span>NEURAL TARGETING // ACTIVE OPS GRID</span>
+              <span>TASK API // DOMAIN · URL · IP INTAKE</span>
             </div>
 
-            <div class="hero-tagline">INFILTRATE • RECON • DOMINATE</div>
+            <div class="hero-tagline">QUEUE • ENUMERATE • CORRELATE</div>
 
             <h1 class="hero-title">
-              <span>NEON-LIT</span>
-              <span>OFFENSIVE RECON</span>
-              <span>FOR ELITE OPERATORS.</span>
+              <span>RECON WORKFLOWS</span>
+              <span>BACKED BY</span>
+              <span>REAL SCAN JOBS.</span>
             </h1>
 
             <p class="hero-lead">
-              Build a target profile, stream live discovery, map infrastructure, fingerprint exposure, and export intel from a
-              single dystopian control surface engineered to feel dangerously premium.
+              NEOSCAN sits directly on top of your FastAPI reconnaissance backend: create jobs, poll status, stop long runs,
+              and explore structured reports for DNS, WHOIS, tech fingerprints, web assets, port exposure, and service risk.
             </p>
 
             <div class="hero-input-shell">
-              <label class="hero-input-shell__label">Enter target (domain / IP / URL / username)</label>
+              <label class="hero-input-shell__label">Target intake (domain / URL / IP)</label>
               <div class="hero-input-shell__row">
-                <input id="heroTargetInput" class="hero-target-input" type="text" placeholder="corp.tld / 8.8.8.8 / https://target.tld / ghost_handle" autocomplete="off" />
+                <input id="heroTargetInput" class="hero-target-input" type="text" placeholder="corp.tld / 8.8.8.8 / https://target.tld" autocomplete="off" />
                 <button id="heroScanButton" class="neo-button neo-button--primary ripple-target" type="button">
                   INITIATE SCAN
                 </button>
               </div>
               <div class="hero-input-shell__actions">
                 <button class="neo-button neo-button--ghost ripple-target" type="button" data-view-target="console">
-                  OPEN CONSOLE
+                  OPEN WORKSPACE
                 </button>
                 <button id="demoSampleBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-                  LOAD GHOST SAMPLE
+                  LOAD SAMPLE REPORT
                 </button>
               </div>
             </div>
 
             <div class="hero-chip-row">
-              <span class="signal-chip">Realtime telemetry</span>
-              <span class="signal-chip">Passive + active recon</span>
-              <span class="signal-chip">Live node graph</span>
-              <span class="signal-chip">Dark export pipeline</span>
+              <span class="signal-chip">DNS + WHOIS baseline</span>
+              <span class="signal-chip">Optional CT / passive DNS</span>
+              <span class="signal-chip">Web assets + service risk</span>
+              <span class="signal-chip">Task queue + JSON export</span>
             </div>
 
             <div class="hero-stats">
               <article class="hero-stat-panel">
-                <span>Signal Integrity</span>
-                <strong id="heroSignalIntegrity">99.4%</strong>
+                <span>API Health</span>
+                <strong id="heroSignalIntegrity">CHECKING</strong>
               </article>
               <article class="hero-stat-panel">
-                <span>Threat Posture</span>
+                <span>Risk Posture</span>
                 <strong id="heroThreatPosture">MONITORED</strong>
               </article>
               <article class="hero-stat-panel">
-                <span>Node Cluster</span>
-                <strong id="heroNodeStatus">128 ONLINE</strong>
+                <span>Queue State</span>
+                <strong id="heroNodeStatus">QUEUE READY</strong>
               </article>
             </div>
           </div>
@@ -147,39 +152,153 @@
                 </div>
                 <div class="holo-stage__beam"></div>
                 <div class="holo-stage__target">
-                  <span class="eyebrow">ACTIVE TARGET</span>
+                  <span class="eyebrow">CURRENT TARGET</span>
                   <strong id="heroTargetEcho">waiting for target</strong>
-                  <p id="heroStatusLine">signal trace idle // feed a target to ignite the console</p>
+                  <p id="heroStatusLine">task intake idle // feed a target to assemble the evidence pipeline</p>
                 </div>
               </div>
 
               <article class="floating-panel floating-panel--top">
-                <span>Asset Flow</span>
-                <strong id="heroAssetFlow">675 KB/S</strong>
+                <span>Job Queue</span>
+                <strong id="heroAssetFlow">QUEUE READY</strong>
               </article>
 
               <article class="floating-panel floating-panel--left">
-                <span>Active Nodes</span>
-                <strong id="heroCollectorCount">127 / 128</strong>
+                <span>Optional Modules</span>
+                <strong id="heroCollectorCount">00 ARMED</strong>
               </article>
 
               <article class="floating-panel floating-panel--right">
-                <span>Threat Level</span>
+                <span>Report Verdict</span>
                 <strong id="heroThreatLevel">TRACKED</strong>
               </article>
 
               <article class="feed-panel">
                 <div class="feed-panel__head">
-                  <span>Signal Stream</span>
+                  <span>Pipeline Stream</span>
                   <strong id="heroFeedState">READY</strong>
                 </div>
                 <div id="heroFeed" class="feed-panel__body">
-                  <div>ghost collectors are calibrating passive channels...</div>
-                  <div>whois, dns, and header sensors are ready to deploy...</div>
-                  <div>raw export lanes are standing by for exfil package build...</div>
+                  <div>dns, whois, and technology profiling are part of every scan job...</div>
+                  <div>optional enrichment can add ct logs, passive dns, asn, and vt intel...</div>
+                  <div>json evidence packages stay queryable through the task api...</div>
                 </div>
               </article>
             </div>
+          </div>
+        </section>
+
+        <section class="capability-band">
+          <div class="section-copy">
+            <span class="eyebrow">Backend-Mapped Capabilities</span>
+            <h2>Every panel mirrors a real stage in your FastAPI reconnaissance pipeline.</h2>
+            <p>
+              The website is now structured around what the backend truly supports: baseline identity collection, optional
+              enrichment lanes, task orchestration, and structured report exploration.
+            </p>
+          </div>
+
+          <div class="capability-grid">
+            <article class="feature-card">
+              <span class="eyebrow">Baseline</span>
+              <h3>Identity foundation</h3>
+              <p>Every job parses the target, resolves DNS, pulls WHOIS ownership data, and fingerprints the visible tech stack.</p>
+              <div class="feature-card__chips">
+                <span>DNS</span>
+                <span>WHOIS</span>
+                <span>Tech detection</span>
+              </div>
+            </article>
+
+            <article class="feature-card">
+              <span class="eyebrow">Optional Intel</span>
+              <h3>Enrichment lanes</h3>
+              <p>CT logs, passive DNS, ASN expansion, and VirusTotal can be armed per job when deeper attribution is needed.</p>
+              <div class="feature-card__chips">
+                <span>CT logs</span>
+                <span>Passive DNS</span>
+                <span>ASN</span>
+                <span>VirusTotal</span>
+              </div>
+            </article>
+
+            <article class="feature-card">
+              <span class="eyebrow">Exposure</span>
+              <h3>Network and web surface</h3>
+              <p>Port scanning, crawler-based web asset discovery, JS extraction, directory probing, and sensitive path merging live in one flow.</p>
+              <div class="feature-card__chips">
+                <span>TCP / UDP</span>
+                <span>Crawler</span>
+                <span>JS extract</span>
+                <span>Directory probe</span>
+              </div>
+            </article>
+
+            <article class="feature-card">
+              <span class="eyebrow">Correlation</span>
+              <h3>Risk analysis</h3>
+              <p>Open-service inventory can be correlated into CVE lookups and weak-configuration checks, then exported as report JSON.</p>
+              <div class="feature-card__chips">
+                <span>CVE lookup</span>
+                <span>Weak checks</span>
+                <span>Job stop</span>
+                <span>JSON export</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workflow-section">
+          <div class="workflow-section__head">
+            <div>
+              <span class="eyebrow">API Workflow</span>
+              <h2>Designed around how your backend actually runs scans.</h2>
+            </div>
+            <p>
+              The website now follows the same lifecycle as the API: submit a job, poll it, stop it if needed, then drill into the final report.
+            </p>
+          </div>
+
+          <div class="workflow-grid">
+            <div class="workflow-steps">
+              <article class="workflow-step">
+                <strong>01</strong>
+                <h3>Create Job</h3>
+                <p>Send a target and module selections to <code>POST /api/scan</code> and receive a queued job id.</p>
+              </article>
+              <article class="workflow-step">
+                <strong>02</strong>
+                <h3>Poll Status</h3>
+                <p>Read queued, running, stopping, completed, failed, or canceled states from <code>GET /api/scan/{job_id}</code>.</p>
+              </article>
+              <article class="workflow-step">
+                <strong>03</strong>
+                <h3>Control Runtime</h3>
+                <p>Abort long jobs through <code>POST /api/scan/{job_id}/stop</code> when you need to reclaim the pipeline.</p>
+              </article>
+              <article class="workflow-step">
+                <strong>04</strong>
+                <h3>Explore Report</h3>
+                <p>Review DNS, web assets, IP scan, service risk, and raw JSON in the same control surface.</p>
+              </article>
+            </div>
+
+            <aside class="workflow-api neo-card">
+              <div class="card-head">
+                <div>
+                  <span class="eyebrow">Backend Contract</span>
+                  <h3>What the frontend now honors</h3>
+                </div>
+                <span class="status-pill">fastapi</span>
+              </div>
+              <div class="workflow-api__list">
+                <div><strong>Health</strong><span><code>GET /health</code></span></div>
+                <div><strong>Create</strong><span><code>POST /api/scan</code></span></div>
+                <div><strong>Status</strong><span><code>GET /api/scan/{job_id}</code></span></div>
+                <div><strong>Stop</strong><span><code>POST /api/scan/{job_id}/stop</code></span></div>
+                <div><strong>History</strong><span><code>GET /api/jobs</code></span></div>
+              </div>
+            </aside>
           </div>
         </section>
 
@@ -187,10 +306,10 @@
           <div class="workspace-shell__head">
             <div>
               <span class="eyebrow">OPS NEXUS</span>
-              <h2>One surface for threat intake, deep recon, and theatrical delivery.</h2>
+              <h2>One workspace for target intake, job control, and report exploration.</h2>
               <p>
-                Dashboard intelligence, scan orchestration, and result exploitation all live in the same premium control
-                rail so operators never lose the thread.
+                The homepage now feeds directly into the same job lifecycle your backend exposes, with baseline stages,
+                optional modules, API state, and report blocks all visible in one place.
               </p>
             </div>
 
@@ -206,27 +325,27 @@
               <div class="dashboard-grid">
                 <div class="dashboard-grid__stats">
                   <article class="stat-card stat-card--cyan">
-                    <span>Scans Today</span>
+                    <span>Jobs Today</span>
                     <strong id="statScansToday">014</strong>
-                    <p>Night-cycle jobs launched across passive and active lanes.</p>
+                    <p>Queued and completed scan jobs observed by this workspace session.</p>
                   </article>
 
                   <article class="stat-card stat-card--magenta">
-                    <span>Targets Tracked</span>
+                    <span>Unique Targets</span>
                     <strong id="statTargetsTracked">086</strong>
-                    <p>Entities stitched into the live watchlist and mission history.</p>
+                    <p>Distinct domains, URLs, and IPs that have passed through the intake rail.</p>
                   </article>
 
                   <article class="stat-card stat-card--green">
-                    <span>Vulns Found</span>
+                    <span>Findings Surfaced</span>
                     <strong id="statVulnsFound">021</strong>
-                    <p>Fingerprints, risky exposures, and high-signal anomalies surfaced.</p>
+                    <p>Technology signals, service-risk matches, and exposure indicators gathered from reports.</p>
                   </article>
 
                   <article class="stat-card stat-card--danger">
-                    <span>Active Nodes</span>
+                    <span>Queue Depth</span>
                     <strong id="statActiveNodes">128</strong>
-                    <p>Distributed recon workers synchronized to the command lattice.</p>
+                    <p>Backend jobs currently queued, running, or waiting to finish in the task list.</p>
                   </article>
                 </div>
 
@@ -255,47 +374,92 @@
                   </div>
                 </div>
 
-                <div class="dashboard-grid__map neo-card">
+                <div class="dashboard-grid__api neo-card">
                   <div class="card-head">
                     <div>
-                      <span class="eyebrow">Global Reach</span>
-                      <h3>Last scan locations</h3>
+                      <span class="eyebrow">Backend State</span>
+                      <h3>API health and task channel</h3>
                     </div>
-                    <span id="mapLocationCount" class="status-pill">06 pins</span>
+                    <span id="apiHealthBadge" class="status-pill">checking</span>
                   </div>
 
-                  <div class="world-map-shell">
-                    <svg class="world-map" viewBox="0 0 1000 500" aria-hidden="true">
-                      <path d="M101 189l42-35 86-11 53 31 61-9 43 31 8 44-25 16-42 4-31 27 11 43-21 24-60-7-53-48-47 4-42-36-9-41z"></path>
-                      <path d="M406 145l75-38 105 11 83 44 81 4 38 48-13 33-48 5-36 28-83 11-36-18-19 27 15 49-47 25-71-16-44-40-59-4-45-44-8-50 35-32z"></path>
-                      <path d="M760 304l45-28 64 9 29 48-19 49-57 42-61-7-28-51z"></path>
-                    </svg>
-                    <div id="mapPins" class="map-pins"></div>
+                  <div class="api-health-grid">
+                    <article class="api-health-tile">
+                      <span>Health</span>
+                      <strong id="apiHealthValue">probing</strong>
+                    </article>
+                    <article class="api-health-tile">
+                      <span>Scan Endpoint</span>
+                      <strong id="apiEndpointValue">/api/scan</strong>
+                    </article>
+                    <article class="api-health-tile">
+                      <span>Job History</span>
+                      <strong id="apiJobsCountValue">0 jobs</strong>
+                    </article>
+                  </div>
+                  <p id="apiHealthMessage" class="dashboard-support-copy">
+                    Point the workspace to your FastAPI server and the dashboard will pull health and job history.
+                  </p>
+                </div>
+
+                <div class="dashboard-grid__jobs neo-card">
+                  <div class="card-head">
+                    <div>
+                      <span class="eyebrow">Recent Jobs</span>
+                      <h3>Backend task history</h3>
+                    </div>
+                    <span class="status-pill" id="mapLocationCount">history</span>
+                  </div>
+
+                  <div class="table-wrap">
+                    <table class="neon-table neon-table--compact">
+                      <thead>
+                        <tr>
+                          <th>Job</th>
+                          <th>Status</th>
+                          <th>Mode</th>
+                          <th>Created</th>
+                        </tr>
+                      </thead>
+                      <tbody id="apiJobsBody"></tbody>
+                    </table>
                   </div>
                 </div>
 
-                <div class="dashboard-grid__feed neo-card">
+                <div class="dashboard-grid__schema neo-card">
                   <div class="card-head">
                     <div>
-                      <span class="eyebrow">Command Feed</span>
-                      <h3>Underground chatter</h3>
+                      <span class="eyebrow">Report Schema</span>
+                      <h3>Blocks emitted by the backend</h3>
                     </div>
-                    <button id="copyFeedBtn" class="icon-button ripple-target" type="button" data-copy-target="intelFeed">copy</button>
+                    <span class="status-pill status-pill--online">mapped</span>
                   </div>
 
-                  <div id="intelFeed" class="intel-feed">
-                    <div class="intel-feed__item">
-                      <strong>ghost relay</strong>
-                      <span>heuristic scanner reports fresh header anomalies on obfuscated infra.</span>
-                    </div>
-                    <div class="intel-feed__item">
-                      <strong>night broker</strong>
-                      <span>high-churn dns patterns detected on a known staging domain.</span>
-                    </div>
-                    <div class="intel-feed__item">
-                      <strong>shadow pin</strong>
-                      <span>new tls metadata stitched into the reconnaissance evidence graph.</span>
-                    </div>
+                  <div class="schema-grid">
+                    <article class="schema-card">
+                      <strong>Always on</strong>
+                      <span>target</span>
+                      <span>dns</span>
+                      <span>whois</span>
+                      <span>tech_stack</span>
+                    </article>
+                    <article class="schema-card">
+                      <strong>Identity+</strong>
+                      <span>certificate_transparency</span>
+                      <span>passive_dns</span>
+                      <span>asn_network</span>
+                    </article>
+                    <article class="schema-card">
+                      <strong>Exposure</strong>
+                      <span>web_assets</span>
+                      <span>ip_scan</span>
+                    </article>
+                    <article class="schema-card">
+                      <strong>Risk</strong>
+                      <span>service_risk</span>
+                      <span>virustotal</span>
+                      <span>meta</span>
+                    </article>
                   </div>
                 </div>
               </div>
@@ -347,74 +511,60 @@
                   <section class="neo-card module-panel">
                     <div class="card-head">
                       <div>
-                        <span class="eyebrow">Scan Modules</span>
-                        <h3>Black site modules</h3>
+                        <span class="eyebrow">Recon Modules</span>
+                        <h3>Backend-mapped switches</h3>
                       </div>
                       <span id="moduleCountChip" class="status-pill">06 armed</span>
+                    </div>
+
+                    <div class="module-baseline">
+                      <span class="eyebrow">Always collected</span>
+                      <div class="module-baseline__chips">
+                        <span>DNS resolution</span>
+                        <span>WHOIS ownership</span>
+                        <span>Technology fingerprint</span>
+                      </div>
+                      <p>These stages run on every backend job and are shown as baseline pipeline blocks instead of fake toggles.</p>
                     </div>
 
                     <div class="module-toggle-grid">
                       <label class="module-toggle ripple-target">
                         <input id="modulePassive" type="checkbox" checked />
                         <span>
-                          <strong>Passive Recon</strong>
-                          <small>historical trails + passive dns echoes</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleDns" type="checkbox" checked />
-                        <span>
-                          <strong>DNS Enumeration</strong>
-                          <small>resolve public records and alias trails</small>
+                          <strong>Passive / Historical DNS</strong>
+                          <small>historical subdomains and resolved IP echoes</small>
                         </span>
                       </label>
 
                       <label class="module-toggle ripple-target">
                         <input id="moduleSubdomain" type="checkbox" checked />
                         <span>
-                          <strong>Subdomain Brute</strong>
-                          <small>ct logs + passive expansion</small>
+                          <strong>Certificate Transparency</strong>
+                          <small>ct log expansion and discovered subdomains</small>
                         </span>
                       </label>
 
                       <label class="module-toggle ripple-target">
                         <input id="modulePort" type="checkbox" checked />
                         <span>
-                          <strong>Port Scan</strong>
-                          <small>tcp/udp fingerprint and service banners</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleWhois" type="checkbox" checked />
-                        <span>
-                          <strong>WHOIS + OSINT</strong>
-                          <small>registrar, dates, nameservers, enrich</small>
+                          <strong>Network Port Scan</strong>
+                          <small>nmap-backed tcp/udp service discovery</small>
                         </span>
                       </label>
 
                       <label class="module-toggle ripple-target">
                         <input id="moduleVuln" type="checkbox" checked />
                         <span>
-                          <strong>Vulnerability Fingerprint</strong>
-                          <small>cve correlation and weak-check hints</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleSocial" type="checkbox" />
-                        <span>
-                          <strong>Social Media Recon</strong>
-                          <small>username traces and social mentions</small>
+                          <strong>Service Risk Correlation</strong>
+                          <small>cve lookup and weak configuration checks</small>
                         </span>
                       </label>
 
                       <label class="module-toggle ripple-target">
                         <input id="moduleWeb" type="checkbox" checked />
                         <span>
-                          <strong>Web Asset Crawl</strong>
-                          <small>endpoints, js extraction, surface mapping</small>
+                          <strong>Web Asset Enumeration</strong>
+                          <small>crawler, js extraction, directory probing</small>
                         </span>
                       </label>
 
@@ -429,16 +579,16 @@
                       <label class="module-toggle ripple-target">
                         <input id="moduleThreat" type="checkbox" />
                         <span>
-                          <strong>Threat Intel</strong>
-                          <small>virustotal signal correlation</small>
+                          <strong>VirusTotal Enrichment</strong>
+                          <small>domain and url verdict correlation</small>
                         </span>
                       </label>
 
                       <label class="module-toggle ripple-target">
                         <input id="modulePrivate" type="checkbox" />
                         <span>
-                          <strong>Private Sweep</strong>
-                          <small>allow internal cidr ranges</small>
+                          <strong>Private CIDR Sweep</strong>
+                          <small>allow private ranges and attached cidr targets</small>
                         </span>
                       </label>
                     </div>
@@ -482,8 +632,8 @@
                         <strong id="statusThreat">LOW</strong>
                       </article>
                       <article>
-                        <span>Nodes</span>
-                        <strong id="statusNodes">128</strong>
+                        <span>Jobs</span>
+                        <strong id="statusNodes">0 active</strong>
                       </article>
                     </div>
                   </section>
@@ -639,9 +789,10 @@
                 <section class="neo-card results-stack">
                   <div class="results-tabs" role="tablist" aria-label="Results tabs">
                     <button class="result-tab is-active ripple-target" type="button" data-result-tab="overview">Overview</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="recon">Recon Data</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="recon">Identity &amp; DNS</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="web">Web Assets</button>
                     <button class="result-tab ripple-target" type="button" data-result-tab="network">Network Map</button>
-                    <button class="result-tab ripple-target" type="button" data-result-tab="vulns">Vulnerabilities</button>
+                    <button class="result-tab ripple-target" type="button" data-result-tab="vulns">Risk &amp; Intel</button>
                     <button class="result-tab ripple-target" type="button" data-result-tab="json">Raw JSON</button>
                   </div>
 
@@ -722,6 +873,58 @@
                             <button class="icon-button ripple-target" type="button" data-copy-target="resolvedTargetsList">copy</button>
                           </div>
                           <div id="resolvedTargetsList" class="result-list"></div>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>CT + Passive Expansion</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="ctPassiveList">copy</button>
+                          </div>
+                          <div id="ctPassiveList" class="result-list"></div>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>ASN + Adjacent Space</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="asnRecordList">copy</button>
+                          </div>
+                          <div id="asnRecordList" class="result-list"></div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section class="result-panel" data-result-panel="web">
+                      <div class="result-panel__grid">
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Combined Endpoints</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="webEndpointList">copy</button>
+                          </div>
+                          <div id="webEndpointList" class="result-list"></div>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>JavaScript Sources</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="webJsFileList">copy</button>
+                          </div>
+                          <div id="webJsFileList" class="result-list"></div>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Sensitive Paths</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="webSensitiveList">copy</button>
+                          </div>
+                          <div id="webSensitiveList" class="result-list"></div>
+                        </div>
+
+                        <div class="result-card">
+                          <div class="result-card__table-head">
+                            <span>Directory Probe Hits</span>
+                            <button class="icon-button ripple-target" type="button" data-copy-target="webDirectoryList">copy</button>
+                          </div>
+                          <div id="webDirectoryList" class="result-list"></div>
                         </div>
                       </div>
                     </section>

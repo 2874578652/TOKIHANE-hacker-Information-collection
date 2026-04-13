@@ -202,6 +202,8 @@ textarea {
 
 .hud-navbar,
 .hero-section,
+.capability-band,
+.workflow-section,
 .workspace-shell,
 .neo-card,
 .site-footer,
@@ -232,6 +234,8 @@ textarea {
 
 .hud-navbar::before,
 .hero-section::before,
+.capability-band::before,
+.workflow-section::before,
 .workspace-shell::before,
 .neo-card::before,
 .site-footer::before,
@@ -923,6 +927,199 @@ textarea {
   background: rgba(8, 14, 24, 0.76);
   color: var(--text-soft);
   line-height: 1.45;
+}
+
+.capability-band,
+.workflow-section {
+  position: relative;
+  margin-top: 30px;
+  padding: 28px;
+  border-radius: var(--radius-xl);
+}
+
+.section-copy,
+.workflow-section__head,
+.capability-grid,
+.workflow-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.section-copy,
+.workflow-section__head {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.section-copy h2,
+.workflow-section__head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 2.4vw, 2.7rem);
+  line-height: 1.06;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-copy p,
+.workflow-section__head p,
+.module-baseline p,
+.dashboard-support-copy {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.capability-grid,
+.workflow-steps,
+.api-health-grid,
+.schema-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.capability-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.feature-card,
+.workflow-step,
+.schema-card,
+.api-health-tile {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(8, 14, 24, 0.88), rgba(5, 8, 15, 0.92)),
+    rgba(8, 14, 24, 0.82);
+}
+
+.feature-card h3,
+.workflow-step h3,
+.schema-card strong {
+  margin: 10px 0 8px;
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.feature-card p,
+.workflow-step p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.feature-card__chips,
+.module-baseline__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.feature-card__chips span,
+.module-baseline__chips span,
+.schema-card span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  background: rgba(8, 14, 24, 0.7);
+  color: var(--text-soft);
+  font-size: 0.76rem;
+}
+
+.workflow-grid {
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.75fr);
+  align-items: start;
+}
+
+.workflow-steps {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.workflow-step strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 240, 255, 0.14);
+  color: var(--cyan);
+  font-family: var(--display);
+}
+
+.workflow-api {
+  padding: 22px;
+}
+
+.workflow-api__list {
+  display: grid;
+  gap: 12px;
+}
+
+.workflow-api__list div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 240, 255, 0.08);
+  background: rgba(8, 14, 24, 0.72);
+}
+
+.workflow-api__list strong {
+  font-size: 0.9rem;
+}
+
+.workflow-api code,
+.workflow-step code {
+  color: var(--cyan);
+  font-family: var(--mono);
+}
+
+.api-health-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+
+.api-health-tile span {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+}
+
+.api-health-tile strong {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.schema-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.schema-card {
+  display: grid;
+  gap: 10px;
+}
+
+.module-baseline {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(0, 240, 255, 0.08);
+  background: rgba(8, 14, 24, 0.68);
 }
 
 .workspace-shell {
@@ -2083,13 +2280,18 @@ textarea {
     width: min(1920px, calc(100vw - 28px));
   }
 
-  .hero-section {
+  .hero-section,
+  .workflow-grid {
     grid-template-columns: 1fr;
     min-height: auto;
   }
 
   .holo-stage {
     min-height: 760px;
+  }
+
+  .capability-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .results-summary__grid {
@@ -2112,12 +2314,19 @@ textarea {
   .console-grid,
   .result-panel__grid,
   .recon-grid,
-  .network-grid {
+  .network-grid,
+  .workflow-steps {
     grid-template-columns: 1fr;
   }
 
   .dashboard-grid__stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .capability-grid,
+  .api-health-grid,
+  .schema-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
   .status-ribbon {
@@ -2155,6 +2364,8 @@ textarea {
   }
 
   .hero-section,
+  .capability-band,
+  .workflow-section,
   .workspace-shell,
   .site-footer,
   .neo-card,
@@ -2217,6 +2428,7 @@ textarea {
   .hud-navbar__right,
   .hero-input-shell__row,
   .hero-input-shell__actions,
+  .workflow-section__head,
   .workspace-shell__head,
   .card-head,
   .results-actions {
@@ -2229,12 +2441,18 @@ textarea {
   }
 
   .hero-section,
+  .capability-band,
+  .workflow-section,
   .workspace-shell,
   .neo-card,
   .site-footer {
     padding: 18px;
   }
 
+  .capability-grid,
+  .workflow-steps,
+  .api-health-grid,
+  .schema-grid,
   .dashboard-grid__stats,
   .results-summary__grid,
   .vuln-grid,

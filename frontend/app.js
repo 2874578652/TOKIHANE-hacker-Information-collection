@@ -27,9 +27,13 @@ const refs = {
   statVulnsFound: document.getElementById("statVulnsFound"),
   statActiveNodes: document.getElementById("statActiveNodes"),
   recentScansBody: document.getElementById("recentScansBody"),
-  mapPins: document.getElementById("mapPins"),
   mapLocationCount: document.getElementById("mapLocationCount"),
-  intelFeed: document.getElementById("intelFeed"),
+  apiHealthBadge: document.getElementById("apiHealthBadge"),
+  apiHealthValue: document.getElementById("apiHealthValue"),
+  apiEndpointValue: document.getElementById("apiEndpointValue"),
+  apiJobsCountValue: document.getElementById("apiJobsCountValue"),
+  apiHealthMessage: document.getElementById("apiHealthMessage"),
+  apiJobsBody: document.getElementById("apiJobsBody"),
   reportFileInput: document.getElementById("reportFileInput"),
   importReportBtn: document.getElementById("importReportBtn"),
   reportMeta: document.getElementById("reportMeta"),
@@ -75,6 +79,12 @@ const refs = {
   whoisTableBody: document.getElementById("whoisTableBody"),
   techChipList: document.getElementById("techChipList"),
   resolvedTargetsList: document.getElementById("resolvedTargetsList"),
+  ctPassiveList: document.getElementById("ctPassiveList"),
+  asnRecordList: document.getElementById("asnRecordList"),
+  webEndpointList: document.getElementById("webEndpointList"),
+  webJsFileList: document.getElementById("webJsFileList"),
+  webSensitiveList: document.getElementById("webSensitiveList"),
+  webDirectoryList: document.getElementById("webDirectoryList"),
   networkCanvas: document.getElementById("networkCanvas"),
   nodeLegend: document.getElementById("nodeLegend"),
   rerenderGraphBtn: document.getElementById("rerenderGraphBtn"),
@@ -101,34 +111,23 @@ const refs = {
 };
 
 const moduleDefs = [
-  { id: "modulePassive", label: "Passive Recon", payload: "passive_dns_scan", defaultChecked: true },
-  { id: "moduleDns", label: "DNS Enumeration", payload: null, defaultChecked: true },
-  { id: "moduleSubdomain", label: "Subdomain Brute", payload: "ct_scan", defaultChecked: true },
+  { id: "modulePassive", label: "Passive DNS", payload: "passive_dns_scan", defaultChecked: true },
+  { id: "moduleSubdomain", label: "Certificate Transparency", payload: "ct_scan", defaultChecked: true },
   { id: "modulePort", label: "Port Scan", payload: "port_scan", defaultChecked: true },
-  { id: "moduleWhois", label: "WHOIS + OSINT", payload: null, defaultChecked: true },
-  { id: "moduleVuln", label: "Vulnerability Fingerprint", payload: "service_risk_scan", defaultChecked: true },
-  { id: "moduleSocial", label: "Social Media Recon", payload: null, defaultChecked: false },
-  { id: "moduleWeb", label: "Web Asset Crawl", payload: "web_asset_scan", defaultChecked: true },
+  { id: "moduleVuln", label: "Service Risk", payload: "service_risk_scan", defaultChecked: true },
+  { id: "moduleWeb", label: "Web Assets", payload: "web_asset_scan", defaultChecked: true },
   { id: "moduleAsn", label: "ASN Expansion", payload: "asn_scan", defaultChecked: false },
-  { id: "moduleThreat", label: "Threat Intel", payload: "vt_scan", defaultChecked: false },
-  { id: "modulePrivate", label: "Private Sweep", payload: "allow_private_ip", defaultChecked: false },
+  { id: "moduleThreat", label: "VirusTotal", payload: "vt_scan", defaultChecked: false },
+  { id: "modulePrivate", label: "Private CIDR", payload: "allow_private_ip", defaultChecked: false },
 ].map((item) => ({ ...item, input: document.getElementById(item.id) }));
 
 const heroFeedPool = [
-  "ghost collectors are calibrating passive channels...",
-  "whois, dns, and header sensors are ready to deploy...",
-  "raw export lanes are standing by for exfil package build...",
-  "deep packet shadows indicate low-noise reconnaissance lanes...",
-  "matrix beacons synced to distant proxy relays and safe exits...",
-  "node graph renderer is primed for hostile surface mapping...",
-];
-
-const intelFeedPool = [
-  { title: "ghost relay", text: "heuristic scanner reports fresh header anomalies on obfuscated infra." },
-  { title: "night broker", text: "high-churn dns patterns detected on a known staging domain." },
-  { title: "shadow pin", text: "new tls metadata stitched into the reconnaissance evidence graph." },
-  { title: "wire jack", text: "cdn edge behavior is masking two suspicious service fingerprints." },
-  { title: "dead sector", text: "exposed auth routes are surfacing in passive crawler traces." },
+  "dns resolution, whois collection, and tech detection are baseline stages...",
+  "optional lanes can add ct logs, passive dns, asn expansion, and vt verdicts...",
+  "web asset enumeration merges crawler, js extraction, and directory probe signals...",
+  "service risk analysis correlates open services into cve and weak-check evidence...",
+  "task ids remain queryable through the scan api until the report is complete...",
+  "json evidence packages can be imported back into the workspace at any time...",
 ];
 
 const WORLD_POINTS = [
@@ -144,24 +143,24 @@ const WORLD_POINTS = [
 
 const translations = {
   en: {
-    navLaunch: "Prime Console",
+    navLaunch: "Open Workspace",
     heroScan: "INITIATE SCAN",
-    openConsole: "OPEN CONSOLE",
-    demoSample: "LOAD GHOST SAMPLE",
+    openConsole: "OPEN WORKSPACE",
+    demoSample: "LOAD SAMPLE REPORT",
     terminal: "Terminal",
     navPlaceholder: "quick target // domain or ip",
-    heroPlaceholder: "corp.tld / 8.8.8.8 / https://target.tld / ghost_handle",
+    heroPlaceholder: "corp.tld / 8.8.8.8 / https://target.tld",
     consolePlaceholder: "target.tld / 203.0.113.5 / https://portal.tld",
     terminalPlaceholder: "type help, status, scan example.com, view results...",
   },
   cn: {
-    navLaunch: "启动控制台",
+    navLaunch: "打开工作台",
     heroScan: "开始扫描",
-    openConsole: "打开控制台",
-    demoSample: "载入样例",
+    openConsole: "打开工作台",
+    demoSample: "载入样例报告",
     terminal: "终端",
     navPlaceholder: "快速目标 // 域名或 IP",
-    heroPlaceholder: "corp.tld / 8.8.8.8 / https://target.tld / ghost_handle",
+    heroPlaceholder: "corp.tld / 8.8.8.8 / https://target.tld",
     consolePlaceholder: "target.tld / 203.0.113.5 / https://portal.tld",
     terminalPlaceholder: "输入 help、status、scan example.com、view results ...",
   },
@@ -186,11 +185,13 @@ const state = {
   logTimer: null,
   overlayTimer: null,
   heroFeedTimer: null,
-  intelFeedTimer: null,
   ambientTimer: null,
+  backendTimer: null,
   recentScans: [],
   currentScanEntryId: null,
   currentThreat: "LOW",
+  apiJobs: [],
+  apiHealth: "checking",
 };
 
 let audioContext = null;
@@ -201,6 +202,31 @@ function inferDefaultApiUrl() {
     return "http://127.0.0.1:8000/api/scan";
   }
   return `${window.location.origin}/api/scan`;
+}
+
+function getApiScanUrl() {
+  return normalizeTarget(refs.apiUrlInput?.value) || inferDefaultApiUrl();
+}
+
+function getApiRootUrl(apiScanUrl = getApiScanUrl()) {
+  return apiScanUrl.replace(/\/+$/, "").replace(/\/scan$/, "");
+}
+
+function getHealthUrl(apiScanUrl = getApiScanUrl()) {
+  const apiRoot = getApiRootUrl(apiScanUrl);
+  return apiRoot.endsWith("/api") ? `${apiRoot.slice(0, -4)}/health` : `${apiRoot}/health`;
+}
+
+function getJobsUrl(apiScanUrl = getApiScanUrl()) {
+  return `${getApiRootUrl(apiScanUrl)}/jobs`;
+}
+
+function setElementVisibility(node, visible, displayValue = "block") {
+  if (!node) {
+    return;
+  }
+  node.hidden = !visible;
+  node.style.display = visible ? displayValue : "none";
 }
 
 function hashString(value) {
@@ -486,14 +512,31 @@ function buildSyntheticReport(rawTarget) {
     },
     web_assets: {
       enabled: !!document.getElementById("moduleWeb")?.checked,
+      base_url: `https://${domain}`,
+      crawler: {
+        enabled: !!document.getElementById("moduleWeb")?.checked,
+        js_files: [`https://${domain}/cdn/app.js`, `https://${domain}/assets/runtime.js`],
+        discovered_endpoints: [`https://${domain}/login`, `https://${domain}/api/v1/session`],
+        sensitive_paths: [`https://${domain}/.env`],
+      },
+      js_extraction: {
+        enabled: !!document.getElementById("moduleWeb")?.checked,
+        endpoints: [`https://${domain}/api/internal/audit`, `https://${domain}/api/v1/session`],
+        sensitive_paths: [`https://${domain}/backup.sql`],
+      },
       combined_endpoints: [`https://${domain}/login`, `https://${domain}/api/v1/session`, `https://${domain}/cdn/app.js`],
       sensitive_paths: {
+        enabled: !!document.getElementById("moduleWeb")?.checked,
         count: 2,
-        hits: [`https://${domain}/.env`, `https://${domain}/backup.sql`],
+        items: [`https://${domain}/.env`, `https://${domain}/backup.sql`],
       },
       directory_probe: {
+        enabled: !!document.getElementById("moduleWeb")?.checked,
         hit_count: 2,
-        hits: [`/admin`, `/private`],
+        hits: [
+          { url: `https://${domain}/admin` },
+          { url: `https://${domain}/private` },
+        ],
       },
     },
     service_risk: {
@@ -679,11 +722,11 @@ function setTarget(value, source = null) {
   refs.consoleTargetChip.textContent = parsed.label.toLowerCase() === "no target" ? "no target" : parsed.label;
   refs.heroStatusLine.textContent = nextTarget
     ? state.scanning
-      ? `live trace engaged against ${parsed.label}`
+      ? `job active // building report blocks for ${parsed.label}`
       : state.latestReport
         ? `evidence package cached for ${parsed.label}`
-        : `target ghosted into memory // ready for uplift`
-    : "signal trace idle // feed a target to ignite the console";
+        : `target staged in memory // ready to create a scan job`
+    : "task intake idle // feed a target to assemble the evidence pipeline";
 }
 
 function updateLanguage(lang) {
@@ -777,6 +820,7 @@ function seedRecentScans() {
 function updateDashboardStats() {
   const scansToday = state.recentScans.length + (state.latestReport ? 1 : 0);
   const uniqueTargets = new Set(state.recentScans.map((entry) => entry.target));
+  const activeJobs = state.apiJobs.filter((job) => !["completed", "failed", "canceled"].includes(String(job.status || "").toLowerCase())).length;
   if (state.latestReport?.target?.input) {
     uniqueTargets.add(state.latestReport.target.input);
   }
@@ -784,7 +828,7 @@ function updateDashboardStats() {
   refs.statScansToday.textContent = String(scansToday).padStart(3, "0");
   refs.statTargetsTracked.textContent = String(uniqueTargets.size).padStart(3, "0");
   refs.statVulnsFound.textContent = String(clamp(vulnBase, 0, 99)).padStart(3, "0");
-  refs.statActiveNodes.textContent = state.scanning ? "132" : "128";
+  refs.statActiveNodes.textContent = String(activeJobs).padStart(3, "0");
 }
 
 function renderRecentScans() {
@@ -811,44 +855,104 @@ function renderRecentScans() {
     });
 }
 
-function renderMapPins() {
-  if (!refs.mapPins) {
+function applyStatusTone(node, tone = "default", label = "") {
+  if (!node) {
     return;
   }
-  refs.mapPins.innerHTML = "";
-  state.recentScans
-    .slice(0, 6)
-    .forEach((entry) => {
-      const pin = document.createElement("span");
-      pin.className = "map-pin";
-      pin.style.setProperty("--x", entry.point.x);
-      pin.style.setProperty("--y", entry.point.y);
-      pin.title = `${entry.point.label} // ${entry.target}`;
-      refs.mapPins.appendChild(pin);
-    });
-
-  if (refs.mapLocationCount) {
-    refs.mapLocationCount.textContent = `${Math.min(state.recentScans.length, 6)} pins`;
+  node.className = "status-pill";
+  if (tone === "online") {
+    node.classList.add("status-pill--online");
+  } else if (tone === "warning") {
+    node.classList.add("status-pill--warning");
+  } else if (tone === "danger") {
+    node.classList.add("status-pill--danger");
+  }
+  if (label) {
+    node.textContent = label;
   }
 }
 
-function renderIntelFeed() {
-  if (!refs.intelFeed) {
+function renderApiHealth(status, message, apiUrl = getApiScanUrl()) {
+  state.apiHealth = status;
+  refs.apiEndpointValue.textContent = apiUrl;
+  refs.apiHealthValue.textContent = status === "online" ? "online" : status === "offline" ? "offline" : "checking";
+  refs.apiHealthMessage.textContent = message;
+  applyStatusTone(
+    refs.apiHealthBadge,
+    status === "online" ? "online" : status === "offline" ? "danger" : "warning",
+    status === "online" ? "api ready" : status === "offline" ? "api offline" : "checking"
+  );
+  refs.heroSignalIntegrity.textContent = status === "online" ? "API READY" : status === "offline" ? "API OFFLINE" : "CHECKING";
+}
+
+function renderApiJobs() {
+  if (!refs.apiJobsBody) {
+    return;
+  }
+  refs.apiJobsBody.innerHTML = "";
+  const jobs = state.apiJobs.slice(0, 6);
+  refs.apiJobsCountValue.textContent = `${state.apiJobs.length} jobs`;
+  refs.mapLocationCount.textContent = jobs.length ? `${jobs.length} rows` : "history";
+
+  if (!jobs.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="4">No backend jobs loaded yet.</td>`;
+    refs.apiJobsBody.appendChild(row);
     return;
   }
 
-  refs.intelFeed.innerHTML = "";
-  intelFeedPool.slice(0, 3).forEach((item) => {
-    const block = document.createElement("div");
-    block.className = "intel-feed__item";
-    block.innerHTML = `<strong>${item.title}</strong><span>${item.text}</span>`;
-    refs.intelFeed.appendChild(block);
+  jobs.forEach((job) => {
+    const row = document.createElement("tr");
+    const created = job.created_at ? new Date(job.created_at).toLocaleTimeString("zh-CN", { hour12: false }) : "--:--:--";
+    row.innerHTML = `
+      <td>${String(job.job_id || "unknown").slice(0, 8)}</td>
+      <td>${buildStatusBadge(job.status || "unknown")}</td>
+      <td>${job.result?.meta?.scan_mode || "legacy"}</td>
+      <td>${created}</td>
+    `;
+    refs.apiJobsBody.appendChild(row);
   });
 }
 
-function rotateIntelFeed() {
-  intelFeedPool.push(intelFeedPool.shift());
-  renderIntelFeed();
+async function probeApiHealth() {
+  const apiUrl = getApiScanUrl();
+  try {
+    const response = await fetch(getHealthUrl(apiUrl));
+    if (!response.ok) {
+      throw new Error(`health check failed with HTTP ${response.status}`);
+    }
+    renderApiHealth("online", "FastAPI health check responded successfully. Job endpoints are ready to accept traffic.", apiUrl);
+    return true;
+  } catch (error) {
+    renderApiHealth("offline", `Unable to reach backend health endpoint. ${String(error.message || error)}`, apiUrl);
+    return false;
+  }
+}
+
+async function fetchApiJobs() {
+  try {
+    const response = await fetch(getJobsUrl(getApiScanUrl()));
+    if (!response.ok) {
+      throw new Error(`job history failed with HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    state.apiJobs = Array.isArray(data?.jobs) ? data.jobs : [];
+  } catch (_error) {
+    state.apiJobs = [];
+  }
+  renderApiJobs();
+  updateDashboardStats();
+}
+
+async function refreshBackendState() {
+  const isOnline = await probeApiHealth();
+  if (isOnline) {
+    await fetchApiJobs();
+    return;
+  }
+  state.apiJobs = [];
+  renderApiJobs();
+  updateDashboardStats();
 }
 
 function addRecentScanEntry(target, type = "Deep Recon") {
@@ -865,7 +969,6 @@ function addRecentScanEntry(target, type = "Deep Recon") {
   state.recentScans.unshift(entry);
   state.recentScans = state.recentScans.slice(0, 10);
   renderRecentScans();
-  renderMapPins();
   updateDashboardStats();
 }
 
@@ -880,7 +983,6 @@ function updateRecentScanEntry(patch) {
     return { ...entry, ...patch };
   });
   renderRecentScans();
-  renderMapPins();
   updateDashboardStats();
 }
 
@@ -931,7 +1033,7 @@ function showOverlay(title, statusText) {
   if (!refs.scanOverlay) {
     return;
   }
-  refs.scanOverlay.hidden = false;
+  setElementVisibility(refs.scanOverlay, true, "grid");
   refs.scanOverlayTitle.textContent = title;
   refs.scanOverlayStatusText.textContent = statusText;
 }
@@ -939,7 +1041,7 @@ function showOverlay(title, statusText) {
 function hideOverlay(delay = 0) {
   window.clearTimeout(state.overlayTimer);
   state.overlayTimer = window.setTimeout(() => {
-    refs.scanOverlay.hidden = true;
+    setElementVisibility(refs.scanOverlay, false, "grid");
   }, delay);
 }
 
@@ -965,6 +1067,7 @@ function setThreatLabel(label) {
 
 function updateStatusUi() {
   const parsed = parseTarget(state.target || state.latestReport?.target?.input || "");
+  const activeJobs = state.apiJobs.filter((job) => !["completed", "failed", "canceled"].includes(String(job.status || "").toLowerCase())).length;
   refs.consoleTargetChip.textContent = parsed.label;
   refs.heroTargetEcho.textContent = parsed.label;
   refs.resultTargetKpi.textContent = parsed.label;
@@ -972,19 +1075,19 @@ function updateStatusUi() {
   refs.consoleStopBtn.disabled = !state.scanning;
   refs.consoleStatusChip.textContent = state.scanning ? "scanning" : state.latestReport ? "ready" : "idle";
   refs.resultStatusKpi.textContent = state.scanning ? "SCANNING" : state.latestReport ? "READY" : "STANDBY";
-  refs.statusNodes.textContent = state.scanning ? "132" : "128";
-  refs.heroNodeStatus.textContent = state.scanning ? "132 ONLINE" : "128 ONLINE";
+  refs.statusNodes.textContent = `${state.scanning ? Math.max(activeJobs, 1) : activeJobs} active`;
+  refs.heroNodeStatus.textContent = state.scanning ? "JOB RUNNING" : activeJobs ? `${activeJobs} ACTIVE` : "QUEUE READY";
   refs.heroFeedState.textContent = state.scanning ? "TRACKING" : "READY";
   refs.statusMode.textContent = isPortScanEnabled() ? refs.portModeInput.value.toUpperCase() : "INTEL";
 
   if (!state.target && !state.latestReport) {
-    refs.heroStatusLine.textContent = "signal trace idle // feed a target to ignite the console";
+    refs.heroStatusLine.textContent = "task intake idle // feed a target to assemble the evidence pipeline";
   } else if (state.scanning) {
-    refs.heroStatusLine.textContent = `uplink active // tracing ${parsed.label} across hostile layers`;
+    refs.heroStatusLine.textContent = `job active // building report blocks for ${parsed.label}`;
   } else if (state.latestReport) {
     refs.heroStatusLine.textContent = `evidence package compiled for ${parsed.label}`;
   } else {
-    refs.heroStatusLine.textContent = `target ghosted into memory // ready for uplift`;
+    refs.heroStatusLine.textContent = `target staged in memory // ready to create a scan job`;
   }
 }
 
@@ -1102,6 +1205,7 @@ function beginScanSession(source) {
   appendPhaseLogs(state.target);
   setThreatLabel("TRACKED");
   updateStatusUi();
+  refreshBackendState();
   playSfx("scan");
 }
 
@@ -1128,6 +1232,7 @@ function finishScan(report, source = "LIVE API") {
   hideOverlay();
   playSfx("success");
   showToast("NEOSCAN", source === "IMPORTED" ? "Imported report injected into the results stack." : "Recon evidence package is ready.", "success");
+  refreshBackendState();
 }
 
 function failScan(message) {
@@ -1143,6 +1248,7 @@ function failScan(message) {
   appendLog(message, "error");
   playSfx("error");
   showToast("NEOSCAN", message, "error");
+  refreshBackendState();
 }
 
 function startGhostMode(target) {
@@ -1204,6 +1310,7 @@ async function createRemoteScan(target) {
   state.currentJobId = data.job_id;
   appendLog(`live uplink established // job ${data.job_id}`, "success");
   refs.scanOverlayTitle.textContent = "live uplink established";
+  refreshBackendState();
   pollRemoteScan(apiUrl, data.job_id);
 }
 
@@ -1305,6 +1412,7 @@ async function abortScan() {
       await fetch(`${apiUrl.replace(/\/+$/, "")}/${state.currentJobId}/stop`, { method: "POST" });
       appendLog(`abort signal transmitted // ${state.currentJobId}`, "warn");
       showToast("NEOSCAN", "Abort signal transmitted to remote uplink.", "success");
+      refreshBackendState();
     } catch (error) {
       failScan(`abort request failed: ${error.message}`);
     }
@@ -1319,6 +1427,7 @@ async function abortScan() {
   hideOverlay();
   appendLog("ghost uplink aborted by operator", "warn");
   playSfx("error");
+  refreshBackendState();
 }
 
 function summarizeReport(report) {
@@ -1424,6 +1533,56 @@ function renderResolvedTargets(report) {
   const passive = Array.isArray(report?.passive_dns?.historical_subdomains) ? report.passive_dns.historical_subdomains : [];
   const ct = Array.isArray(report?.certificate_transparency?.discovered_subdomains) ? report.certificate_transparency.discovered_subdomains : [];
   fillList(refs.resolvedTargetsList, [...ips, ...passive, ...ct], "No passive relationships surfaced.");
+}
+
+function renderIdentityExpansion(report) {
+  const ct = Array.isArray(report?.certificate_transparency?.discovered_subdomains) ? report.certificate_transparency.discovered_subdomains : [];
+  const passiveSubs = Array.isArray(report?.passive_dns?.historical_subdomains) ? report.passive_dns.historical_subdomains : [];
+  const passiveIps = Array.isArray(report?.passive_dns?.resolved_ips) ? report.passive_dns.resolved_ips : [];
+  const asnRecords = Array.isArray(report?.asn_network?.records) ? report.asn_network.records : [];
+  const expandedHosts = Array.isArray(report?.asn_network?.expanded_c_segment_hosts) ? report.asn_network.expanded_c_segment_hosts : [];
+
+  fillList(
+    refs.ctPassiveList,
+    [
+      ...ct.map((item) => `ct :: ${item}`),
+      ...passiveSubs.map((item) => `passive subdomain :: ${item}`),
+      ...passiveIps.map((item) => `passive ip :: ${item}`),
+    ],
+    "CT logs and passive DNS are disabled or did not return any records."
+  );
+
+  fillList(
+    refs.asnRecordList,
+    [
+      ...asnRecords.map((row) => `asn :: ${row.asn || "n/a"} // prefix :: ${row.prefix || "n/a"}`),
+      ...expandedHosts.map((item) => `expanded host :: ${item}`),
+    ],
+    "ASN expansion is disabled or no adjacent network space was returned."
+  );
+}
+
+function renderWebAssets(report) {
+  const webAssets = report?.web_assets || {};
+  const combinedEndpoints = Array.isArray(webAssets.combined_endpoints) ? webAssets.combined_endpoints : [];
+  const jsFiles = Array.isArray(webAssets?.crawler?.js_files)
+    ? webAssets.crawler.js_files
+    : Array.isArray(webAssets?.js_extraction?.js_files)
+      ? webAssets.js_extraction.js_files
+      : [];
+  const sensitive = Array.isArray(webAssets?.sensitive_paths?.items)
+    ? webAssets.sensitive_paths.items
+    : Array.isArray(webAssets?.sensitive_paths?.hits)
+      ? webAssets.sensitive_paths.hits
+      : [];
+  const directoryHits = Array.isArray(webAssets?.directory_probe?.hits)
+    ? webAssets.directory_probe.hits.map((row) => (typeof row === "string" ? row : row.url || JSON.stringify(row)))
+    : [];
+
+  fillList(refs.webEndpointList, combinedEndpoints, "Web asset enumeration returned no combined endpoints.");
+  fillList(refs.webJsFileList, jsFiles, "No JavaScript source files were collected.");
+  fillList(refs.webSensitiveList, sensitive, "No sensitive paths were merged from crawler, JS, or directory probe.");
+  fillList(refs.webDirectoryList, directoryHits, "Directory probing is disabled or returned no hits.");
 }
 
 function buildGraph(report) {
@@ -1629,6 +1788,8 @@ function renderReport(report) {
   renderWhoisTable(report);
   renderTechChips(report);
   renderResolvedTargets(report);
+  renderIdentityExpansion(report);
+  renderWebAssets(report);
   renderGraph(report);
   renderVulnCards(report);
   refs.rawJsonView.textContent = JSON.stringify(report, null, 2);
@@ -1702,10 +1863,9 @@ function handleImportedReport(file) {
 }
 
 function updateAmbientHud() {
-  const seed = Date.now() / 1000;
-  refs.heroSignalIntegrity.textContent = `${(99 + Math.sin(seed / 6) * 0.4).toFixed(1)}%`;
-  refs.heroCollectorCount.textContent = `${127 + (Math.floor(seed) % 2)} / 128`;
-  refs.heroAssetFlow.textContent = `${640 + (Math.floor(seed * 13) % 110)} KB/S`;
+  const activeJobs = state.apiJobs.filter((job) => !["completed", "failed", "canceled"].includes(String(job.status || "").toLowerCase())).length;
+  refs.heroCollectorCount.textContent = `${String(getModuleCount()).padStart(2, "0")} ARMED`;
+  refs.heroAssetFlow.textContent = activeJobs ? `${String(activeJobs).padStart(2, "0")} ACTIVE` : "QUEUE READY";
 }
 
 function initAmbientLoops() {
@@ -1714,10 +1874,6 @@ function initAmbientLoops() {
     heroFeedPool.push(heroFeedPool.shift());
     renderFeedLine(refs.heroFeed, heroFeedPool[0], 3);
   }, 2800);
-
-  state.intelFeedTimer = window.setInterval(() => {
-    rotateIntelFeed();
-  }, 5200);
 
   state.ambientTimer = window.setInterval(updateAmbientHud, 1400);
 }
@@ -1841,7 +1997,7 @@ function initParticleField() {
 }
 
 function toggleTerminal(open) {
-  refs.terminalOverlay.hidden = !open;
+  setElementVisibility(refs.terminalOverlay, open, "flex");
   if (open) {
     ensureTerminalBoot();
     refs.terminalCommandInput.focus();
@@ -1917,12 +2073,14 @@ function initCopyButtons() {
 }
 
 function initBindings() {
+  setElementVisibility(refs.mobileDrawer, false, "grid");
+  setElementVisibility(refs.terminalOverlay, false, "flex");
+  setElementVisibility(refs.scanOverlay, false, "grid");
   bindRipples();
   updateLanguage("en");
   seedRecentScans();
   renderRecentScans();
-  renderMapPins();
-  renderIntelFeed();
+  renderApiJobs();
   updateDashboardStats();
   updateModuleCountChip();
   syncCustomPortField();
@@ -1980,10 +2138,6 @@ function initBindings() {
 
   refs.downloadReportBtn?.addEventListener("click", downloadLatestReport);
   refs.darkWebExportBtn?.addEventListener("click", exportToDarkWeb);
-  document.getElementById("copyFeedBtn")?.addEventListener("click", (event) => {
-    event.preventDefault();
-    copyTargetContent("intelFeed");
-  });
   refs.rerenderGraphBtn?.addEventListener("click", () => {
     if (state.latestReport) {
       renderGraph(state.latestReport);
@@ -2001,13 +2155,13 @@ function initBindings() {
 
   refs.mobileMenuToggle?.addEventListener("click", () => {
     const next = refs.mobileDrawer.hidden;
-    refs.mobileDrawer.hidden = !next;
+    setElementVisibility(refs.mobileDrawer, next, "grid");
     refs.mobileMenuToggle.setAttribute("aria-expanded", String(next));
   });
 
   refs.mobileDrawer?.querySelectorAll("a, button").forEach((node) => {
     node.addEventListener("click", () => {
-      refs.mobileDrawer.hidden = true;
+      setElementVisibility(refs.mobileDrawer, false, "grid");
       refs.mobileMenuToggle?.setAttribute("aria-expanded", "false");
     });
   });
@@ -2019,7 +2173,7 @@ function initBindings() {
   window.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       toggleTerminal(false);
-      refs.mobileDrawer.hidden = true;
+      setElementVisibility(refs.mobileDrawer, false, "grid");
     }
   });
 
@@ -2033,6 +2187,12 @@ function initBindings() {
   initAmbientLoops();
   initMatrixRain();
   initParticleField();
+  refreshBackendState();
+  state.backendTimer = window.setInterval(refreshBackendState, 15000);
+
+  refs.apiUrlInput?.addEventListener("change", () => {
+    refreshBackendState();
+  });
 
   const params = new URLSearchParams(window.location.search);
   const initialTarget = normalizeTarget(params.get("target"));
@@ -2045,7 +2205,7 @@ function initBindings() {
   if (["dashboard", "console", "results"].includes(initialView)) {
     setActiveView(initialView, { scroll: false });
   }
-  if (["overview", "recon", "network", "vulns", "json"].includes(initialTab)) {
+  if (["overview", "recon", "web", "network", "vulns", "json"].includes(initialTab)) {
     setResultTab(initialTab);
   }
 }
