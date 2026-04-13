@@ -339,7 +339,16 @@ select {
   gap: 18px;
 }
 
-.brand-block .eyebrow,
+.brand-block,
+.hint {
+  margin: 0;
+}
+
+.brand-block {
+  display: grid;
+  gap: 14px;
+}
+
 .hint {
   margin: 0;
 }
@@ -347,59 +356,118 @@ select {
 .brand-lockup {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   flex-wrap: wrap;
   margin: 0;
 }
 
 .brand-logo {
+  position: relative;
+  isolation: isolate;
   flex: none;
   display: inline-grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
-  border: 1px solid rgba(35, 244, 255, 0.22);
-  border-radius: 18px;
+  width: 78px;
+  height: 78px;
+  border: 1px solid rgba(236, 251, 255, 0.08);
+  border-radius: 24px;
   background:
-    radial-gradient(circle at 30% 30%, rgba(35, 244, 255, 0.12), transparent 58%),
-    linear-gradient(180deg, rgba(13, 21, 37, 0.96), rgba(7, 11, 20, 0.98));
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.1), transparent 24%),
+    linear-gradient(180deg, rgba(12, 20, 36, 0.98), rgba(5, 9, 18, 1));
   box-shadow:
-    inset 0 0 18px rgba(35, 244, 255, 0.08),
-    0 0 20px rgba(35, 244, 255, 0.08);
+    inset 0 0 24px rgba(35, 244, 255, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 26px rgba(35, 244, 255, 0.08);
   animation: brandPulse 5.2s ease-in-out infinite;
 }
 
+.brand-logo::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -2;
+  border-radius: 30px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(35, 244, 255, 0.8),
+    rgba(43, 125, 255, 0.75),
+    rgba(177, 76, 255, 0.78),
+    rgba(255, 79, 203, 0.72),
+    rgba(35, 244, 255, 0.8)
+  );
+  filter: blur(18px);
+  opacity: 0.36;
+  animation: brandOrbit 18s linear infinite, brandGlow 4.2s ease-in-out infinite;
+}
+
+.brand-logo::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: -1;
+  border-radius: 18px;
+  border: 1px solid rgba(35, 244, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(35, 244, 255, 0.08), transparent 66%);
+  box-shadow:
+    inset 0 0 18px rgba(35, 244, 255, 0.08),
+    inset 0 0 28px rgba(177, 76, 255, 0.06);
+}
+
 .brand-logo svg {
-  width: 42px;
-  height: 42px;
+  width: 52px;
+  height: 52px;
   overflow: visible;
 }
 
-.brand-logo__frame,
-.brand-logo__trace {
+.brand-logo__badge,
+.brand-logo__badge-inner,
+.brand-logo__monogram,
+.brand-logo__accent {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.brand-logo__frame {
-  stroke: rgba(236, 251, 255, 0.86);
-  stroke-width: 3;
-  filter: drop-shadow(0 0 8px rgba(35, 244, 255, 0.24));
+.brand-logo__badge {
+  stroke: rgba(241, 252, 255, 0.94);
+  stroke-width: 2.6;
+  filter: drop-shadow(0 0 10px rgba(35, 244, 255, 0.24));
+  animation: brandLogoWhitePulse 4.2s ease-in-out infinite;
 }
 
-.brand-logo__trace {
+.brand-logo__badge-inner {
+  stroke-width: 2.2;
   stroke: var(--accent-cyan);
-  stroke-width: 3.6;
-  filter: drop-shadow(0 0 8px rgba(35, 244, 255, 0.28));
+  filter: drop-shadow(0 0 10px rgba(35, 244, 255, 0.3));
+  animation: brandLogoSpectrum 7s linear infinite;
 }
 
-.brand-logo__trace--accent {
-  stroke: var(--accent-violet);
+.brand-logo__monogram {
+  stroke-width: 5;
+  stroke: rgba(245, 253, 255, 0.96);
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.18))
+    drop-shadow(0 0 14px rgba(35, 244, 255, 0.16));
+  animation: brandLogoWhitePulse 4.6s ease-in-out infinite;
 }
 
-.brand-logo__trace--slash {
-  stroke: rgba(236, 251, 255, 0.9);
+.brand-logo__accent {
+  stroke-width: 4.6;
+  stroke: var(--accent-cyan);
+  filter: drop-shadow(0 0 10px rgba(35, 244, 255, 0.32));
+  animation: brandLogoSpectrum 7s linear infinite reverse;
+}
+
+.brand-logo__core {
+  fill: var(--accent-violet);
+  transform-origin: center;
+  transform-box: fill-box;
+  filter:
+    drop-shadow(0 0 8px rgba(35, 244, 255, 0.36))
+    drop-shadow(0 0 16px rgba(177, 76, 255, 0.28));
+  animation: brandLogoSpectrumFill 7s linear infinite, brandCorePulse 3.2s ease-in-out infinite;
 }
 
 .brand-title {
@@ -1740,13 +1808,96 @@ code {
   }
 }
 
+@keyframes brandCorePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.88;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 1;
+  }
+}
+
 @keyframes brandGlow {
   0%,
   100% {
-    opacity: 0.5;
+    opacity: 0.36;
   }
   50% {
-    opacity: 0.92;
+    opacity: 0.72;
+  }
+}
+
+@keyframes brandOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes brandLogoSpectrum {
+  0%,
+  100% {
+    stroke: var(--accent-cyan);
+    filter: drop-shadow(0 0 10px rgba(35, 244, 255, 0.34));
+  }
+  25% {
+    stroke: var(--accent-blue);
+    filter: drop-shadow(0 0 10px rgba(43, 125, 255, 0.32));
+  }
+  50% {
+    stroke: var(--accent-violet);
+    filter: drop-shadow(0 0 10px rgba(177, 76, 255, 0.34));
+  }
+  75% {
+    stroke: var(--accent-pink);
+    filter: drop-shadow(0 0 10px rgba(255, 79, 203, 0.3));
+  }
+}
+
+@keyframes brandLogoSpectrumFill {
+  0%,
+  100% {
+    fill: var(--accent-cyan);
+    filter:
+      drop-shadow(0 0 6px rgba(35, 244, 255, 0.5))
+      drop-shadow(0 0 14px rgba(177, 76, 255, 0.26));
+  }
+  25% {
+    fill: var(--accent-blue);
+    filter:
+      drop-shadow(0 0 6px rgba(43, 125, 255, 0.46))
+      drop-shadow(0 0 14px rgba(35, 244, 255, 0.2));
+  }
+  50% {
+    fill: var(--accent-violet);
+    filter:
+      drop-shadow(0 0 6px rgba(177, 76, 255, 0.48))
+      drop-shadow(0 0 14px rgba(255, 79, 203, 0.24));
+  }
+  75% {
+    fill: var(--accent-pink);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 79, 203, 0.48))
+      drop-shadow(0 0 14px rgba(255, 79, 203, 0.2));
+  }
+}
+
+@keyframes brandLogoWhitePulse {
+  0%,
+  100% {
+    stroke: rgba(241, 252, 255, 0.92);
+    filter: drop-shadow(0 0 9px rgba(35, 244, 255, 0.2));
+  }
+  50% {
+    stroke: rgba(255, 255, 255, 1);
+    filter:
+      drop-shadow(0 0 10px rgba(35, 244, 255, 0.26))
+      drop-shadow(0 0 18px rgba(177, 76, 255, 0.16));
   }
 }
 
