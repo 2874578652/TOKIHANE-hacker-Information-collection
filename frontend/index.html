@@ -465,277 +465,354 @@
               </div>
             </section>
 
-            <section class="workspace-view" data-view="console">
-              <div class="console-grid">
-                <aside class="console-grid__sidebar">
-                  <section class="neo-card module-panel">
-                    <div class="card-head">
-                      <div>
-                        <span class="eyebrow">Mission Target</span>
-                        <h3>Target lock</h3>
-                      </div>
-                      <span id="consoleThreatChip" class="status-pill status-pill--warning">tracked</span>
-                    </div>
-
-                    <label class="field-block">
-                      <span>Primary target</span>
-                      <input id="consoleTargetInput" type="text" placeholder="target.tld / 203.0.113.5 / https://portal.tld" autocomplete="off" />
-                    </label>
-
-                    <div class="action-cluster">
-                      <button id="consoleStartBtn" class="neo-button neo-button--primary ripple-target" type="button">
-                        Launch Scan
-                      </button>
-                      <button id="consoleStopBtn" class="neo-button neo-button--ghost ripple-target" type="button" disabled>
-                        Abort
-                      </button>
-                    </div>
-
-                    <div class="action-cluster">
-                      <button id="demoModeBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-                        Ghost Mode
-                      </button>
-                      <button id="importReportBtn" class="neo-button neo-button--ghost ripple-target" type="button">
-                        Import JSON
-                      </button>
-                    </div>
-
-                    <input id="reportFileInput" type="file" accept=".json,application/json" hidden />
-
-                    <div id="reportMeta" class="file-meta">
-                      <span>Report channel idle.</span>
-                      <strong id="reportMetaName">No imported evidence</strong>
-                    </div>
-                  </section>
-
-                  <section class="neo-card module-panel">
-                    <div class="card-head">
-                      <div>
-                        <span class="eyebrow">Recon Modules</span>
-                        <h3>Backend-mapped switches</h3>
-                      </div>
-                      <span id="moduleCountChip" class="status-pill">06 armed</span>
-                    </div>
-
-                    <div class="module-baseline">
-                      <span class="eyebrow">Always collected</span>
-                      <div class="module-baseline__chips">
-                        <span>DNS resolution</span>
-                        <span>WHOIS ownership</span>
-                        <span>Technology fingerprint</span>
-                      </div>
-                      <p>These stages run on every backend job and are shown as baseline pipeline blocks instead of fake toggles.</p>
-                    </div>
-
-                    <div class="module-toggle-grid">
-                      <label class="module-toggle ripple-target">
-                        <input id="modulePassive" type="checkbox" checked />
-                        <span>
-                          <strong>Passive / Historical DNS</strong>
-                          <small>historical subdomains and resolved IP echoes</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleSubdomain" type="checkbox" checked />
-                        <span>
-                          <strong>Certificate Transparency</strong>
-                          <small>ct log expansion and discovered subdomains</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="modulePort" type="checkbox" checked />
-                        <span>
-                          <strong>Network Port Scan</strong>
-                          <small>nmap-backed tcp/udp service discovery</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleVuln" type="checkbox" checked />
-                        <span>
-                          <strong>Service Risk Correlation</strong>
-                          <small>cve lookup and weak configuration checks</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleWeb" type="checkbox" checked />
-                        <span>
-                          <strong>Web Asset Enumeration</strong>
-                          <small>crawler, js extraction, directory probing</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleAsn" type="checkbox" />
-                        <span>
-                          <strong>ASN Expansion</strong>
-                          <small>adjacent network reconnaissance</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="moduleThreat" type="checkbox" />
-                        <span>
-                          <strong>VirusTotal Enrichment</strong>
-                          <small>domain and url verdict correlation</small>
-                        </span>
-                      </label>
-
-                      <label class="module-toggle ripple-target">
-                        <input id="modulePrivate" type="checkbox" />
-                        <span>
-                          <strong>Private CIDR Sweep</strong>
-                          <small>allow private ranges and attached cidr targets</small>
-                        </span>
-                      </label>
-                    </div>
-                  </section>
-                </aside>
-
-                <div class="console-grid__main">
-                  <section class="neo-card console-status-panel">
-                    <div class="card-head">
-                      <div>
-                        <span class="eyebrow">Scan State</span>
-                        <h3>Live decryption channel</h3>
-                      </div>
-                      <div class="status-cluster">
-                        <span id="consoleStatusChip" class="status-pill status-pill--online">idle</span>
-                        <span id="consoleTargetChip" class="status-pill">no target</span>
-                      </div>
-                    </div>
-
-                    <div class="decrypt-bar">
-                      <div class="decrypt-bar__track">
-                        <div id="scanProgressBar" class="decrypt-bar__fill"></div>
-                      </div>
-                      <div class="decrypt-bar__meta">
-                        <span id="scanProgressText">decrypting... 0%</span>
-                        <span id="scanRuntimeText">runtime // 00:00</span>
-                      </div>
-                    </div>
-
-                    <div class="status-ribbon">
-                      <article>
-                        <span>Transport</span>
-                        <strong id="statusTransport">API LINKED</strong>
-                      </article>
-                      <article>
-                        <span>Mode</span>
-                        <strong id="statusMode">COMMON</strong>
-                      </article>
-                      <article>
-                        <span>Threat</span>
-                        <strong id="statusThreat">LOW</strong>
-                      </article>
-                      <article>
-                        <span>Jobs</span>
-                        <strong id="statusNodes">0 active</strong>
-                      </article>
-                    </div>
-                  </section>
-
-                  <section class="neo-card terminal-panel">
-                    <div class="card-head">
-                      <div>
-                        <span class="eyebrow">Terminal Stream</span>
-                        <h3>Live offensive transcript</h3>
-                      </div>
-                      <button id="clearConsoleLogBtn" class="icon-button ripple-target" type="button">clear</button>
-                    </div>
-
-                    <div id="scanLog" class="scan-log"></div>
-                  </section>
-
-                  <section class="neo-card advanced-panel">
-                    <div class="card-head">
-                      <div>
-                        <span class="eyebrow">Advanced Controls</span>
-                        <h3>Holographic tuning rails</h3>
-                      </div>
-                      <span class="status-pill">expert only</span>
-                    </div>
-
-                    <div class="advanced-accordion">
-                      <details class="holo-accordion" open>
-                        <summary>Core transport and timing</summary>
-                        <div class="holo-accordion__body">
-                          <div class="field-grid">
-                            <label class="field-block">
-                              <span>Backend API</span>
-                              <input id="apiUrlInput" type="text" placeholder="http://127.0.0.1:8000/api/scan" />
-                            </label>
-                            <label class="field-block">
-                              <span>Timeout (s)</span>
-                              <input id="timeoutInput" type="number" min="1" step="1" value="10" />
-                            </label>
-                            <label class="field-block">
-                              <span>Port timeout (s)</span>
-                              <input id="portTimeoutInput" type="number" min="0.1" step="0.1" value="0.8" />
-                            </label>
-                            <label class="field-block">
-                              <span>Port mode</span>
-                              <select id="portModeInput">
-                                <option value="common" selected>Common</option>
-                                <option value="full">Full</option>
-                                <option value="custom">Custom</option>
-                              </select>
-                            </label>
-                          </div>
-                          <label id="customPortsField" class="field-block field-block--hidden">
-                            <span>Custom ports</span>
-                            <input id="customPortsInput" type="text" placeholder="22,80,443,8443 or 1-1024" />
-                          </label>
-                        </div>
-                      </details>
-
-                      <details class="holo-accordion">
-                        <summary>Transport protocols and enrichment</summary>
-                        <div class="holo-accordion__body">
-                          <div class="switch-row">
-                            <label class="mini-switch ripple-target">
-                              <input id="tcpEnabledInput" type="checkbox" checked />
-                              <span>TCP</span>
-                            </label>
-                            <label class="mini-switch ripple-target">
-                              <input id="udpEnabledInput" type="checkbox" />
-                              <span>UDP</span>
-                            </label>
-                            <label class="mini-switch ripple-target">
-                              <input id="webCrawlerInput" type="checkbox" checked />
-                              <span>Web crawler</span>
-                            </label>
-                            <label class="mini-switch ripple-target">
-                              <input id="jsExtractInput" type="checkbox" checked />
-                              <span>JS extract</span>
-                            </label>
-                          </div>
-                        </div>
-                      </details>
-
-                      <details class="holo-accordion">
-                        <summary>Threat intel and private lanes</summary>
-                        <div class="holo-accordion__body">
-                          <div class="field-grid">
-                            <label class="field-block">
-                              <span>VirusTotal API key</span>
-                              <input id="vtApiKeyInput" type="password" placeholder="paste your own key to arm threat intel" autocomplete="off" />
-                            </label>
-                            <label class="field-block">
-                              <span>Private CIDR targets</span>
-                              <input id="cidrTargetsInput" type="text" placeholder="10.0.0.0/24,192.168.1.0/24" />
-                            </label>
-                          </div>
-                        </div>
-                      </details>
-                    </div>
-                  </section>
-                </div>
-              </div>
-            </section>
+	            <section class="workspace-view" data-view="console">
+	              <div class="scan-workbench">
+	                <section class="neo-card scan-command-center">
+	                  <div class="scan-command-center__head">
+	                    <div class="scan-command-center__copy">
+	                      <span class="eyebrow">Scan Workspace</span>
+	                      <h3>Launch jobs, watch the pipeline, and keep the runtime under control.</h3>
+	                      <p>
+	                        This page is now a dedicated scanning workbench: target intake on the left, live execution in the
+	                        center, and module plus tuning rails on the right.
+	                      </p>
+	                    </div>
+	                    <div class="scan-command-center__chips">
+	                      <span id="consoleStatusChip" class="status-pill status-pill--online">idle</span>
+	                      <span id="consoleTargetChip" class="status-pill">no target</span>
+	                      <span id="consoleThreatChip" class="status-pill status-pill--warning">tracked</span>
+	                    </div>
+	                  </div>
+	
+	                  <div class="decrypt-bar">
+	                    <div class="decrypt-bar__track">
+	                      <div id="scanProgressBar" class="decrypt-bar__fill"></div>
+	                    </div>
+	                    <div class="decrypt-bar__meta">
+	                      <span id="scanProgressText">decrypting... 0%</span>
+	                      <span id="scanRuntimeText">runtime // 00:00</span>
+	                    </div>
+	                  </div>
+	
+	                  <div class="status-ribbon">
+	                    <article>
+	                      <span>Transport</span>
+	                      <strong id="statusTransport">API LINKED</strong>
+	                    </article>
+	                    <article>
+	                      <span>Mode</span>
+	                      <strong id="statusMode">COMMON</strong>
+	                    </article>
+	                    <article>
+	                      <span>Threat</span>
+	                      <strong id="statusThreat">LOW</strong>
+	                    </article>
+	                    <article>
+	                      <span>Jobs</span>
+	                      <strong id="statusNodes">0 active</strong>
+	                    </article>
+	                  </div>
+	                </section>
+	
+	                <div class="scan-layout">
+	                  <aside class="scan-layout__rail">
+	                    <section class="neo-card scan-target-card">
+	                      <div class="card-head">
+	                        <div>
+	                          <span class="eyebrow">Target Intake</span>
+	                          <h3>Prepare the next scan job</h3>
+	                        </div>
+	                        <span class="status-pill">input</span>
+	                      </div>
+	
+	                      <label class="field-block field-block--emphasis">
+	                        <span>Primary target</span>
+	                        <input id="consoleTargetInput" type="text" placeholder="target.tld / 203.0.113.5 / https://portal.tld" autocomplete="off" />
+	                      </label>
+	
+	                      <div class="scan-action-stack">
+	                        <button id="consoleStartBtn" class="neo-button neo-button--primary ripple-target" type="button">
+	                          Launch Scan
+	                        </button>
+	                        <button id="consoleStopBtn" class="neo-button neo-button--ghost ripple-target" type="button" disabled>
+	                          Abort
+	                        </button>
+	                        <button id="demoModeBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+	                          Ghost Mode
+	                        </button>
+	                        <button id="importReportBtn" class="neo-button neo-button--ghost ripple-target" type="button">
+	                          Import JSON
+	                        </button>
+	                      </div>
+	
+	                      <input id="reportFileInput" type="file" accept=".json,application/json" hidden />
+	
+	                      <div id="reportMeta" class="file-meta">
+	                        <span>Report channel idle.</span>
+	                        <strong id="reportMetaName">No imported evidence</strong>
+	                      </div>
+	                    </section>
+	
+	                    <section class="neo-card scan-baseline-card">
+	                      <div class="card-head">
+	                        <div>
+	                          <span class="eyebrow">Pipeline Base</span>
+	                          <h3>Always-on stages</h3>
+	                        </div>
+	                        <span class="status-pill status-pill--online">baseline</span>
+	                      </div>
+	
+	                      <div class="scan-baseline-list">
+	                        <div>
+	                          <strong>Target parsing</strong>
+	                          <span>Domain, URL, and IP normalization before the task is queued.</span>
+	                        </div>
+	                        <div>
+	                          <strong>Identity collection</strong>
+	                          <span>DNS resolution and WHOIS ownership context are part of every backend run.</span>
+	                        </div>
+	                        <div>
+	                          <strong>Technology profile</strong>
+	                          <span>Visible frameworks and server fingerprints are always staged into the report.</span>
+	                        </div>
+	                      </div>
+	                    </section>
+	                  </aside>
+	
+	                  <main class="scan-layout__stage">
+	                    <section class="neo-card scan-visual-stage">
+	                      <div class="card-head">
+	                        <div>
+	                          <span class="eyebrow">Execution Stage</span>
+	                          <h3>Live pipeline map</h3>
+	                        </div>
+	                        <span class="status-pill">runtime</span>
+	                      </div>
+	
+	                      <div class="scan-pipeline-map">
+	                        <article class="scan-pipeline-node scan-pipeline-node--input">
+	                          <span class="eyebrow">01</span>
+	                          <strong>Intake</strong>
+	                          <p>Queue a target and freeze the input state for the job.</p>
+	                        </article>
+	                        <article class="scan-pipeline-node scan-pipeline-node--identity">
+	                          <span class="eyebrow">02</span>
+	                          <strong>Identity</strong>
+	                          <p>DNS, WHOIS, CT, and passive records fill the early graph.</p>
+	                        </article>
+	                        <article class="scan-pipeline-node scan-pipeline-node--exposure">
+	                          <span class="eyebrow">03</span>
+	                          <strong>Exposure</strong>
+	                          <p>Web assets, ports, and adjacent surfaces get enumerated.</p>
+	                        </article>
+	                        <article class="scan-pipeline-node scan-pipeline-node--risk">
+	                          <span class="eyebrow">04</span>
+	                          <strong>Risk</strong>
+	                          <p>Service risk, CVE hints, and enrichment lanes finalize the report.</p>
+	                        </article>
+	                      </div>
+	
+	                      <div class="scan-stage-notes">
+	                        <div>
+	                          <strong>Queue-aware</strong>
+	                          <span>Uses the backend job lifecycle instead of a fake one-shot scan form.</span>
+	                        </div>
+	                        <div>
+	                          <strong>Runtime-safe</strong>
+	                          <span>Long-running tasks can be stopped without leaving the workspace.</span>
+	                        </div>
+	                        <div>
+	                          <strong>Report-linked</strong>
+	                          <span>Everything on this page feeds the structured result stack below.</span>
+	                        </div>
+	                      </div>
+	                    </section>
+	
+	                    <section class="neo-card scan-terminal-card">
+	                      <div class="card-head">
+	                        <div>
+	                          <span class="eyebrow">Terminal Stream</span>
+	                          <h3>Live scan transcript</h3>
+	                        </div>
+	                        <button id="clearConsoleLogBtn" class="icon-button ripple-target" type="button">clear</button>
+	                      </div>
+	
+	                      <div class="scan-terminal-shell">
+	                        <div class="scan-terminal-shell__chrome">
+	                          <span>jobs</span>
+	                          <span>dns</span>
+	                          <span>web</span>
+	                          <span>risk</span>
+	                        </div>
+	                        <div id="scanLog" class="scan-log"></div>
+	                      </div>
+	                    </section>
+	                  </main>
+	
+	                  <aside class="scan-layout__config">
+	                    <section class="neo-card scan-modules-card">
+	                      <div class="card-head">
+	                        <div>
+	                          <span class="eyebrow">Recon Modules</span>
+	                          <h3>Optional backend switches</h3>
+	                        </div>
+	                        <span id="moduleCountChip" class="status-pill">06 armed</span>
+	                      </div>
+	
+	                      <div class="module-toggle-grid">
+	                        <label class="module-toggle ripple-target">
+	                          <input id="modulePassive" type="checkbox" checked />
+	                          <span>
+	                            <strong>Passive / Historical DNS</strong>
+	                            <small>historical subdomains and resolved IP echoes</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="moduleSubdomain" type="checkbox" checked />
+	                          <span>
+	                            <strong>Certificate Transparency</strong>
+	                            <small>ct log expansion and discovered subdomains</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="modulePort" type="checkbox" checked />
+	                          <span>
+	                            <strong>Network Port Scan</strong>
+	                            <small>nmap-backed tcp/udp service discovery</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="moduleVuln" type="checkbox" checked />
+	                          <span>
+	                            <strong>Service Risk Correlation</strong>
+	                            <small>cve lookup and weak configuration checks</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="moduleWeb" type="checkbox" checked />
+	                          <span>
+	                            <strong>Web Asset Enumeration</strong>
+	                            <small>crawler, js extraction, directory probing</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="moduleAsn" type="checkbox" />
+	                          <span>
+	                            <strong>ASN Expansion</strong>
+	                            <small>adjacent network reconnaissance</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="moduleThreat" type="checkbox" />
+	                          <span>
+	                            <strong>VirusTotal Enrichment</strong>
+	                            <small>domain and url verdict correlation</small>
+	                          </span>
+	                        </label>
+	
+	                        <label class="module-toggle ripple-target">
+	                          <input id="modulePrivate" type="checkbox" />
+	                          <span>
+	                            <strong>Private CIDR Sweep</strong>
+	                            <small>allow private ranges and attached cidr targets</small>
+	                          </span>
+	                        </label>
+	                      </div>
+	                    </section>
+	
+	                    <section class="neo-card scan-advanced-card">
+	                      <div class="card-head">
+	                        <div>
+	                          <span class="eyebrow">Advanced Controls</span>
+	                          <h3>Tuning and protocol rails</h3>
+	                        </div>
+	                        <span class="status-pill">expert</span>
+	                      </div>
+	
+	                      <div class="advanced-accordion">
+	                        <details class="holo-accordion" open>
+	                          <summary>Core transport and timing</summary>
+	                          <div class="holo-accordion__body">
+	                            <div class="field-grid">
+	                              <label class="field-block">
+	                                <span>Backend API</span>
+	                                <input id="apiUrlInput" type="text" placeholder="http://127.0.0.1:8000/api/scan" />
+	                              </label>
+	                              <label class="field-block">
+	                                <span>Timeout (s)</span>
+	                                <input id="timeoutInput" type="number" min="1" step="1" value="10" />
+	                              </label>
+	                              <label class="field-block">
+	                                <span>Port timeout (s)</span>
+	                                <input id="portTimeoutInput" type="number" min="0.1" step="0.1" value="0.8" />
+	                              </label>
+	                              <label class="field-block">
+	                                <span>Port mode</span>
+	                                <select id="portModeInput">
+	                                  <option value="common" selected>Common</option>
+	                                  <option value="full">Full</option>
+	                                  <option value="custom">Custom</option>
+	                                </select>
+	                              </label>
+	                            </div>
+	                            <label id="customPortsField" class="field-block field-block--hidden">
+	                              <span>Custom ports</span>
+	                              <input id="customPortsInput" type="text" placeholder="22,80,443,8443 or 1-1024" />
+	                            </label>
+	                          </div>
+	                        </details>
+	
+	                        <details class="holo-accordion">
+	                          <summary>Transport protocols and enrichment</summary>
+	                          <div class="holo-accordion__body">
+	                            <div class="switch-row">
+	                              <label class="mini-switch ripple-target">
+	                                <input id="tcpEnabledInput" type="checkbox" checked />
+	                                <span>TCP</span>
+	                              </label>
+	                              <label class="mini-switch ripple-target">
+	                                <input id="udpEnabledInput" type="checkbox" />
+	                                <span>UDP</span>
+	                              </label>
+	                              <label class="mini-switch ripple-target">
+	                                <input id="webCrawlerInput" type="checkbox" checked />
+	                                <span>Web crawler</span>
+	                              </label>
+	                              <label class="mini-switch ripple-target">
+	                                <input id="jsExtractInput" type="checkbox" checked />
+	                                <span>JS extract</span>
+	                              </label>
+	                            </div>
+	                          </div>
+	                        </details>
+	
+	                        <details class="holo-accordion">
+	                          <summary>Threat intel and private lanes</summary>
+	                          <div class="holo-accordion__body">
+	                            <div class="field-grid">
+	                              <label class="field-block">
+	                                <span>VirusTotal API key</span>
+	                                <input id="vtApiKeyInput" type="password" placeholder="paste your own key to arm threat intel" autocomplete="off" />
+	                              </label>
+	                              <label class="field-block">
+	                                <span>Private CIDR targets</span>
+	                                <input id="cidrTargetsInput" type="text" placeholder="10.0.0.0/24,192.168.1.0/24" />
+	                              </label>
+	                            </div>
+	                          </div>
+	                        </details>
+	                      </div>
+	                    </section>
+	                  </aside>
+	                </div>
+	              </div>
+	            </section>
 
             <section id="resultsAnchor" class="workspace-view" data-view="results">
               <div class="results-shell">
