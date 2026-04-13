@@ -79,119 +79,175 @@
             </div>
 
             <form id="scanForm" class="stack">
-              <label class="field">
-                <span>目标</span>
-                <input id="targetInput" name="target" type="text" placeholder="example.com / https://target.tld / 203.0.113.5" required />
-              </label>
+              <section class="subsection subsection--compact">
+                <div class="subsection__head">
+                  <div>
+                    <p class="eyebrow">Primary Inputs</p>
+                    <h3>基础配置</h3>
+                  </div>
+                  <span class="inline-stat">首屏常用</span>
+                </div>
 
-              <label class="field">
-                <span>Backend API</span>
-                <input id="apiUrlInput" name="apiUrl" type="url" placeholder="http://127.0.0.1:8000/api/scan" />
-              </label>
+                <div class="stack">
+                  <label class="field">
+                    <span>目标</span>
+                    <input id="targetInput" name="target" type="text" placeholder="example.com / https://target.tld / 203.0.113.5" required />
+                  </label>
 
-              <div class="field-grid field-grid--two">
-                <label class="field">
-                  <span>请求超时</span>
-                  <input id="timeoutInput" name="timeout" type="number" min="1" max="300" value="10" />
-                </label>
-                <label class="field">
-                  <span>端口超时</span>
-                  <input id="portTimeoutInput" name="portTimeout" type="number" min="0.05" max="60" step="0.05" value="0.8" />
-                </label>
-              </div>
+                  <label class="field">
+                    <span>Backend API</span>
+                    <input id="apiUrlInput" name="apiUrl" type="url" placeholder="http://127.0.0.1:8000/api/scan" />
+                  </label>
 
-              <div class="field-grid field-grid--two">
-                <label class="field">
-                  <span>端口模式</span>
-                  <select id="scanModeInput" name="scanMode">
-                    <option value="common">常用端口</option>
-                    <option value="full" selected>全端口</option>
-                    <option value="custom">自定义</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>扫描引擎</span>
-                  <select id="portScannerInput" name="portScanner">
-                    <option value="auto" selected>auto</option>
-                    <option value="nmap">nmap</option>
-                    <option value="builtin">builtin</option>
-                  </select>
-                </label>
-              </div>
+                  <div class="field-grid field-grid--two">
+                    <label class="field">
+                      <span>请求超时</span>
+                      <input id="timeoutInput" name="timeout" type="number" min="1" max="300" value="10" />
+                    </label>
+                    <label class="field">
+                      <span>端口超时</span>
+                      <input id="portTimeoutInput" name="portTimeout" type="number" min="0.05" max="60" step="0.05" value="0.8" />
+                    </label>
+                  </div>
 
-              <label class="field" id="customPortsField" hidden>
-                <span>自定义端口</span>
-                <input id="customPortsInput" name="customPorts" type="text" placeholder="22,80,443,3306 或 1-1024" />
-              </label>
+                  <div class="field-grid field-grid--two">
+                    <label class="field">
+                      <span>端口模式</span>
+                      <select id="scanModeInput" name="scanMode">
+                        <option value="common">常用端口</option>
+                        <option value="full" selected>全端口</option>
+                        <option value="custom">自定义</option>
+                      </select>
+                    </label>
+                    <label class="field">
+                      <span>扫描引擎</span>
+                      <select id="portScannerInput" name="portScanner">
+                        <option value="auto" selected>auto</option>
+                        <option value="nmap">nmap</option>
+                        <option value="builtin">builtin</option>
+                      </select>
+                    </label>
+                  </div>
 
-              <div class="toggle-grid">
-                <label class="toggle">
-                  <input id="tcpScanInput" type="checkbox" checked />
-                  <span>TCP 扫描</span>
-                </label>
-                <label class="toggle">
-                  <input id="udpScanInput" type="checkbox" checked />
-                  <span>UDP 扫描</span>
-                </label>
-                <label class="toggle">
-                  <input id="allowPrivateIpInput" type="checkbox" />
-                  <span>允许私网 IP</span>
-                </label>
-                <label class="toggle">
-                  <input id="vtScanInput" type="checkbox" />
-                  <span>VirusTotal</span>
-                </label>
-              </div>
+                  <label class="field" id="customPortsField" hidden>
+                    <span>自定义端口</span>
+                    <input id="customPortsInput" name="customPorts" type="text" placeholder="22,80,443,3306 或 1-1024" />
+                  </label>
+                </div>
+              </section>
 
-              <label class="field">
-                <span>附加 CIDR 目标</span>
-                <textarea id="cidrTargetsInput" rows="2" placeholder="192.168.1.0/24,10.0.0.0/24"></textarea>
-              </label>
+              <section class="subsection subsection--compact">
+                <div class="subsection__head">
+                  <div>
+                    <p class="eyebrow">Quick Toggles</p>
+                    <h3>核心开关</h3>
+                  </div>
+                  <span class="inline-stat"><strong id="moduleCount">0</strong> 个启用</span>
+                </div>
 
-              <label class="field">
-                <span>VirusTotal API Key</span>
-                <input id="vtApiKeyInput" type="password" placeholder="仅在启用 VirusTotal 时需要" />
-              </label>
+                <div class="toggle-grid">
+                  <label class="toggle">
+                    <input id="tcpScanInput" type="checkbox" checked />
+                    <span>TCP 扫描</span>
+                  </label>
+                  <label class="toggle">
+                    <input id="udpScanInput" type="checkbox" checked />
+                    <span>UDP 扫描</span>
+                  </label>
+                  <label class="toggle">
+                    <input id="allowPrivateIpInput" type="checkbox" />
+                    <span>允许私网 IP</span>
+                  </label>
+                  <label class="toggle">
+                    <input id="vtScanInput" type="checkbox" />
+                    <span>VirusTotal</span>
+                  </label>
+                </div>
+              </section>
 
-              <label class="field">
-                <span>NVD API Key</span>
-                <input id="nvdApiKeyInput" type="password" placeholder="仅在启用 CVE 关联时需要" />
-              </label>
+              <details class="subsection accordion">
+                <summary class="accordion__summary">
+                  <div>
+                    <p class="eyebrow">Advanced Network</p>
+                    <h3>高级输入项</h3>
+                  </div>
+                  <span class="accordion__hint">CIDR / API Key</span>
+                </summary>
+
+                <div class="accordion__body stack">
+                  <label class="field">
+                    <span>附加 CIDR 目标</span>
+                    <textarea id="cidrTargetsInput" rows="2" placeholder="192.168.1.0/24,10.0.0.0/24"></textarea>
+                  </label>
+
+                  <div class="field-grid field-grid--two">
+                    <label class="field">
+                      <span>VirusTotal API Key</span>
+                      <input id="vtApiKeyInput" type="password" placeholder="仅在启用 VirusTotal 时需要" />
+                    </label>
+                    <label class="field">
+                      <span>NVD API Key</span>
+                      <input id="nvdApiKeyInput" type="password" placeholder="仅在启用 CVE 关联时需要" />
+                    </label>
+                  </div>
+                </div>
+              </details>
 
               <section class="subsection">
                 <div class="subsection__head">
                   <div>
                     <p class="eyebrow">Module Matrix</p>
-                    <h3>模块选择</h3>
+                    <h3>增强模块</h3>
                   </div>
-                  <span class="inline-stat"><strong id="moduleCount">0</strong> 个启用</span>
+                  <span class="inline-stat">按需展开</span>
                 </div>
 
                 <div class="module-groups">
-                  <div class="module-group">
-                    <h4>基础增强</h4>
-                    <label class="toggle"><input id="ctScanInput" type="checkbox" /> <span>证书透明度</span></label>
-                    <label class="toggle"><input id="passiveDnsInput" type="checkbox" /> <span>被动 DNS</span></label>
-                    <label class="toggle"><input id="asnScanInput" type="checkbox" /> <span>ASN 情报</span></label>
-                    <label class="toggle"><input id="asnExpandInput" type="checkbox" /> <span>同 C 段扩展</span></label>
-                  </div>
+                  <details class="module-group accordion">
+                    <summary class="accordion__summary accordion__summary--small">
+                      <div>
+                        <h4>基础增强</h4>
+                        <p class="hint">CT、被动 DNS、ASN</p>
+                      </div>
+                    </summary>
+                    <div class="accordion__body module-group__body">
+                      <label class="toggle"><input id="ctScanInput" type="checkbox" /> <span>证书透明度</span></label>
+                      <label class="toggle"><input id="passiveDnsInput" type="checkbox" /> <span>被动 DNS</span></label>
+                      <label class="toggle"><input id="asnScanInput" type="checkbox" /> <span>ASN 情报</span></label>
+                      <label class="toggle"><input id="asnExpandInput" type="checkbox" /> <span>同 C 段扩展</span></label>
+                    </div>
+                  </details>
 
-                  <div class="module-group">
-                    <h4>Web 资产枚举</h4>
-                    <label class="toggle"><input id="webAssetScanInput" type="checkbox" checked /> <span>启用 Web 枚举</span></label>
-                    <label class="toggle"><input id="webCrawlerInput" type="checkbox" checked /> <span>站内爬取</span></label>
-                    <label class="toggle"><input id="webJsExtractInput" type="checkbox" checked /> <span>JS 接口提取</span></label>
-                    <label class="toggle"><input id="webSensitiveInput" type="checkbox" checked /> <span>敏感路径提取</span></label>
-                    <label class="toggle"><input id="webDirScanInput" type="checkbox" checked /> <span>目录探测</span></label>
-                    <label class="toggle"><input id="webDirFfufInput" type="checkbox" /> <span>优先 ffuf</span></label>
-                  </div>
+                  <details class="module-group accordion">
+                    <summary class="accordion__summary accordion__summary--small">
+                      <div>
+                        <h4>Web 资产枚举</h4>
+                        <p class="hint">爬取、JS、敏感路径、目录探测</p>
+                      </div>
+                    </summary>
+                    <div class="accordion__body module-group__body">
+                      <label class="toggle"><input id="webAssetScanInput" type="checkbox" checked /> <span>启用 Web 枚举</span></label>
+                      <label class="toggle"><input id="webCrawlerInput" type="checkbox" checked /> <span>站内爬取</span></label>
+                      <label class="toggle"><input id="webJsExtractInput" type="checkbox" checked /> <span>JS 接口提取</span></label>
+                      <label class="toggle"><input id="webSensitiveInput" type="checkbox" checked /> <span>敏感路径提取</span></label>
+                      <label class="toggle"><input id="webDirScanInput" type="checkbox" checked /> <span>目录探测</span></label>
+                      <label class="toggle"><input id="webDirFfufInput" type="checkbox" /> <span>优先 ffuf</span></label>
+                    </div>
+                  </details>
 
-                  <div class="module-group">
-                    <h4>服务风险</h4>
-                    <label class="toggle"><input id="serviceRiskInput" type="checkbox" checked /> <span>启用服务风险分析</span></label>
-                    <label class="toggle"><input id="cveLookupInput" type="checkbox" checked /> <span>CVE 关联</span></label>
-                    <label class="toggle"><input id="weakChecksInput" type="checkbox" checked /> <span>弱配置检查</span></label>
-                  </div>
+                  <details class="module-group accordion" open>
+                    <summary class="accordion__summary accordion__summary--small">
+                      <div>
+                        <h4>服务风险</h4>
+                        <p class="hint">服务清单、CVE、弱配置检查</p>
+                      </div>
+                    </summary>
+                    <div class="accordion__body module-group__body">
+                      <label class="toggle"><input id="serviceRiskInput" type="checkbox" checked /> <span>启用服务风险分析</span></label>
+                      <label class="toggle"><input id="cveLookupInput" type="checkbox" checked /> <span>CVE 关联</span></label>
+                      <label class="toggle"><input id="weakChecksInput" type="checkbox" checked /> <span>弱配置检查</span></label>
+                    </div>
+                  </details>
                 </div>
               </section>
 

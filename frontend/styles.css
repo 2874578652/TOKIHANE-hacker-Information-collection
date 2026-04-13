@@ -251,6 +251,8 @@ textarea {
 .sidebar {
   position: sticky;
   top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow: auto;
 }
 
 .panel-section + .panel-section {
@@ -323,7 +325,8 @@ textarea {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
+  min-height: 50px;
+  padding: 10px 14px;
   border: 1px solid var(--line-soft);
   border-radius: 14px;
   background: var(--bg-surface-strong);
@@ -342,24 +345,39 @@ textarea {
   background: rgba(245, 248, 252, 0.72);
 }
 
+.subsection--compact {
+  padding: 16px;
+}
+
 .module-groups {
   margin-top: 14px;
 }
 
 .module-group {
-  padding: 16px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.68);
   border: 1px solid var(--line-soft);
+  overflow: hidden;
 }
 
 .module-group h4 {
-  margin: 0 0 12px;
+  margin: 0;
+}
+
+.module-group__body {
+  display: grid;
+  gap: 10px;
+  padding: 0 16px 16px;
 }
 
 .actions {
   display: flex;
   gap: 12px;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding-top: 8px;
+  background: linear-gradient(180deg, rgba(243, 246, 251, 0), rgba(243, 246, 251, 0.95) 28%);
 }
 
 .button {
@@ -395,6 +413,54 @@ textarea {
 .job-list {
   display: grid;
   gap: 10px;
+}
+
+.accordion {
+  margin: 0;
+}
+
+.accordion__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion__summary::after {
+  content: "+";
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(37, 104, 216, 0.08);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.accordion[open] > .accordion__summary::after {
+  content: "-";
+}
+
+.accordion__summary--small {
+  padding: 14px 16px;
+}
+
+.accordion__hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.accordion__body {
+  margin-top: 14px;
 }
 
 .job-item {
