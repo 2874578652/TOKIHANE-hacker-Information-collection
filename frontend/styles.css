@@ -828,6 +828,8 @@ select {
 
 .subsection--toggles {
   grid-column: 2 / 3;
+  display: flex;
+  flex-direction: column;
 }
 
 .subsection--advanced {
@@ -868,6 +870,115 @@ select {
 
 .toggle-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dragon-sigil {
+  position: relative;
+  flex: 1;
+  min-height: 228px;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(35, 244, 255, 0.16);
+  border-radius: calc(var(--radius-lg) + 2px);
+  background:
+    radial-gradient(circle at 22% 22%, rgba(35, 244, 255, 0.08), transparent 26%),
+    radial-gradient(circle at 80% 74%, rgba(177, 76, 255, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(9, 16, 29, 0.96), rgba(7, 11, 21, 0.98));
+  box-shadow:
+    inset 0 0 26px rgba(35, 244, 255, 0.06),
+    inset 0 0 52px rgba(177, 76, 255, 0.05),
+    0 0 26px rgba(35, 244, 255, 0.08);
+}
+
+.dragon-sigil::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(35, 244, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 244, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 28px, 28px 100%;
+  opacity: 0.34;
+  pointer-events: none;
+}
+
+.dragon-sigil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, transparent 0%, rgba(35, 244, 255, 0.08) 34%, transparent 66%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 28%);
+  transform: translateX(-36%);
+  animation: dragonSweep 8s linear infinite;
+  pointer-events: none;
+}
+
+.dragon-sigil svg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 22px;
+  overflow: visible;
+}
+
+.dragon-sigil__shield,
+.dragon-sigil__orbit,
+.dragon-sigil__wing,
+.dragon-sigil__body,
+.dragon-sigil__horn {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dragon-sigil__shield {
+  stroke: rgba(239, 251, 255, 0.82);
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 10px rgba(35, 244, 255, 0.2));
+}
+
+.dragon-sigil__orbit {
+  stroke: rgba(35, 244, 255, 0.3);
+  stroke-width: 1.9;
+  stroke-dasharray: 12 9;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: dragonOrbit 16s linear infinite;
+}
+
+.dragon-sigil__wing {
+  stroke: rgba(35, 244, 255, 0.7);
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 12px rgba(35, 244, 255, 0.22))
+    drop-shadow(0 0 22px rgba(43, 125, 255, 0.08));
+  animation: dragonSpectrum 7s linear infinite;
+}
+
+.dragon-sigil__body {
+  stroke: rgba(248, 252, 255, 0.94);
+  stroke-width: 4.8;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 255, 255, 0.12))
+    drop-shadow(0 0 16px rgba(35, 244, 255, 0.12));
+  animation: dragonBreath 4.2s ease-in-out infinite;
+}
+
+.dragon-sigil__horn {
+  stroke: rgba(177, 76, 255, 0.9);
+  stroke-width: 3.2;
+  filter: drop-shadow(0 0 10px rgba(177, 76, 255, 0.26));
+  animation: dragonSpectrum 7s linear infinite reverse;
+}
+
+.dragon-sigil__eye {
+  fill: var(--accent-pink);
+  filter:
+    drop-shadow(0 0 8px rgba(255, 79, 203, 0.55))
+    drop-shadow(0 0 16px rgba(255, 84, 106, 0.28));
+  animation: dragonEyePulse 2.4s ease-in-out infinite;
 }
 
 .toggle {
@@ -1898,6 +2009,64 @@ code {
     filter:
       drop-shadow(0 0 10px rgba(35, 244, 255, 0.26))
       drop-shadow(0 0 18px rgba(177, 76, 255, 0.16));
+  }
+}
+
+@keyframes dragonSweep {
+  0% {
+    transform: translateX(-46%);
+  }
+  100% {
+    transform: translateX(46%);
+  }
+}
+
+@keyframes dragonOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dragonSpectrum {
+  0%,
+  100% {
+    stroke: rgba(35, 244, 255, 0.78);
+  }
+  33% {
+    stroke: rgba(43, 125, 255, 0.82);
+  }
+  66% {
+    stroke: rgba(177, 76, 255, 0.84);
+  }
+}
+
+@keyframes dragonBreath {
+  0%,
+  100% {
+    filter:
+      drop-shadow(0 0 10px rgba(255, 255, 255, 0.12))
+      drop-shadow(0 0 16px rgba(35, 244, 255, 0.12));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 12px rgba(255, 255, 255, 0.16))
+      drop-shadow(0 0 24px rgba(35, 244, 255, 0.18))
+      drop-shadow(0 0 30px rgba(177, 76, 255, 0.08));
+  }
+}
+
+@keyframes dragonEyePulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
   }
 }
 
