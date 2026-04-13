@@ -82,7 +82,17 @@
     );
   }
 
+  function initNavChrome() {
+    const sync = () => {
+      body.classList.toggle("is-nav-scrolled", (window.scrollY || 0) > 18);
+    };
+
+    sync();
+    window.addEventListener("scroll", sync, { passive: true });
+  }
+
   initPointerTracking();
   initRevealObserver();
   initScrollSweep();
+  initNavChrome();
 })();

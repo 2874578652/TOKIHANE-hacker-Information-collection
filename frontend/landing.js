@@ -24,14 +24,18 @@ const TRANSITION_KEY = "tokihane-page-transition";
 const landingDigitSelectors = [
   ".gate-nav",
   ".hero-stage",
+  ".value-card",
+  ".capability-band",
+  ".workflow-step",
   ".snapshot-feature",
   ".snapshot-card",
-  ".capability-card",
-  ".transition-gate__panel",
+  ".trust-card",
+  ".transition-panel",
   ".nav-chip",
   ".meta-strip",
   ".hero-feed",
   ".readout-card",
+  ".site-footer",
 ];
 const digitCharacters = "00112233445566778899";
 

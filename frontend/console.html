@@ -37,7 +37,8 @@
                   <defs>
                     <linearGradient id="logoNeonA" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stop-color="#7fffd4" />
-                      <stop offset="100%" stop-color="#39d0ff" />
+                      <stop offset="52%" stop-color="#39d0ff" />
+                      <stop offset="100%" stop-color="#a870ff" />
                     </linearGradient>
                   </defs>
                   <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#logoNeonA)" stroke-width="4" />
@@ -48,18 +49,26 @@
               </div>
 
               <div class="brand-copy">
-                <p class="eyebrow">TOKIHANE / TARGET INTELLIGENCE</p>
+                <p class="eyebrow">TOKIHANE / MISSION CONTROL</p>
                 <h1>Attack Surface Workspace</h1>
-                <p class="logo-sub">Domain, IP, port, and web asset scanning</p>
+                <p class="logo-sub">Launch scans, import reports, and review signal-rich output from one focused mission deck.</p>
               </div>
 
               <a href="./" class="console-home-link">Back to Overview</a>
             </div>
 
             <div class="status-focus">
-              <span class="eyebrow">CURRENT TARGET</span>
+              <div class="status-focus__head">
+                <span class="eyebrow">Current mission</span>
+                <span class="status-focus__badge">Live Console</span>
+              </div>
               <strong id="statusTarget">NO TARGET</strong>
-              <p>Target, scan scope, and result status stay visible while collection is running.</p>
+              <p>Target, job state, and execution feedback stay pinned while collection is in progress.</p>
+              <div class="status-focus__notes">
+                <span>Ready for target intake</span>
+                <span>Progress-aware controls</span>
+                <span>Evidence-ready output</span>
+              </div>
             </div>
           </div>
 
@@ -84,17 +93,12 @@
         </header>
 
         <form id="scanForm" class="console-workspace reveal delay-1">
-          <aside class="control-sidebar control-zone">
-            <header class="zone-head">
-              <span class="zone-code">OPS/01</span>
-              <h2>Scan Controls</h2>
-            </header>
-
-            <section class="stack-section">
-              <div class="section-head">
-                <span>TARGET INPUT</span>
-                <strong>TARGET SETUP</strong>
-              </div>
+          <aside class="control-sidebar">
+            <section class="stack-section stack-section--entry">
+              <header class="section-head section-head--stack">
+                <span class="zone-code">INPUT / 01</span>
+                <strong>Target Intake</strong>
+              </header>
 
               <label class="input-block">
                 <span>Target</span>
@@ -118,13 +122,48 @@
                   <input id="apiUrl" type="text" placeholder="http://localhost:8000/api/scan" />
                 </label>
               </div>
+
+              <div class="entry-tip">
+                <span>Supports live target scans for domains, URLs, and IPs. Imported reports remain reviewable in the same result dock.</span>
+              </div>
+            </section>
+
+            <section class="stack-section stack-section--upload">
+              <header class="section-head section-head--stack">
+                <span class="zone-code">IMPORT / 02</span>
+                <strong>Report Ingest</strong>
+              </header>
+
+              <div id="reportDropzone" class="report-dropzone">
+                <div class="report-dropzone__icon" aria-hidden="true">01</div>
+                <div class="report-dropzone__copy">
+                  <strong>Drag a JSON report here or choose one manually.</strong>
+                  <p>Use imported results for quick review, export inspection, and historical comparison.</p>
+                </div>
+
+                <div id="reportFileMeta" class="report-file-meta">
+                  <div class="report-file-meta__name">
+                    <span>Selected file</span>
+                    <strong id="reportFileName">No file selected</strong>
+                  </div>
+                  <div class="report-file-meta__details">
+                    <span id="reportFileSize">Ready for import</span>
+                    <span id="reportFileType">JSON report</span>
+                  </div>
+                </div>
+
+                <label class="file-btn report-dropzone__action">
+                  Import JSON Report
+                  <input id="reportFile" type="file" accept=".json,application/json" />
+                </label>
+              </div>
             </section>
 
             <section class="stack-section">
-              <div class="section-head">
-                <span>SCAN MODE</span>
-                <strong>SCAN PROFILE</strong>
-              </div>
+              <header class="section-head section-head--stack">
+                <span class="zone-code">PROFILE / 03</span>
+                <strong>Scan Profile</strong>
+              </header>
 
               <label class="input-block">
                 <span>Port Engine</span>
@@ -158,28 +197,29 @@
               <div class="scan-mode-group">
                 <span class="scan-mode-title">Port Scan Mode</span>
                 <div class="scan-mode-options">
-                  <label class="toggle"><input type="radio" name="scanMode" value="common" checked /> 常用端口</label>
-                  <label class="toggle"><input type="radio" name="scanMode" value="full" /> 全量端口</label>
-                  <label class="toggle"><input type="radio" name="scanMode" value="custom" /> 自定义</label>
+                  <label class="toggle"><input type="radio" name="scanMode" value="common" checked /> Common</label>
+                  <label class="toggle"><input type="radio" name="scanMode" value="full" /> Full</label>
+                  <label class="toggle"><input type="radio" name="scanMode" value="custom" /> Custom</label>
                 </div>
               </div>
 
               <label id="customPortsWrap" class="input-block hidden">
                 <span>Custom Ports</span>
-                <input id="customPorts" type="text" placeholder="22,80,443,3306 或 1-1024" />
+                <input id="customPorts" type="text" placeholder="22,80,443,3306 or 1-1024" />
               </label>
             </section>
 
             <section class="stack-section">
-              <div class="section-head">
-                <span>MODULES</span>
-                <strong>SCAN SOURCES</strong>
-              </div>
+              <header class="section-head section-head--stack">
+                <span class="zone-code">MODULES / 04</span>
+                <strong>Collection Sources</strong>
+              </header>
 
               <div class="module-grid">
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>VirusTotal</span>
+                    <small>Reputation signal</small>
                     <div class="port-scan-switch">
                       <input id="vtScan" type="checkbox" />
                       <span id="vtScanStateText">OFF</span>
@@ -190,6 +230,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>Port Scan</span>
+                    <small>Open service discovery</small>
                     <div class="port-scan-switch">
                       <input id="enablePortScan" type="checkbox" />
                       <span id="portScanStateText">OFF</span>
@@ -200,6 +241,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>CT Logs</span>
+                    <small>Certificate expansion</small>
                     <div class="port-scan-switch">
                       <input id="ctScan" type="checkbox" />
                       <span id="ctScanStateText">OFF</span>
@@ -210,6 +252,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>Passive DNS</span>
+                    <small>Historical resolution</small>
                     <div class="port-scan-switch">
                       <input id="passiveDnsScan" type="checkbox" />
                       <span id="passiveDnsScanStateText">OFF</span>
@@ -220,6 +263,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>ASN Expand</span>
+                    <small>Neighboring infrastructure</small>
                     <div class="port-scan-switch">
                       <input id="asnScan" type="checkbox" />
                       <span id="asnScanStateText">OFF</span>
@@ -230,6 +274,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>Web Assets</span>
+                    <small>Endpoint and tech review</small>
                     <div class="port-scan-switch">
                       <input id="webAssetScan" type="checkbox" />
                       <span id="webAssetScanStateText">OFF</span>
@@ -240,6 +285,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>Service Risk</span>
+                    <small>CVE and weak checks</small>
                     <div class="port-scan-switch">
                       <input id="serviceRiskScan" type="checkbox" />
                       <span id="serviceRiskScanStateText">OFF</span>
@@ -250,6 +296,7 @@
                 <div class="feature-block">
                   <label class="port-scan-master">
                     <span>Private IP</span>
+                    <small>Internal scope support</small>
                     <div class="port-scan-switch">
                       <input id="allowPrivateIp" type="checkbox" />
                       <span id="allowPrivateIpStateText">OFF</span>
@@ -260,26 +307,22 @@
             </section>
 
             <section class="stack-section stack-section--actions">
-              <div class="section-head">
-                <span>ACTIONS</span>
-                <strong>RUN SCAN</strong>
-              </div>
+              <header class="section-head section-head--stack">
+                <span class="zone-code">ACTION / 05</span>
+                <strong>Run And Control</strong>
+              </header>
 
               <div class="action-rack">
-                <button type="submit" id="runBtn" class="glow-btn primary-action">开始扫描</button>
-                <button type="button" id="stopBtn" class="glow-btn">停止扫描</button>
-                <button type="button" id="downloadBtn" class="glow-btn">下载结果</button>
-                <button type="button" id="clearBtn" class="glow-btn">一键清空</button>
-                <label class="file-btn glow-btn">
-                  加载 REPORT.JSON
-                  <input id="reportFile" type="file" accept=".json,application/json" />
-                </label>
+                <button type="submit" id="runBtn" class="glow-btn primary-action">Start Scan</button>
+                <button type="button" id="stopBtn" class="glow-btn">Stop Scan</button>
+                <button type="button" id="downloadBtn" class="glow-btn">Download Result</button>
+                <button type="button" id="clearBtn" class="glow-btn">Reset Workspace</button>
               </div>
 
               <div class="progress-wrap">
                 <div class="progress-meta">
-                  <span class="eyebrow">SCAN PROGRESS</span>
-                  <strong id="progressText">扫描进度：0%</strong>
+                  <span class="eyebrow">Scan Progress</span>
+                  <strong id="progressText">Progress: 0%</strong>
                 </div>
                 <div class="progress-track">
                   <div id="progressBar" class="progress-bar"></div>
@@ -290,9 +333,9 @@
 
           <section class="center-stage">
             <div class="center-stage__head">
-              <span class="zone-code">CORE/02</span>
-              <h2>Radar Core</h2>
-              <p>Review the active target, live scan status, and module output from the central analysis view.</p>
+              <span class="zone-code">CORE / 06</span>
+              <h2>Mission Deck</h2>
+              <p>Watch live telemetry, track the active target, and keep configuration in reach while results are building.</p>
             </div>
 
             <section class="recon-core control-zone">
@@ -313,7 +356,7 @@
 
               <div class="radar-stage">
                 <div class="radar-backdrop" aria-hidden="true"></div>
-                <div class="radar-grid-shell" aria-hidden="true">
+                <div class="radar-grid-shell cyber-void-art" aria-hidden="true">
                   <span class="radar-ring radar-ring--outer"></span>
                   <span class="radar-ring radar-ring--mid"></span>
                   <span class="radar-ring radar-ring--inner"></span>
@@ -355,60 +398,61 @@
 
             <section id="moduleConfigStage" class="module-config-stage module-config-stage--center">
               <header class="module-config-head">
-                <span>MODULE CONFIG</span>
-                <h2>Scan Module Settings</h2>
+                <span>Module Config</span>
+                <h2>Active Module Settings</h2>
+                <p>Enabled modules surface their advanced controls here so the main scan lane stays clean.</p>
               </header>
 
-              <div id="moduleConfigEmpty" class="module-config-empty">Enable a module to view its scan settings.</div>
+              <div id="moduleConfigEmpty" class="module-config-empty">Enable a module to reveal its advanced settings.</div>
 
               <div class="module-config-grid">
                 <div id="vtOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">VirusTotal 配置</h3>
+                  <h3 class="module-config-title">VirusTotal Configuration</h3>
                   <label class="input-block">
                     <span>VirusTotal API Key</span>
-                    <input id="vtApiKey" type="password" placeholder="请输入你自己的 VT API Key" autocomplete="off" />
+                    <input id="vtApiKey" type="password" placeholder="Enter your VirusTotal API key" autocomplete="off" />
                   </label>
                 </div>
 
                 <div id="portScanOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">端口扫描配置</h3>
-                  <p class="config-note">Scan mode, protocol, and timeout are configured in the left scan controls.</p>
+                  <h3 class="module-config-title">Port Scan Controls</h3>
+                  <p class="config-note">Port mode, protocol, and timeout settings are synchronized with the scan profile panel on the left.</p>
                 </div>
 
                 <div id="asnOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">ASN/C 段扩展配置</h3>
+                  <h3 class="module-config-title">ASN Expansion Controls</h3>
                   <div class="toggle-dock">
                     <div class="toggles">
-                      <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> 扩展同 C 段</label>
+                      <label class="toggle"><input id="asnExpandCSegment" type="checkbox" /> Expand adjacent C-segment hosts</label>
                     </div>
                   </div>
                 </div>
 
                 <div id="webAssetOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">Web 资产枚举配置</h3>
+                  <h3 class="module-config-title">Web Asset Enumeration</h3>
                   <div class="toggle-dock">
                     <div class="toggles">
-                      <label class="toggle"><input id="webCrawler" type="checkbox" checked /> 爬虫抓链</label>
-                      <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> JS 接口提取</label>
-                      <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> 敏感路径提取</label>
-                      <label class="toggle"><input id="webDirScan" type="checkbox" checked /> 目录/文件探测</label>
-                      <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> 目录探测使用 ffuf</label>
+                      <label class="toggle"><input id="webCrawler" type="checkbox" checked /> Crawl linked pages</label>
+                      <label class="toggle"><input id="webJsExtract" type="checkbox" checked /> Extract JavaScript endpoints</label>
+                      <label class="toggle"><input id="webSensitivePathExtract" type="checkbox" checked /> Surface sensitive paths</label>
+                      <label class="toggle"><input id="webDirScan" type="checkbox" checked /> Probe directories and files</label>
+                      <label class="toggle"><input id="webDirUseFfuf" type="checkbox" /> Use ffuf for directory probing</label>
                     </div>
                   </div>
                 </div>
 
                 <div id="serviceRiskOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">服务风险关联配置</h3>
+                  <h3 class="module-config-title">Service Risk Controls</h3>
                   <div class="toggle-dock">
                     <div class="toggles">
-                      <label class="toggle"><input id="cveLookup" type="checkbox" /> CPE/CVE 关联</label>
-                      <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> 弱配置检查</label>
+                      <label class="toggle"><input id="cveLookup" type="checkbox" /> Correlate CPE and CVE matches</label>
+                      <label class="toggle"><input id="weakNmapChecks" type="checkbox" /> Run weak configuration checks</label>
                     </div>
                   </div>
                 </div>
 
                 <div id="networkOptions" class="port-options-panel is-closed">
-                  <h3 class="module-config-title">内网扫描配置</h3>
+                  <h3 class="module-config-title">Private Network Scope</h3>
                   <label class="input-block">
                     <span>CIDR Targets</span>
                     <input id="cidrTargets" type="text" placeholder="192.168.1.0/24,10.0.0.0/24" />
@@ -421,8 +465,8 @@
           <aside class="intel-sidebar">
             <section class="intel-panel control-zone">
               <header class="zone-head zone-head--compact">
-                <span class="zone-code">INTEL/03</span>
-                <h2>Scan Summary</h2>
+                <span class="zone-code">SUMMARY / 07</span>
+                <h2>Mission Brief</h2>
               </header>
 
               <div id="missionBrief" class="summary-grid">
@@ -447,18 +491,32 @@
 
             <section class="intel-panel control-zone">
               <header class="zone-head zone-head--compact">
-                <span class="zone-code">EVENT/04</span>
-                <h2>Live Events</h2>
+                <span class="zone-code">HISTORY / 08</span>
+                <h2>Recent Activity</h2>
               </header>
 
-              <div id="liveEvents" class="live-events">
-                <div class="event-line event-line--muted">[standby] scan workspace ready. enter a target to begin.</div>
+              <div id="historyList" class="history-list">
+                <div class="history-item history-item--empty">
+                  <strong>No recent activity yet.</strong>
+                  <span>Completed scans and imported reports will appear here.</span>
+                </div>
               </div>
             </section>
 
             <section class="intel-panel control-zone">
               <header class="zone-head zone-head--compact">
-                <span class="zone-code">MODULE/05</span>
+                <span class="zone-code">EVENT / 09</span>
+                <h2>Live Events</h2>
+              </header>
+
+              <div id="liveEvents" class="live-events">
+                <div class="event-line event-line--muted">[standby] scan system ready. enter a target to begin.</div>
+              </div>
+            </section>
+
+            <section class="intel-panel control-zone">
+              <header class="zone-head zone-head--compact">
+                <span class="zone-code">MODULE / 10</span>
                 <h2>Module Status</h2>
               </header>
 
@@ -470,15 +528,34 @@
         <section class="bottom-console reveal delay-2">
           <div class="dock-head">
             <div class="dock-head__copy">
-              <span class="eyebrow">SCAN RESULTS</span>
-              <h2>Findings and Output</h2>
-              <p>Review assets, open ports, technologies, logs, and export data for the active target.</p>
+              <span class="eyebrow">RESULT DOCK</span>
+              <h2>Findings, Logs, and Export Layers</h2>
+              <p>Read the high-level outcome first, then pivot into ports, technology signals, terminal output, or raw evidence.</p>
             </div>
 
             <div class="dock-head__meta">
-              <span>Result Tabs</span>
-              <strong>5 Views / Live Update</strong>
+              <span>Output Layer</span>
+              <strong>Live Review / 5 Views</strong>
             </div>
+          </div>
+
+          <div class="results-overview">
+            <article class="summary-card summary-card--result">
+              <span>Result State</span>
+              <strong id="resultStatus">STANDBY</strong>
+            </article>
+            <article class="summary-card summary-card--result">
+              <span>Open Ports</span>
+              <strong id="resultOpenPorts">0</strong>
+            </article>
+            <article class="summary-card summary-card--result">
+              <span>Tech Signals</span>
+              <strong id="resultTechCount">0</strong>
+            </article>
+            <article class="summary-card summary-card--result">
+              <span>Source</span>
+              <strong id="resultSourceBadge">NO DATA</strong>
+            </article>
           </div>
 
           <div class="dock-tabs" role="tablist" aria-label="Result dock tabs">
@@ -491,28 +568,48 @@
 
           <div class="dock-panels">
             <section class="dock-panel is-active" data-panel="assets" role="tabpanel">
+              <div class="dock-panel__intro">
+                <strong>Summary View</strong>
+                <span>Primary target findings and scan overview</span>
+              </div>
               <div id="summary" class="summary">
-                <div class="summary-item">Run a scan or load a report to view results.</div>
+                <div class="summary-item">Run a scan or import a report to view summarized findings.</div>
               </div>
             </section>
 
             <section class="dock-panel" data-panel="ports" role="tabpanel" hidden>
+              <div class="dock-panel__intro">
+                <strong>Port Intelligence</strong>
+                <span>Open service banners and exposure hints</span>
+              </div>
               <div id="portsOutput" class="dock-list dock-list--ports">
                 <div class="summary-item">Open ports and service banners will appear here.</div>
               </div>
             </section>
 
             <section class="dock-panel" data-panel="tech" role="tabpanel" hidden>
+              <div class="dock-panel__intro">
+                <strong>Technology Signals</strong>
+                <span>Detected stacks, endpoints, and service-risk hints</span>
+              </div>
               <div id="techOutput" class="dock-list">
                 <div class="summary-item">Technologies, fingerprints, and service risk findings will appear here.</div>
               </div>
             </section>
 
             <section class="dock-panel" data-panel="logs" role="tabpanel" hidden>
+              <div class="dock-panel__intro">
+                <strong>Execution Log</strong>
+                <span>Live terminal output and scan lifecycle events</span>
+              </div>
               <div id="terminal" class="terminal"></div>
             </section>
 
             <section class="dock-panel" data-panel="export" role="tabpanel" hidden>
+              <div class="dock-panel__intro">
+                <strong>Raw Evidence</strong>
+                <span>Structured export payload for reporting and handoff</span>
+              </div>
               <div class="export-panel">
                 <div class="export-summary">
                   <article class="summary-card">

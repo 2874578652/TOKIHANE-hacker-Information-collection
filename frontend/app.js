@@ -3,6 +3,11 @@ const summary = document.getElementById("summary");
 const rawOutput = document.getElementById("rawOutput");
 const form = document.getElementById("scanForm");
 const fileInput = document.getElementById("reportFile");
+const reportDropzone = document.getElementById("reportDropzone");
+const reportFileMeta = document.getElementById("reportFileMeta");
+const reportFileName = document.getElementById("reportFileName");
+const reportFileSize = document.getElementById("reportFileSize");
+const reportFileType = document.getElementById("reportFileType");
 const stopBtn = document.getElementById("stopBtn");
 const downloadBtn = document.getElementById("downloadBtn");
 const clearBtn = document.getElementById("clearBtn");
@@ -68,17 +73,23 @@ const coreTargetEcho = document.getElementById("coreTargetEcho");
 const coreStatusLine = document.getElementById("coreStatusLine");
 const coreSignalLane = document.getElementById("coreSignalLane");
 const coreStateVector = document.getElementById("coreStateVector");
+const historyList = document.getElementById("historyList");
 const liveEvents = document.getElementById("liveEvents");
 const moduleStatusList = document.getElementById("moduleStatusList");
 const portsOutput = document.getElementById("portsOutput");
 const techOutput = document.getElementById("techOutput");
 const exportSource = document.getElementById("exportSource");
 const exportTarget = document.getElementById("exportTarget");
+const resultStatus = document.getElementById("resultStatus");
+const resultOpenPorts = document.getElementById("resultOpenPorts");
+const resultTechCount = document.getElementById("resultTechCount");
+const resultSourceBadge = document.getElementById("resultSourceBadge");
 const dockTabs = Array.from(document.querySelectorAll(".dock-tab"));
 const dockPanels = Array.from(document.querySelectorAll(".dock-panel"));
 
 const COMMON_PORT_RANGE =
   "21,22,23,25,53,80,110,111,135,139,143,389,443,445,465,587,993,995,1433,1521,1723,1883,1900,2049,2375,2376,3306,3389,5432,5900,6379,7001,8000,8080,8081,8443,8888,9200,11211,27017";
+const HISTORY_KEY = "tokihane-scan-history";
 
 let currentJobId = null;
 let pollTimer = null;
@@ -87,6 +98,7 @@ let latestReportSource = null;
 let isRunning = false;
 let progressValue = 0;
 let hudRuntimeTick = 0;
+let recentHistory = [];
 
 const moduleToggleInputs = [
   vtScanInput,
@@ -117,6 +129,150 @@ function setNodeText(node, text, fallback = "N/A") {
   }
   const value = String(text ?? "").trim();
   node.textContent = value || fallback;
+}
+
+function loadHistory() {
+  try {
+    const raw = window.localStorage.getItem(HISTORY_KEY);
+    if (!raw) {
+      return [];
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.slice(0, 8) : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function saveHistory() {
+  try {
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(recentHistory.slice(0, 8)));
+  } catch (_error) {}
+}
+
+function formatHistoryTime(timestamp) {
+  if (!timestamp) {
+    return "just now";
+  }
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) {
+    return "just now";
+  }
+  return date.toLocaleString("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function renderHistory() {
+  if (!historyList) {
+    return;
+  }
+
+  historyList.innerHTML = "";
+  if (!recentHistory.length) {
+    const empty = document.createElement("div");
+    empty.className = "history-item history-item--empty";
+    empty.innerHTML = "<strong>No recent activity yet.</strong><span>Completed scans and imported reports will appear here.</span>";
+    historyList.appendChild(empty);
+    return;
+  }
+
+  recentHistory.forEach((entry) => {
+    const item = document.createElement("div");
+    item.className = "history-item";
+
+    const title = document.createElement("strong");
+    title.textContent = entry.title || "Untitled";
+
+    const detail = document.createElement("span");
+    detail.textContent = entry.detail || "Recent workspace event";
+
+    const meta = document.createElement("div");
+    meta.className = "history-item__meta";
+
+    const time = document.createElement("span");
+    time.textContent = formatHistoryTime(entry.timestamp);
+
+    const status = document.createElement("span");
+    status.className = "history-item__status";
+    status.textContent = (entry.status || "READY").toUpperCase();
+    status.dataset.state = (entry.status || "ready").toLowerCase();
+
+    meta.append(time, status);
+    item.append(title, detail, meta);
+    historyList.appendChild(item);
+  });
+}
+
+function pushHistoryEntry({ title, detail, status }) {
+  recentHistory = [
+    {
+      title: title || "Workspace Event",
+      detail: detail || "Recent workspace event",
+      status: (status || "ready").toLowerCase(),
+      timestamp: Date.now(),
+    },
+    ...recentHistory,
+  ].slice(0, 8);
+  saveHistory();
+  renderHistory();
+}
+
+function formatFileSize(bytes) {
+  const size = Number(bytes || 0);
+  if (!Number.isFinite(size) || size <= 0) {
+    return "Ready for import";
+  }
+  if (size >= 1024 * 1024) {
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  }
+  if (size >= 1024) {
+    return `${Math.round(size / 1024)} KB`;
+  }
+  return `${size} B`;
+}
+
+function setReportFileState(file, detailText) {
+  if (reportDropzone) {
+    reportDropzone.classList.toggle("is-has-file", !!file);
+  }
+  if (reportFileMeta) {
+    reportFileMeta.dataset.state = file ? "selected" : "idle";
+  }
+  setNodeText(reportFileName, file?.name || "No file selected", "No file selected");
+  setNodeText(reportFileSize, detailText || formatFileSize(file?.size), "Ready for import");
+  setNodeText(reportFileType, file?.type || "JSON report", "JSON report");
+}
+
+function resetReportFileState() {
+  setReportFileState(null, "Ready for import");
+}
+
+function countOpenPorts(data) {
+  const ipScan = data?.ip_scan || {};
+  let total = 0;
+  Object.values(ipScan.results || {}).forEach((result) => {
+    const tcp = Array.isArray(result?.tcp?.open_ports) ? result.tcp.open_ports.length : Number(result?.tcp?.open_port_count || 0);
+    const udp = Array.isArray(result?.udp?.open_ports) ? result.udp.open_ports.length : Number(result?.udp?.open_port_count || 0);
+    total += tcp + udp;
+  });
+  return total;
+}
+
+function countTechSignals(data) {
+  const tech = Array.isArray(data?.tech_stack?.detected_technologies) ? data.tech_stack.detected_technologies.length : 0;
+  const cves = Array.isArray(data?.service_risk?.cve_lookup?.matches) ? data.service_risk.cve_lookup.matches.length : 0;
+  const weak = Array.isArray(data?.service_risk?.weak_checks?.findings) ? data.service_risk.weak_checks.findings.length : 0;
+  return tech + cves + weak;
+}
+
+function updateResultOverview(data) {
+  setNodeText(resultOpenPorts, data ? String(countOpenPorts(data)) : "0", "0");
+  setNodeText(resultTechCount, data ? String(countTechSignals(data)) : "0", "0");
+  setNodeText(resultSourceBadge, latestReport ? String(latestReportSource || "scan").toUpperCase() : "NO DATA", "NO DATA");
 }
 
 function getTargetLabel() {
@@ -195,6 +351,7 @@ function updateCoreStatusLine(message) {
 function updateExportMeta() {
   setNodeText(exportSource, latestReport ? String(latestReportSource || "scan").toUpperCase() : "NO DATA", "NO DATA");
   setNodeText(exportTarget, getTargetDisplayValue(), "NO TARGET");
+  updateResultOverview(latestReport);
 }
 
 function appendDockRows(container, rows, emptyText) {
@@ -295,6 +452,7 @@ function setHudTaskState(stateText) {
   const nextState = stateText || "IDLE";
   hudTaskState.textContent = nextState;
   setNodeText(coreStateVector, nextState, "IDLE");
+  setNodeText(resultStatus, nextState, "STANDBY");
   updateMissionFocus();
   updateCoreStatusLine();
 }
@@ -800,7 +958,7 @@ function initVoidRainPanel() {
 function logLine(text, level = "info") {
   const line = document.createElement("div");
   line.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
-  line.style.color = level === "error" ? "#ff8f9f" : level === "ok" ? "#9dffc3" : "#ffdce1";
+  line.style.color = level === "error" ? "var(--alert)" : level === "ok" ? "var(--ok)" : "var(--cyan-hot)";
   terminal.appendChild(line);
   terminal.scrollTop = terminal.scrollHeight;
   pushLiveEvent(text, level);
@@ -928,37 +1086,37 @@ function formatSummary(data) {
   const ipScanWarnings = Array.isArray(ipScan?.warnings) ? ipScan.warnings.join(" | ") : "N/A";
 
   const blocks = [
-    `目标输入: ${targetInput}`,
-    `目标域名: ${domain}`,
-    `规范化URL: ${normalizedUrl}`,
-    `端口模式: ${data?.meta?.scan_mode || "N/A"}`,
-    `端口扫描引擎: ${ipScan.scanner || data?.meta?.requested_port_scanner || "N/A"}`,
-    `端口扫描告警: ${ipScanWarnings}`,
-    `端口范围: ${ipScan.port_range || data?.meta?.requested_port_range || "N/A"}`,
-    `TCP扫描: ${String(ipScan.tcp_scan_enabled ?? true)}`,
-    `UDP扫描: ${String(ipScan.udp_scan_enabled ?? false)}`,
-    `是否完成IP扫描: ${String(ipScan.scan_performed ?? false)}`,
+    `Target input: ${targetInput}`,
+    `Target domain: ${domain}`,
+    `Normalized URL: ${normalizedUrl}`,
+    `Scan mode: ${data?.meta?.scan_mode || "N/A"}`,
+    `Port engine: ${ipScan.scanner || data?.meta?.requested_port_scanner || "N/A"}`,
+    `Port warnings: ${ipScanWarnings}`,
+    `Port range: ${ipScan.port_range || data?.meta?.requested_port_range || "N/A"}`,
+    `TCP scan enabled: ${String(ipScan.tcp_scan_enabled ?? true)}`,
+    `UDP scan enabled: ${String(ipScan.udp_scan_enabled ?? false)}`,
+    `IP scan performed: ${String(ipScan.scan_performed ?? false)}`,
     `Targets(IP): ${(ipScan.targets || []).join(", ") || "N/A"}`,
-    `开放 TCP 端口数: ${openTcp}`,
-    `开放 UDP 端口数: ${openUdp}`,
-    `TCP 端口服务(全量): ${tcpAll.join(" | ") || "N/A"}`,
-    `UDP 端口服务(全量): ${udpAll.join(" | ") || "N/A"}`,
+    `Open TCP ports: ${openTcp}`,
+    `Open UDP ports: ${openUdp}`,
+    `TCP services: ${tcpAll.join(" | ") || "N/A"}`,
+    `UDP services: ${udpAll.join(" | ") || "N/A"}`,
     `DNS A: ${dnsA}`,
     `DNS AAAA: ${dnsAAAA}`,
     `DNS NS: ${dnsNS}`,
     `DNS MX: ${dnsMX}`,
-    `WHOIS 注册商: ${whoisRegistrar}`,
-    `WHOIS 创建时间: ${whoisCreated}`,
-    `WHOIS 到期时间: ${whoisExpire}`,
-    `技术栈识别: ${techText}`,
-    `VT 已启用: ${String(vt.enabled ?? false)}`,
-    `VT 域名统计: ${vtDomainStats}`,
-    `VT URL统计: ${vtUrlStats}`,
-    `CT 日志启用: ${String(ct.enabled ?? false)} / 子域名: ${ctSubdomains}`,
-    `被动DNS启用: ${String(passiveDns.enabled ?? false)} / 历史子域: ${passiveSubdomains} / 解析IP: ${passiveIps}`,
-    `ASN模块启用: ${String(asn.enabled ?? false)} / ASN记录: ${asnRecords} / C段扩展IP: ${asnExpandedHosts}`,
-    `Web资产枚举启用: ${String(webAssets.enabled ?? false)} / 端点: ${webEndpoints} / 敏感路径: ${webSensitive} / 目录命中: ${webDirHits}`,
-    `服务风险模块启用: ${String(serviceRisk.enabled ?? false)} / CPE-CVE查询条目: ${cveMatches}`,
+    `WHOIS registrar: ${whoisRegistrar}`,
+    `WHOIS created: ${whoisCreated}`,
+    `WHOIS expires: ${whoisExpire}`,
+    `Detected technologies: ${techText}`,
+    `VirusTotal enabled: ${String(vt.enabled ?? false)}`,
+    `VirusTotal domain stats: ${vtDomainStats}`,
+    `VirusTotal URL stats: ${vtUrlStats}`,
+    `CT logs enabled: ${String(ct.enabled ?? false)} / subdomains: ${ctSubdomains}`,
+    `Passive DNS enabled: ${String(passiveDns.enabled ?? false)} / historical subdomains: ${passiveSubdomains} / resolved IPs: ${passiveIps}`,
+    `ASN enabled: ${String(asn.enabled ?? false)} / records: ${asnRecords} / expanded hosts: ${asnExpandedHosts}`,
+    `Web asset enumeration enabled: ${String(webAssets.enabled ?? false)} / endpoints: ${webEndpoints} / sensitive paths: ${webSensitive} / directory hits: ${webDirHits}`,
+    `Service risk enabled: ${String(serviceRisk.enabled ?? false)} / CPE-CVE matches: ${cveMatches}`,
   ];
 
   summary.innerHTML = "";
@@ -982,6 +1140,7 @@ function renderReport(data, source = "scan") {
   updateMissionMode();
   updateMissionFocus();
   updateExportMeta();
+  updateResultOverview(data);
   logLine("Report rendered.", "ok");
 }
 
@@ -995,6 +1154,9 @@ function renderNoBackendState(message) {
   appendDockRows(techOutput, [], "No technology or service risk intelligence loaded.");
   rawOutput.textContent = "";
   updateExportMeta();
+  if (!latestReport) {
+    updateResultOverview(null);
+  }
 }
 
 function setProgress(value, customText) {
@@ -1003,7 +1165,7 @@ function setProgress(value, customText) {
     progressBar.style.width = `${progressValue}%`;
   }
   if (progressText) {
-    progressText.textContent = customText || `扫描进度：${progressValue}%`;
+    progressText.textContent = customText || `Progress: ${progressValue}%`;
   }
 }
 
@@ -1027,7 +1189,7 @@ function buildPayload() {
       portRange = COMMON_PORT_RANGE;
     } else if (scanMode === "custom") {
       if (!customPorts) {
-        throw new Error("自定义端口模式下，请填写端口范围。");
+        throw new Error("Custom port mode requires a port range.");
       }
       fullPortScan = false;
       portRange = customPorts;
@@ -1037,7 +1199,7 @@ function buildPayload() {
   const tcpScanEnabled = portScanEnabled ? document.getElementById("tcpScan").checked : false;
   const udpScanEnabled = portScanEnabled ? document.getElementById("udpScan").checked : false;
   if (portScanEnabled && !tcpScanEnabled && !udpScanEnabled) {
-    throw new Error("请至少启用一种协议：TCP 或 UDP。");
+    throw new Error("Enable at least one protocol: TCP or UDP.");
   }
 
   return {
@@ -1117,12 +1279,17 @@ async function pollJobStatus(apiUrl, jobId) {
     setRunningState(false);
     currentJobId = null;
     setHudTaskState("COMPLETED");
-    setProgress(100, "扫描进度：100%（已完成）");
+    setProgress(100, "Progress: 100% (completed)");
     if (data.result) {
       renderReport(data.result);
     } else {
       renderNoBackendState("Scan completed but no result returned.");
     }
+    pushHistoryEntry({
+      title: getTargetDisplayValue(),
+      detail: "Completed scan result ready for review.",
+      status: "completed",
+    });
     logLine("Scan completed.", "ok");
     return;
   }
@@ -1132,12 +1299,17 @@ async function pollJobStatus(apiUrl, jobId) {
     setRunningState(false);
     currentJobId = null;
     setHudTaskState("CANCELED");
-    setProgress(100, "扫描进度：100%（已停止）");
+    setProgress(100, "Progress: 100% (stopped)");
     if (data.result) {
       renderReport(data.result);
     } else {
       renderNoBackendState("Scan canceled.");
     }
+    pushHistoryEntry({
+      title: getTargetDisplayValue(),
+      detail: "Scan was canceled before completion.",
+      status: "canceled",
+    });
     logLine("Scan canceled.", "error");
     return;
   }
@@ -1148,8 +1320,13 @@ async function pollJobStatus(apiUrl, jobId) {
     currentJobId = null;
     setHudTaskState("FAILED");
     setHudThreat("ELEVATED");
-    setProgress(100, "扫描进度：100%（失败）");
+    setProgress(100, "Progress: 100% (failed)");
     renderNoBackendState(`Scan failed: ${data.error || "unknown error"}`);
+    pushHistoryEntry({
+      title: getTargetDisplayValue(),
+      detail: `Scan failed: ${data.error || "unknown error"}`,
+      status: "failed",
+    });
     logLine(`Scan failed: ${data.error || "unknown error"}`, "error");
     return;
   }
@@ -1157,10 +1334,10 @@ async function pollJobStatus(apiUrl, jobId) {
   // running / queued / stopping
   if (status === "stopping") {
     setHudTaskState("STOPPING");
-    setProgress(Math.max(progressValue, 95), "扫描进度：停止中...");
+    setProgress(Math.max(progressValue, 95), "Progress: stopping...");
   } else if (status === "queued") {
     setHudTaskState("QUEUED");
-    setProgress(Math.max(progressValue, 5), "扫描进度：排队中...");
+    setProgress(Math.max(progressValue, 5), "Progress: queued...");
   } else {
     setHudTaskState("RUNNING");
     setProgress(Math.min(95, progressValue + 3));
@@ -1171,7 +1348,7 @@ async function pollJobStatus(apiUrl, jobId) {
 async function runScan(event) {
   event.preventDefault();
   if (isRunning) {
-    logLine("已有扫描任务正在执行，请先停止。", "error");
+    logLine("A scan is already running. Stop it before launching another.", "error");
     return;
   }
 
@@ -1179,35 +1356,36 @@ async function runScan(event) {
   try {
     payload = buildPayload();
   } catch (error) {
-    logLine(error.message || "扫描参数无效。", "error");
+    logLine(error.message || "Scan parameters are invalid.", "error");
     return;
   }
 
   if (!payload.target) {
-    logLine("目标不能为空。", "error");
+    logLine("Target cannot be empty.", "error");
     return;
   }
   if (payload.vt_scan && !payload.vt_api_key) {
-    logLine("已开启 VirusTotal，请先填写你自己的 API Key。", "error");
+    logLine("VirusTotal is enabled. Enter your own API key first.", "error");
     return;
   }
 
-  logLine(`开始扫描目标：${payload.target}`);
+  logLine(`Launching scan for ${payload.target}.`);
   updateHudTargetLock();
   setHudTaskState("LAUNCH");
   setHudThreat("MEDIUM");
   const apiUrl = getApiUrl();
 
   if (!apiUrl) {
-    logLine("未填写后端 API 地址。", "error");
-    renderNoBackendState("后端 API 未连接，请先填写 API 地址。");
+    logLine("Backend API URL is missing.", "error");
+    renderNoBackendState("Backend API is not connected. Enter an API URL first.");
     return;
   }
 
   try {
     latestReport = null;
     latestReportSource = null;
-    setProgress(3, "扫描进度：启动中...");
+    updateResultOverview(null);
+    setProgress(3, "Progress: booting...");
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1227,8 +1405,13 @@ async function runScan(event) {
     currentJobId = jobId;
     setRunningState(true);
     setHudTaskState("RUNNING");
-    renderNoBackendState(`扫描任务已创建，任务ID：${jobId}`);
-    logLine(`任务已创建：${jobId}`, "ok");
+    renderNoBackendState(`Scan job created. Job ID: ${jobId}`);
+    pushHistoryEntry({
+      title: payload.target,
+      detail: `Scan launched. Job ${jobId} is now active.`,
+      status: "running",
+    });
+    logLine(`Job created: ${jobId}.`, "ok");
 
     clearPollTimer();
     pollTimer = setInterval(() => {
@@ -1238,28 +1421,28 @@ async function runScan(event) {
         currentJobId = null;
         setHudTaskState("ERROR");
         setHudThreat("ELEVATED");
-        setProgress(0, "扫描进度：0%");
-        renderNoBackendState("轮询任务状态失败。");
-        logLine(`轮询失败（${error.message}）。`, "error");
+        setProgress(0, "Progress: 0%");
+        renderNoBackendState("Failed to poll job status.");
+        logLine(`Polling failed (${error.message}).`, "error");
       });
     }, 1000);
   } catch (error) {
     setHudTaskState("ERROR");
     setHudThreat("ELEVATED");
-    setProgress(0, "扫描进度：0%");
-    logLine(`API 请求失败（${error.message}）。`, "error");
-    renderNoBackendState("后端请求失败，请检查 API 地址和后端状态。");
+    setProgress(0, "Progress: 0%");
+    logLine(`API request failed (${error.message}).`, "error");
+    renderNoBackendState("Backend request failed. Check the API URL and backend status.");
   }
 }
 
 async function stopScan() {
   const apiUrl = getApiUrl();
   if (!isRunning || !currentJobId) {
-    logLine("当前没有可停止的扫描任务。", "error");
+    logLine("There is no running scan to stop.", "error");
     return;
   }
   if (!apiUrl) {
-    logLine("后端 API 地址为空。", "error");
+    logLine("Backend API URL is empty.", "error");
     return;
   }
 
@@ -1269,17 +1452,17 @@ async function stopScan() {
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
-    setProgress(Math.max(progressValue, 95), "扫描进度：停止中...");
-    logLine("已发送停止信号。", "ok");
-    renderNoBackendState(`正在停止任务：${currentJobId} ...`);
+    setProgress(Math.max(progressValue, 95), "Progress: stopping...");
+    logLine("Stop signal sent.", "ok");
+    renderNoBackendState(`Stopping job ${currentJobId} ...`);
   } catch (error) {
-    logLine(`停止失败（${error.message}）。`, "error");
+    logLine(`Stop request failed (${error.message}).`, "error");
   }
 }
 
 function downloadResult() {
   if (!latestReport || latestReportSource !== "scan") {
-    logLine("没有可下载的真实扫描结果。请先完成一次扫描。", "error");
+    logLine("No completed scan result is available for download yet.", "error");
     return;
   }
   const content = JSON.stringify(latestReport, null, 2);
@@ -1293,12 +1476,12 @@ function downloadResult() {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-  logLine("结果下载完成。", "ok");
+  logLine("Result download completed.", "ok");
 }
 
 function clearCurrentScan() {
   if (isRunning) {
-    logLine("请先停止当前扫描，再执行清空。", "error");
+    logLine("Stop the current scan before resetting the workspace.", "error");
     return;
   }
   latestReport = null;
@@ -1308,18 +1491,20 @@ function clearCurrentScan() {
   summary.innerHTML = "";
   const item = document.createElement("div");
   item.className = "summary-item";
-  item.textContent = "当前扫描结果已清空。";
+  item.textContent = "Workspace output has been cleared.";
   summary.appendChild(item);
   appendDockRows(portsOutput, [], "Open ports and service banners will appear here.");
   appendDockRows(techOutput, [], "Technologies, fingerprints, and service risk findings will appear here.");
   terminal.innerHTML = "";
   if (liveEvents) {
-    liveEvents.innerHTML = '<div class="event-line event-line--muted">[standby] scan workspace ready. enter a target to begin.</div>';
+    liveEvents.innerHTML = '<div class="event-line event-line--muted">[standby] scan system ready. enter a target to begin.</div>';
   }
-  setProgress(0, "扫描进度：0%");
+  setProgress(0, "Progress: 0%");
+  updateResultOverview(null);
   if (fileInput) {
     fileInput.value = "";
   }
+  resetReportFileState();
 
   // Reset all right-side module switches to OFF.
   moduleToggleInputs.forEach((input) => {
@@ -1336,7 +1521,7 @@ function clearCurrentScan() {
   updateMissionFocus();
   updateMissionMode();
   updateExportMeta();
-  logLine("已清空当前扫描内容，并关闭全部模块开关。", "ok");
+  logLine("Workspace cleared and all module switches were turned off.", "ok");
 }
 
 function handleFileUpload(event) {
@@ -1344,6 +1529,8 @@ function handleFileUpload(event) {
   if (!file) {
     return;
   }
+
+  setReportFileState(file);
 
   const reader = new FileReader();
   reader.onload = () => {
@@ -1353,12 +1540,61 @@ function handleFileUpload(event) {
       renderReport(data, "file");
       setRunningState(false);
       setHudTaskState("REPORT");
-      setProgress(100, "扫描进度：100%（已加载）");
+      setProgress(100, "Progress: 100% (report loaded)");
+      setReportFileState(file, `${formatFileSize(file.size)} / Imported`);
+      pushHistoryEntry({
+        title: file.name,
+        detail: `Report imported for ${getTargetDisplayValue()}.`,
+        status: "report",
+      });
     } catch (_error) {
-      logLine("JSON 文件格式无效。", "error");
+      setReportFileState(file, `${formatFileSize(file.size)} / Invalid JSON`);
+      logLine("The selected file is not valid JSON.", "error");
     }
   };
   reader.readAsText(file, "utf-8");
+}
+
+function initReportDropzone() {
+  if (!reportDropzone || !fileInput) {
+    return;
+  }
+
+  ["dragenter", "dragover"].forEach((eventName) => {
+    reportDropzone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      reportDropzone.classList.add("is-dragover");
+    });
+  });
+
+  ["dragleave", "dragend", "drop"].forEach((eventName) => {
+    reportDropzone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      reportDropzone.classList.remove("is-dragover");
+    });
+  });
+
+  reportDropzone.addEventListener("drop", (event) => {
+    const files = event.dataTransfer?.files;
+    if (!files?.length) {
+      return;
+    }
+    try {
+      fileInput.files = files;
+    } catch (_error) {}
+    handleFileUpload({ target: { files } });
+  });
+
+  reportDropzone.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.closest("input") || target.closest(".file-btn")) {
+      return;
+    }
+    fileInput.click();
+  });
 }
 
 if (form) {
@@ -1407,13 +1643,15 @@ moduleToggleInputs.forEach((input) => {
   input.addEventListener("change", updateModuleActiveCount);
 });
 const perfLiteEnabled = applyPerformancePreset();
+recentHistory = loadHistory();
 initDockTabs();
 initCyberNumberSteppers();
+initReportDropzone();
 initMatrixRain();
 initVoidRainPanel();
 initHudRuntime();
 setRunningState(false);
-setProgress(0, "扫描进度：0%");
+setProgress(0, "Progress: 0%");
 if (apiInput && !apiInput.value.trim()) {
   apiInput.value = inferDefaultApiUrl();
 }
@@ -1428,7 +1666,9 @@ updateModuleActiveCount();
 updateMissionMode();
 updateMissionFocus();
 updateExportMeta();
+renderHistory();
+resetReportFileState();
 if (perfLiteEnabled) {
-  logLine("已启用流畅模式（自动降特效渲染）。", "ok");
+  logLine("Performance mode enabled automatically to reduce heavy effects.", "ok");
 }
-logLine(`界面已就绪。API: ${getApiUrl()}`, "ok");
+logLine(`Workspace ready. API: ${getApiUrl()}`, "ok");

@@ -33,8 +33,8 @@ body::after {
   border-radius: 50%;
   pointer-events: none;
   z-index: 2;
-  opacity: 0.16;
-  background: radial-gradient(circle, rgba(97, 255, 228, 0.12), rgba(57, 210, 255, 0.06) 35%, rgba(97, 255, 228, 0) 70%);
+  opacity: 0.14;
+  background: radial-gradient(circle, rgba(111, 251, 232, 0.12), rgba(63, 212, 255, 0.05) 36%, rgba(111, 251, 232, 0) 70%);
   filter: blur(18px);
   transition: opacity 220ms ease;
 }
@@ -62,43 +62,12 @@ body.is-pointer-idle::after {
   top: 0;
   font-family: "Share Tech Mono", monospace;
   line-height: 1;
-  color: rgba(97, 255, 228, 0.92);
+  color: rgba(111, 251, 232, 0.92);
   text-shadow:
-    0 0 8px rgba(97, 255, 228, 0.34),
-    0 0 20px rgba(57, 210, 255, 0.18);
+    0 0 8px rgba(111, 251, 232, 0.34),
+    0 0 20px rgba(63, 212, 255, 0.18);
   opacity: 0;
   will-change: transform, opacity, filter;
-}
-
-.gate-nav,
-.hero-stage,
-.snapshot-section,
-.capability-section,
-.transition-shell,
-.snapshot-card,
-.capability-card,
-.hero-feed,
-.transition-gate__panel,
-.nav-chip,
-.readout-card {
-  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.gate-nav:hover,
-.hero-stage:hover,
-.snapshot-card:hover,
-.capability-card:hover,
-.transition-gate__panel:hover,
-.nav-chip:hover,
-.readout-card:hover {
-  border-color: rgba(97, 255, 228, 0.16);
-}
-
-.snapshot-card:hover,
-.capability-card:hover,
-.nav-chip:hover,
-.readout-card:hover {
-  transform: translateY(-1px);
 }
 
 body.is-digitizing-out {
@@ -144,20 +113,34 @@ body.is-arriving-assembled .particle-field {
   animation: landingParticlesAssemble 1160ms ease 120ms forwards;
 }
 
+body.is-arriving-assembled .gate-nav,
+body.is-arriving-assembled .hero-stage,
+body.is-arriving-assembled .snapshot-section,
+body.is-arriving-assembled .transition-shell,
+body.is-arriving-assembled .site-footer {
+  animation: landingSectionAssemble 1040ms cubic-bezier(0.16, 0.86, 0.22, 1) forwards;
+}
+
 body.is-digitizing-out .gate-nav,
 body.is-digitizing-out .hero-stage,
-body.is-digitizing-out .snapshot-section,
+body.is-digitizing-out .value-section,
 body.is-digitizing-out .capability-section,
+body.is-digitizing-out .workflow-section,
+body.is-digitizing-out .snapshot-section,
+body.is-digitizing-out .trust-section,
 body.is-digitizing-out .transition-shell,
-body.is-digitizing-out .snapshot-feature,
-body.is-digitizing-out .snapshot-card,
-body.is-digitizing-out .capability-card,
+body.is-digitizing-out .site-footer,
+body.is-digitizing-out .hero-visual__frame,
 body.is-digitizing-out .hero-feed,
-body.is-digitizing-out .transition-gate__panel,
-body.is-digitizing-out .nav-chip,
 body.is-digitizing-out .readout-card,
+body.is-digitizing-out .value-card,
+body.is-digitizing-out .capability-band,
+body.is-digitizing-out .workflow-step,
+body.is-digitizing-out .snapshot-card,
+body.is-digitizing-out .trust-card,
+body.is-digitizing-out .nav-chip,
 body.is-digitizing-out .meta-strip,
-body.is-digitizing-out .hero-visual__frame {
+body.is-digitizing-out .transition-panel {
   animation: landingUiDigitize 900ms cubic-bezier(0.18, 0.84, 0.22, 1) forwards;
 }
 
@@ -262,12 +245,23 @@ body.is-digitizing-out .horizon-grid {
   }
 }
 
+@keyframes landingSectionAssemble {
+  0% {
+    opacity: 0.3;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes landingScanlinesAssemble {
   0% {
     opacity: 0;
   }
   100% {
-    opacity: 0.14;
+    opacity: 0.12;
   }
 }
 
@@ -276,7 +270,7 @@ body.is-digitizing-out .horizon-grid {
     opacity: 0;
   }
   100% {
-    opacity: 0.06;
+    opacity: 0.04;
   }
 }
 
@@ -294,7 +288,7 @@ body.is-digitizing-out .horizon-grid {
     opacity: 0;
   }
   100% {
-    opacity: 0.18;
+    opacity: 0.14;
   }
 }
 
@@ -303,6 +297,6 @@ body.is-digitizing-out .horizon-grid {
     opacity: 0;
   }
   100% {
-    opacity: 0.24;
+    opacity: 0.22;
   }
 }

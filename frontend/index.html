@@ -23,18 +23,18 @@
     </script>
   </head>
   <body>
-      <div id="bootOverlay" class="boot-overlay">
-        <div class="boot-overlay__grid"></div>
-        <div class="boot-overlay__content">
-          <p class="eyebrow">TOKIHANE / SCAN PLATFORM</p>
-          <h1>Initializing Target Intelligence</h1>
-          <div id="bootFeed" class="boot-feed">
-            <span>[boot] loading target intelligence engine...</span>
-            <span>[boot] syncing domain and asset collectors...</span>
-            <span>[boot] preparing scan workspace...</span>
-          </div>
+    <div id="bootOverlay" class="boot-overlay">
+      <div class="boot-overlay__grid"></div>
+      <div class="boot-overlay__content">
+        <p class="eyebrow">TOKIHANE / SCAN PLATFORM</p>
+        <h1>Initializing Target Intelligence</h1>
+        <div id="bootFeed" class="boot-feed">
+          <span>[boot] loading target intelligence engine...</span>
+          <span>[boot] syncing domain and asset collectors...</span>
+          <span>[boot] preparing scan session...</span>
         </div>
       </div>
+    </div>
 
     <canvas id="laserRain" class="fx-canvas laser-rain"></canvas>
     <canvas id="particleField" class="fx-canvas particle-field"></canvas>
@@ -46,31 +46,34 @@
 
     <main class="landing-shell">
       <header class="gate-nav reveal">
-        <a class="gate-nav__brand" href="#top">
+        <a class="gate-nav__brand" href="#top" aria-label="TOKIHANE home">
           <div class="logo-mark" aria-hidden="true">
             <svg viewBox="0 0 120 120" role="img">
               <defs>
                 <linearGradient id="landingLogoNeon" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stop-color="#7fffd4" />
-                  <stop offset="100%" stop-color="#39d2ff" />
+                  <stop offset="52%" stop-color="#39d2ff" />
+                  <stop offset="100%" stop-color="#a870ff" />
                 </linearGradient>
               </defs>
               <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#landingLogoNeon)" stroke-width="4" />
-              <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#landingLogoNeon)" opacity="0.9" />
-              <path d="M52 55h16v30H52z" fill="#97ffe2" opacity="0.88" />
-              <path d="M44 66h32v6H62v14h-4V72H44z" fill="#081116" opacity="0.88" />
+              <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#landingLogoNeon)" opacity="0.92" />
+              <path d="M52 55h16v30H52z" fill="#c6fff5" opacity="0.92" />
+              <path d="M44 66h32v6H62v14h-4V72H44z" fill="#071117" opacity="0.9" />
             </svg>
           </div>
-          <div>
-            <span class="eyebrow">TOKIHANE / SCANNER</span>
+          <div class="brand-copy">
+            <span class="eyebrow">TOKIHANE / THREAT SURFACE</span>
             <strong>Attack Surface Scanner</strong>
           </div>
         </a>
 
         <nav class="gate-nav__links" aria-label="Primary">
-          <a href="#snapshot">Overview</a>
-          <a href="#capabilities">Modules</a>
-          <a href="#transition">Workspace</a>
+          <a href="#value">Why TOKIHANE</a>
+          <a href="#capabilities">Capabilities</a>
+          <a href="#workflow">Scan Flow</a>
+          <a href="#metrics">Signals</a>
+          <a href="#transition">Console</a>
         </nav>
 
         <div class="gate-nav__status">
@@ -82,129 +85,305 @@
             <span>UTC+8</span>
             <strong id="navClock">--:--:--</strong>
           </div>
-          <a id="launchButton" class="launch-button" href="./console.html">Open Scanner</a>
+          <a id="launchButton" class="launch-button" href="./console.html">Start Scan</a>
         </div>
       </header>
 
       <section id="top" class="hero-stage reveal delay-1">
-        <div class="hero-copy">
-          <div class="hero-copy__intro">
-            <p class="eyebrow">Attack Surface Discovery / Domain, IP, and Web Intelligence</p>
-            <h1 class="hero-logo-title">
-              <span>TOKIHANE</span>
-              <span>SCAN WORKSPACE</span>
-            </h1>
-            <p class="hero-copy__lead">
-              Discover domains, IP addresses, exposed services, web assets, and risk signals from one workspace. Start
-              with a target, choose the right modules, and move into live scan results without leaving the platform.
-            </p>
-          </div>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="hero-copy__intro">
+              <div class="hero-badge">
+                <span>Live attack surface scans</span>
+                <i></i>
+                <span>Domain / URL / IP coverage</span>
+              </div>
+              <h1 class="hero-logo-title">
+                <span>Surface Signals.</span>
+                <span>Operator Speed.</span>
+              </h1>
+              <p class="hero-copy__lead">
+                  Discover exposed assets, map target infrastructure, correlate risk signals, and move from first input to
+                  actionable findings inside one continuous scan pipeline.
+              </p>
+            </div>
 
-          <div class="hero-actions">
-            <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Open Workspace</a>
-            <a class="hero-button hero-button--ghost" href="#capabilities">View Modules</a>
-          </div>
+            <div class="hero-actions">
+              <a id="enterButton" class="hero-button hero-button--primary" href="./console.html">Open Scanner</a>
+              <a class="hero-button hero-button--ghost" href="#workflow">See Scan Flow</a>
+            </div>
 
-          <div class="hero-copy__detail">
+            <div class="hero-trust-strip" aria-label="Product highlights">
+              <span>Realtime telemetry</span>
+              <span>Multi-source collection</span>
+              <span>Export-ready evidence</span>
+              <span>Clear result review</span>
+            </div>
+
             <div class="hero-meta">
               <div class="meta-strip">
                 <span>Risk posture</span>
                 <strong id="heroThreatLabel">Monitored</strong>
               </div>
               <div class="meta-strip">
-                <span>Workspace</span>
+                <span>Scanner state</span>
                 <strong id="heroGateStatus">Scanner Ready</strong>
               </div>
             </div>
-
-            <div class="hero-feed">
-              <div class="hero-feed__head">
-                <span>SCAN FEED</span>
-                <strong id="entryTone">READY</strong>
-              </div>
-              <div id="heroFeed" class="hero-feed__body">
-                <div>target input queue is ready for domains, URLs, and IPs...</div>
-                <div>asset collectors are synced for DNS, ports, and web discovery...</div>
-                <div>scan workspace is ready to launch the next task...</div>
-              </div>
-            </div>
           </div>
-        </div>
 
-        <div class="hero-visual">
-          <div class="hero-visual__frame">
-            <div class="hero-visual__labels">
-              <span>ASSET RADAR / TARGET OVERVIEW</span>
-              <strong id="heroVector">TARGET GRID / 024.110 / 121.470</strong>
-            </div>
-
-            <div class="core-visual" aria-hidden="true">
-              <div class="core-visual__scope">
-                <div class="core-visual__grid"></div>
-                <div class="core-visual__ring core-visual__ring--outer"></div>
-                <div class="core-visual__ring core-visual__ring--mid"></div>
-                <div class="core-visual__ring core-visual__ring--inner"></div>
-                <div class="core-visual__axis core-visual__axis--x"></div>
-                <div class="core-visual__axis core-visual__axis--y"></div>
-                <div class="core-visual__axis core-visual__axis--diag-a"></div>
-                <div class="core-visual__axis core-visual__axis--diag-b"></div>
-                <div class="core-visual__sweep"></div>
-
-                <span class="core-node core-node--a"><i></i><em>NODE 17</em></span>
-                <span class="core-node core-node--b"><i></i><em>TRACE</em></span>
-                <span class="core-node core-node--c"><i></i><em>ASSET</em></span>
-                <span class="core-node core-node--d"><i></i><em>THREAT</em></span>
+          <div class="hero-visual">
+            <div class="hero-visual__frame">
+              <div class="hero-visual__top">
+                <div class="hero-visual__labels">
+                  <span>Live target lattice</span>
+                  <strong id="heroVector">TARGET GRID / 024.110 / 121.470</strong>
+                </div>
+                <div class="hero-status-badge">
+                  <span>Queue</span>
+                  <strong>READY</strong>
+                </div>
               </div>
 
-              <div class="core-visual__center">
-                <span>SCAN CORE</span>
-                <strong id="heroCoreState">TARGET READY</strong>
-                <p id="heroCoreNote">Enter a domain, URL, or IP to start collection.</p>
-              </div>
-            </div>
+              <div class="hero-display">
+                <div class="hero-display__glow" aria-hidden="true"></div>
+                <div class="hero-display__grid" aria-hidden="true"></div>
 
-            <div class="hero-visual__readouts">
-              <div class="readout-card">
-                <span>Asset Flow</span>
-                <strong id="heroPacket">682 KB/S</strong>
-              </div>
-              <div class="readout-card">
-                <span>Collectors</span>
-                <strong id="heroNodeSync">128 / 128</strong>
-              </div>
-              <div class="readout-card">
-                <span>Risk Level</span>
-                <strong id="heroPulse">ELEVATED</strong>
+                <div class="core-visual" aria-hidden="true">
+                  <div class="core-visual__scope">
+                    <div class="core-visual__grid"></div>
+                    <div class="core-visual__ring core-visual__ring--outer"></div>
+                    <div class="core-visual__ring core-visual__ring--mid"></div>
+                    <div class="core-visual__ring core-visual__ring--inner"></div>
+                    <div class="core-visual__axis core-visual__axis--x"></div>
+                    <div class="core-visual__axis core-visual__axis--y"></div>
+                    <div class="core-visual__axis core-visual__axis--diag-a"></div>
+                    <div class="core-visual__axis core-visual__axis--diag-b"></div>
+                    <div class="core-visual__sweep"></div>
+                    <span class="core-node core-node--a"><i></i><em>DNS</em></span>
+                    <span class="core-node core-node--b"><i></i><em>PORTS</em></span>
+                    <span class="core-node core-node--c"><i></i><em>WEB</em></span>
+                    <span class="core-node core-node--d"><i></i><em>RISK</em></span>
+                  </div>
+                </div>
+
+                <div class="hero-center-card">
+                  <span>Analysis core</span>
+                  <strong id="heroCoreState">TARGET READY</strong>
+                  <p id="heroCoreNote">Enter a domain, URL, or IP to start collection.</p>
+                </div>
+
+                <div class="hero-feed hero-feed--floating">
+                  <div class="hero-feed__head">
+                    <span>Signal stream</span>
+                    <strong id="entryTone">READY</strong>
+                  </div>
+                  <div id="heroFeed" class="hero-feed__body">
+                    <div>target intake is listening for domains, URLs, and IPs...</div>
+                    <div>dns, service, and web collection modules are synchronized...</div>
+                    <div>export handlers are armed for the next completed scan...</div>
+                  </div>
+                </div>
+
+                <div class="hero-floating hero-floating--north">
+                  <div class="readout-card readout-card--glass">
+                    <span>Asset flow</span>
+                    <strong id="heroPacket">682 KB/S</strong>
+                  </div>
+                </div>
+
+                <div class="hero-floating hero-floating--west">
+                  <div class="readout-card readout-card--glass">
+                    <span>Collectors</span>
+                    <strong id="heroNodeSync">128 / 128</strong>
+                  </div>
+                </div>
+
+                <div class="hero-floating hero-floating--south">
+                  <div class="readout-card readout-card--accent">
+                    <span>Risk level</span>
+                    <strong id="heroPulse">ELEVATED</strong>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="snapshot" class="snapshot-section reveal delay-2">
+      <section id="value" class="value-section reveal delay-2">
         <div class="section-heading">
-          <span class="eyebrow">Scan Snapshot</span>
-          <h2>Key metrics before you start a target scan.</h2>
-          <p>Check platform health, collector readiness, and enabled modules before opening the live scan workspace.</p>
+          <span class="eyebrow">Core Value</span>
+          <h2>Find exposed services, hidden assets, and useful evidence faster.</h2>
+          <p>Keep scan setup, live status, and final review on one path so important signals stay easy to follow.</p>
         </div>
 
+        <div class="value-grid">
+          <article class="value-card">
+            <div class="value-card__icon">01</div>
+            <strong>One input, multi-surface expansion</strong>
+            <p>Start from a domain, URL, or IP and pivot into hosts, services, technologies, and exposed web assets.</p>
+          </article>
+          <article class="value-card value-card--raised">
+            <div class="value-card__icon">02</div>
+            <strong>Operational telemetry while you scan</strong>
+            <p>Track queue state, live progress, latency, and module activity without losing focus on the active target.</p>
+          </article>
+          <article class="value-card">
+            <div class="value-card__icon">03</div>
+            <strong>Evidence-ready outputs</strong>
+            <p>Export structured results, retain raw findings, and move cleanly into follow-up validation or reporting.</p>
+          </article>
+          <article class="value-card">
+            <div class="value-card__icon">04</div>
+            <strong>Modular depth on demand</strong>
+            <p>Arm only the modules you need, or scale into deeper collection when the target warrants more coverage.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="capabilities" class="capability-section reveal">
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="eyebrow">Product Capabilities</span>
+            <h2>Three mission lanes that move from target intake to export-ready evidence.</h2>
+          </div>
+          <p>Start with scoped target intake, expand into live discovery, and finish with organized findings you can review or export.</p>
+        </div>
+
+        <div class="capability-stream">
+          <article class="capability-band">
+            <div class="capability-band__copy">
+              <span class="eyebrow">Intake / Orchestration</span>
+              <h3>Stage targets, choose modules, and launch the right collection depth.</h3>
+              <p>Queue focused scans for surface discovery, or open up deeper service and web analysis when you need more context.</p>
+              <ul class="capability-list">
+                <li>Target normalization for domain, URL, and IP input</li>
+                <li>Configurable port scope, timeout, and protocol mix</li>
+                <li>Module switching without restarting the active run</li>
+              </ul>
+            </div>
+            <div class="capability-band__visual">
+              <div class="capability-panel capability-panel--wide">
+                <span>Intake lane</span>
+                <strong>Recon plan staged</strong>
+                <div class="capability-panel__rows">
+                  <div>Target intake</div>
+                  <div>Profile routing</div>
+                  <div>Module armory</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="capability-band capability-band--reverse">
+            <div class="capability-band__copy">
+              <span class="eyebrow">Discovery / Enrichment</span>
+              <h3>Expand infrastructure context across DNS, certificates, ports, and web assets.</h3>
+              <p>Correlate what is exposed, what is reachable, and what belongs to the same operational surface.</p>
+              <ul class="capability-list">
+                <li>Passive intelligence and certificate history</li>
+                <li>Open-port and service-banner collection</li>
+                <li>Web endpoint, fingerprint, and asset enumeration</li>
+              </ul>
+            </div>
+            <div class="capability-band__visual">
+              <div class="capability-panel capability-panel--stack">
+                <span>Discovery graph</span>
+                <strong>Surface mapping</strong>
+                <div class="capability-panel__stack">
+                  <div>DNS lineage</div>
+                  <div>Port + service map</div>
+                  <div>Endpoint inventory</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="capability-band">
+            <div class="capability-band__copy">
+              <span class="eyebrow">Review / Export</span>
+              <h3>Turn raw scan output into readable findings and structured evidence.</h3>
+              <p>Keep the summary readable for fast triage, then pivot into detail, logs, or raw JSON when the task requires it.</p>
+              <ul class="capability-list">
+                <li>Risk-oriented result grouping</li>
+                <li>Readable scan logs and module states</li>
+                <li>Portable JSON output for reporting and handoff</li>
+              </ul>
+            </div>
+            <div class="capability-band__visual">
+              <div class="capability-panel capability-panel--tall">
+                <span>Evidence dock</span>
+                <strong>Report ready</strong>
+                <div class="capability-panel__ledger">
+                  <div>
+                    <span>Results</span>
+                    <strong>5 views</strong>
+                  </div>
+                  <div>
+                    <span>Logs</span>
+                    <strong>Live</strong>
+                  </div>
+                  <div>
+                    <span>Export</span>
+                    <strong>JSON</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="workflow" class="workflow-section reveal">
+        <div class="section-heading">
+          <span class="eyebrow">Scan Flow</span>
+          <h2>From first target to export in four deliberate steps.</h2>
+          <p>Define scope, launch collection, review findings, and export evidence without losing track of the active target.</p>
+        </div>
+
+        <div class="workflow-rail" aria-hidden="true"></div>
+        <div class="workflow-grid">
+          <article class="workflow-step">
+            <span class="workflow-step__index">01</span>
+            <strong>Define the target</strong>
+            <p>Enter a domain, URL, IP, or import an existing report for immediate review.</p>
+          </article>
+          <article class="workflow-step">
+            <span class="workflow-step__index">02</span>
+            <strong>Arm the modules</strong>
+            <p>Select the collection depth, protocols, and optional enrichment sources needed for the mission.</p>
+          </article>
+          <article class="workflow-step">
+            <span class="workflow-step__index">03</span>
+            <strong>Monitor the run</strong>
+            <p>Watch live telemetry, queue state, and scan progress while signals continue to resolve.</p>
+          </article>
+          <article class="workflow-step">
+            <span class="workflow-step__index">04</span>
+            <strong>Review and export</strong>
+            <p>Pivot across summaries, ports, technologies, logs, and raw output before exporting the final evidence.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="metrics" class="snapshot-section reveal">
         <div class="snapshot-layout">
           <article class="snapshot-feature">
-            <span class="eyebrow">Scan Coverage</span>
-            <h3>Start from one target and expand into domains, IPs, services, and web assets.</h3>
+            <span class="eyebrow">Signal Overview</span>
+            <h3>Telemetry that confirms readiness before each scan begins.</h3>
             <p>
-              Submit a single domain, URL, or IP, then pivot through passive intelligence, certificate history, port
-              discovery, service checks, and web enumeration in one scan flow.
+              Health, signal quality, and module posture stay visible up front so you can launch, tune scan depth, or
+              review imported evidence with confidence.
             </p>
-
             <div class="snapshot-feature__rail">
               <div>
-                <span>Target Input</span>
-                <strong>Domain, URL, or IP</strong>
+                <span>Coverage</span>
+                <strong>DNS / Ports / Web / Risk</strong>
               </div>
               <div>
-                <span>Output Scope</span>
-                <strong>Assets, Ports, Tech, Reports</strong>
+                <span>Operator mode</span>
+                <strong>Live Console + Export</strong>
               </div>
             </div>
           </article>
@@ -213,58 +392,48 @@
             <article class="snapshot-card">
               <span>Threat Level</span>
               <strong id="snapshotThreat">ELEVATED</strong>
-              <p>Risk signals combine exposure, reputation, and service findings for quick review.</p>
+              <p>Exposure, reputation, and service findings are fused into a quick-review signal.</p>
             </article>
             <article class="snapshot-card">
-              <span>Nodes</span>
+              <span>Collectors</span>
               <strong id="snapshotNodes">128</strong>
-              <p>Collectors and analysis workers remain synchronized for the next target.</p>
+              <p>Distributed workers stay synchronized for the next target intake.</p>
             </article>
             <article class="snapshot-card">
               <span>Signal</span>
               <strong id="snapshotSignal">99.1%</strong>
-              <p>Platform connectivity is healthy and ready for external lookups.</p>
+              <p>Workspace health remains stable for external lookups and module coordination.</p>
             </article>
             <article class="snapshot-card">
               <span>Active Modules</span>
               <strong id="snapshotModules">08</strong>
-              <p>Discovery and enrichment modules can be combined for each target.</p>
+              <p>Collection depth can be scaled up or down per mission profile.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section id="capabilities" class="capability-section reveal">
-        <div class="section-heading">
-          <span class="eyebrow">Scan Modules</span>
-          <h2>Core modules for discovery, enrichment, and risk review.</h2>
+      <section id="trust" class="trust-section reveal">
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="eyebrow">Trusted For Review</span>
+            <h2>Built to stay readable during live scans and detailed result review.</h2>
+          </div>
+          <p>Live status, result summaries, and deeper detail stay separated so high-signal findings are easier to spot and act on.</p>
         </div>
 
-        <div class="capability-grid">
-          <article class="capability-card capability-card--feature">
-            <span>Recon</span>
-            <strong>Target intake and scan orchestration</strong>
-            <p>Submit a domain, URL, or IP and dispatch the right collection pipeline in one place.</p>
+        <div class="trust-grid">
+          <article class="trust-card">
+            <span>Readable under load</span>
+            <strong>Clear hierarchy while scans are active</strong>
           </article>
-          <article class="capability-card capability-card--stack">
-            <span>Assets</span>
-            <strong>Domain / IP / Web mapping</strong>
-            <p>Expand hosts, subdomains, endpoints, and ownership clues into one investigation trail.</p>
+          <article class="trust-card">
+            <span>Review-first output</span>
+            <strong>Summaries, detail panes, and exports in one path</strong>
           </article>
-          <article class="capability-card capability-card--signal">
-            <span>Threat</span>
-            <strong>Reputation and service risk review</strong>
-            <p>Combine exposure, IOC context, and service findings into a faster triage workflow.</p>
-          </article>
-          <article class="capability-card capability-card--accent">
-            <span>Telemetry</span>
-            <strong>Live scan status</strong>
-            <p>Watch queue state, runtime events, and module activity while results are still arriving.</p>
-          </article>
-          <article class="capability-card capability-card--compact">
-            <span>Export</span>
-            <strong>JSON results and evidence output</strong>
-            <p>Keep portable scan records for reporting, review, and follow-up verification.</p>
+          <article class="trust-card">
+            <span>Flexible depth</span>
+            <strong>Light recon or deeper target expansion without context switching</strong>
           </article>
         </div>
       </section>
@@ -272,36 +441,88 @@
       <section id="transition" class="transition-section reveal">
         <div class="transition-shell">
           <div class="transition-copy">
-            <span class="eyebrow">Scan Workspace</span>
-            <h2>Open the live workspace to submit targets and review results.</h2>
+            <span class="eyebrow">Open The Console</span>
+            <h2>Start a scan session with live telemetry and export-ready results.</h2>
             <p>
-              Move into the scanner to configure modules, run collection, inspect findings, and export the final JSON
-              report for the active target.
+              Configure module depth, launch collection, track progress, inspect findings, and export the final report
+              package for the active target.
             </p>
 
             <div class="transition-copy__notes">
-              <span>Domain / URL / IP Input</span>
-              <span>Live Results and Logs</span>
-              <span>JSON Export Ready</span>
+              <span>Target intake + report import</span>
+              <span>Live scan status + result tabs</span>
+              <span>Portable evidence export</span>
             </div>
           </div>
 
-          <div class="transition-gate">
-            <div class="transition-gate__scan"></div>
-            <div class="transition-gate__panel">
-              <div class="transition-gate__meta">
-                <span>WORKSPACE STATUS</span>
+          <div class="transition-panel transition-gate__panel">
+            <div class="transition-panel__status">
+              <div>
+                <span>Workspace status</span>
                 <strong id="transitionState">READY FOR SCAN</strong>
               </div>
-              <div class="transition-gate__code">
-                <span>SESSION CODE</span>
+              <div>
+                <span>Session code</span>
                 <strong id="transitionCode">TKH-SCAN-128-READY</strong>
               </div>
+            </div>
+            <div class="transition-panel__actions">
               <a class="hero-button hero-button--primary transition-button" href="./console.html">Open Scan Workspace</a>
+              <a class="hero-button hero-button--ghost" href="#capabilities">Review Features</a>
             </div>
           </div>
         </div>
       </section>
+
+      <footer class="site-footer reveal">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="gate-nav__brand gate-nav__brand--footer" href="#top">
+              <div class="logo-mark" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img">
+                  <defs>
+                    <linearGradient id="landingLogoFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#7fffd4" />
+                      <stop offset="52%" stop-color="#39d2ff" />
+                      <stop offset="100%" stop-color="#a870ff" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M14 32 60 10l46 22v56l-46 22-46-22Z" fill="none" stroke="url(#landingLogoFooter)" stroke-width="4" />
+                  <path d="M30 38h60v10H70l-5 7H55l-5-7H30z" fill="url(#landingLogoFooter)" opacity="0.92" />
+                  <path d="M52 55h16v30H52z" fill="#c6fff5" opacity="0.92" />
+                  <path d="M44 66h32v6H62v14h-4V72H44z" fill="#071117" opacity="0.9" />
+                </svg>
+              </div>
+              <div class="brand-copy">
+                <span class="eyebrow">TOKIHANE / INTELLIGENCE</span>
+                <strong>Attack Surface Scanner</strong>
+              </div>
+            </a>
+            <p>Scan targets, review live telemetry, and export structured findings from one focused surface.</p>
+          </div>
+
+          <div class="footer-column">
+            <span class="eyebrow">Product</span>
+            <a href="#value">Value</a>
+            <a href="#capabilities">Capabilities</a>
+            <a href="#workflow">Scan Flow</a>
+          </div>
+
+          <div class="footer-column">
+            <span class="eyebrow">Workspace</span>
+            <a href="#metrics">Signals</a>
+            <a href="#transition">Open Console</a>
+            <a href="./console.html">Start Scan</a>
+          </div>
+
+          <div class="footer-column">
+            <span class="eyebrow">Status</span>
+            <a href="#top">Scanner Ready</a>
+            <a href="#trust">Result Review</a>
+            <span class="footer-note">Copyright © TOKIHANE</span>
+          </div>
+        </div>
+      </footer>
     </main>
 
     <script src="./landing.js" defer></script>
