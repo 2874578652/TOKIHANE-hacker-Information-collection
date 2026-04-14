@@ -927,6 +927,9 @@ select {
 .dragon-sigil__orbit,
 .dragon-sigil__wing,
 .dragon-sigil__body,
+.dragon-sigil__head,
+.dragon-sigil__tail,
+.dragon-sigil__claw,
 .dragon-sigil__horn {
   fill: none;
   stroke-linecap: round;
@@ -949,12 +952,25 @@ select {
 }
 
 .dragon-sigil__wing {
-  stroke: rgba(35, 244, 255, 0.7);
-  stroke-width: 4;
+  stroke-width: 3.8;
   filter:
     drop-shadow(0 0 12px rgba(35, 244, 255, 0.22))
     drop-shadow(0 0 22px rgba(43, 125, 255, 0.08));
   animation: dragonSpectrum 7s linear infinite;
+}
+
+.dragon-sigil__wing--rear {
+  fill: rgba(35, 244, 255, 0.06);
+  stroke: rgba(35, 244, 255, 0.72);
+}
+
+.dragon-sigil__wing--front {
+  fill: rgba(177, 76, 255, 0.08);
+  stroke: rgba(177, 76, 255, 0.74);
+  filter:
+    drop-shadow(0 0 12px rgba(177, 76, 255, 0.18))
+    drop-shadow(0 0 20px rgba(35, 244, 255, 0.08));
+  animation: dragonSpectrum 7s linear infinite reverse;
 }
 
 .dragon-sigil__body {
@@ -964,6 +980,28 @@ select {
     drop-shadow(0 0 10px rgba(255, 255, 255, 0.12))
     drop-shadow(0 0 16px rgba(35, 244, 255, 0.12));
   animation: dragonBreath 4.2s ease-in-out infinite;
+}
+
+.dragon-sigil__head {
+  stroke: rgba(247, 252, 255, 0.96);
+  stroke-width: 4.4;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 255, 255, 0.14))
+    drop-shadow(0 0 18px rgba(35, 244, 255, 0.14));
+  animation: dragonBreath 4.2s ease-in-out infinite;
+}
+
+.dragon-sigil__tail {
+  stroke: rgba(35, 244, 255, 0.76);
+  stroke-width: 3.6;
+  filter: drop-shadow(0 0 10px rgba(35, 244, 255, 0.24));
+  animation: dragonSpectrum 7s linear infinite;
+}
+
+.dragon-sigil__claw {
+  stroke: rgba(241, 252, 255, 0.82);
+  stroke-width: 2.8;
+  filter: drop-shadow(0 0 8px rgba(35, 244, 255, 0.16));
 }
 
 .dragon-sigil__horn {
