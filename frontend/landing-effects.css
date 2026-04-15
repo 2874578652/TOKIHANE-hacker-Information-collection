@@ -60,7 +60,7 @@ body.is-pointer-idle::after {
   position: absolute;
   left: 0;
   top: 0;
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-mono);
   line-height: 1;
   color: rgba(111, 251, 232, 0.92);
   text-shadow:
@@ -115,6 +115,7 @@ body.is-arriving-assembled .particle-field {
 
 body.is-arriving-assembled .gate-nav,
 body.is-arriving-assembled .hero-stage,
+body.is-arriving-assembled .archive-section,
 body.is-arriving-assembled .snapshot-section,
 body.is-arriving-assembled .transition-shell,
 body.is-arriving-assembled .site-footer {
@@ -126,6 +127,7 @@ body.is-digitizing-out .hero-stage,
 body.is-digitizing-out .value-section,
 body.is-digitizing-out .capability-section,
 body.is-digitizing-out .workflow-section,
+body.is-digitizing-out .archive-section,
 body.is-digitizing-out .snapshot-section,
 body.is-digitizing-out .trust-section,
 body.is-digitizing-out .transition-shell,
@@ -136,6 +138,7 @@ body.is-digitizing-out .readout-card,
 body.is-digitizing-out .value-card,
 body.is-digitizing-out .capability-band,
 body.is-digitizing-out .workflow-step,
+body.is-digitizing-out .archive-panel,
 body.is-digitizing-out .snapshot-card,
 body.is-digitizing-out .trust-card,
 body.is-digitizing-out .nav-chip,

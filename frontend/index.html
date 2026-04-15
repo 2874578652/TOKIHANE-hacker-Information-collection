@@ -3,32 +3,599 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKI Scan Console</title>
+    <title>TOKI Scan Recon Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./theme.css" />
+    <link rel="stylesheet" href="./landing.css" />
+    <link rel="stylesheet" href="./landing-effects.css" />
   </head>
   <body>
-    <div class="scene scene--grid" aria-hidden="true"></div>
-    <div class="scene scene--scanlines" aria-hidden="true"></div>
-    <div class="scene scene--noise" aria-hidden="true"></div>
-    <div class="scene scene--aurora" aria-hidden="true"></div>
-    <div class="scene scene--beams" aria-hidden="true"></div>
-    <div class="scene scene--orbs" aria-hidden="true"></div>
-    <div class="scene scene--glow scene--glow-a" aria-hidden="true"></div>
-    <div class="scene scene--glow scene--glow-b" aria-hidden="true"></div>
-    <div class="scene scene--glow scene--glow-c" aria-hidden="true"></div>
+    <canvas class="fx-canvas laser-rain" id="laserRain" aria-hidden="true"></canvas>
+    <canvas class="fx-canvas particle-field" id="particleField" aria-hidden="true"></canvas>
+    <div class="page-sweep" aria-hidden="true"></div>
+    <div class="transition-flash" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="horizon-grid" aria-hidden="true"></div>
 
-    <div class="app-shell">
-      <header class="topbar hud-panel">
-        <div class="topbar__main">
-          <div class="brand-block">
-            <h1 class="brand-lockup">
-              <span class="brand-logo" aria-hidden="true">
+    <div class="boot-overlay" id="bootOverlay">
+      <div class="boot-overlay__grid" aria-hidden="true"></div>
+      <div class="boot-overlay__content">
+        <p class="eyebrow">Portal Boot / Official Entry Layer</p>
+        <h1>TOKI SCAN PORTAL</h1>
+        <div class="boot-feed" id="bootFeed" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="landing-shell">
+      <header class="gate-nav reveal" id="top">
+        <div class="gate-nav__brand">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 88 88" role="presentation" focusable="false">
+              <path
+                class="brand-logo__badge"
+                d="M44 6 66 15 79 37v14L66 73 44 82 22 73 9 51V37L22 15Z"
+              />
+              <path
+                class="brand-logo__badge-inner"
+                d="M44 16 58 22 68 38v12L58 66 44 72 30 66 20 50V38L30 22Z"
+              />
+              <path class="brand-logo__monogram brand-logo__monogram--top" d="M24 28h38" />
+              <path class="brand-logo__monogram brand-logo__monogram--stem" d="M34 28v34" />
+              <path class="brand-logo__accent" d="M38 44 59 29" />
+              <path class="brand-logo__accent" d="M38 44 61 61" />
+              <path class="brand-logo__core" d="M44 38 50 44 44 50 38 44Z" />
+            </svg>
+          </span>
+
+          <span class="brand-copy">
+            <span class="eyebrow">Official Recon Gate</span>
+            <strong>TOKI SCAN / Security Recon Portal</strong>
+            <span>资产侦察、攻击面建模与风险分析的系统入口。</span>
+          </span>
+        </div>
+
+        <nav class="gate-nav__links" aria-label="门户导航">
+          <a href="#entry">首页</a>
+          <a href="#capabilities">平台能力</a>
+          <a href="#workflow">作战链路</a>
+          <a href="#command">情报总览</a>
+          <a href="#archive">报告中心</a>
+          <a href="#protocols">使用说明</a>
+        </nav>
+
+        <div class="gate-nav__status">
+          <div class="nav-chip">
+            <span>grid signal</span>
+            <strong id="navSignal">99.1%</strong>
+          </div>
+          <div class="nav-chip">
+            <span>ops clock</span>
+            <strong id="navClock">--:--:--</strong>
+          </div>
+          <a class="launch-button" id="launchButton" href="./console.html">进入系统</a>
+        </div>
+      </header>
+
+      <section class="hero-stage reveal" id="entry">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="hero-copy__intro">
+              <span class="hero-badge">
+                <i></i>
+                backend-mapped / threat-intel-ready
+              </span>
+
+              <h1 class="hero-logo-title">
+                <span>TOKI SCAN</span>
+                <span>RECON GATE</span>
+              </h1>
+
+              <p class="hero-copy__lead">
+                这不是普通官网首页，而是一套网络安全扫描平台的官方入口。围绕真实后端能力构建，聚焦目标接入、资产侦察、Web 枚举、服务风险关联与证据级报告输出。
+              </p>
+            </div>
+
+            <div class="hero-actions">
+              <a class="hero-button hero-button--primary" href="./console.html">进入扫描平台</a>
+              <a class="hero-button hero-button--ghost" href="#capabilities">查看平台能力</a>
+              <a class="hero-button hero-button--ghost" href="#archive">查看报告样例</a>
+            </div>
+
+            <div class="hero-trust-strip">
+              <span>ASSET RECON</span>
+              <span>ATTACK SURFACE</span>
+              <span>RISK CORRELATION</span>
+              <span>EVIDENCE ARCHIVE</span>
+            </div>
+
+            <div class="hero-meta">
+              <div class="meta-strip">
+                <span>entry tone</span>
+                <strong id="entryTone">READY</strong>
+              </div>
+              <div class="meta-strip">
+                <span>routing mode</span>
+                <strong>OFFICIAL GATEWAY</strong>
+              </div>
+              <div class="meta-strip">
+                <span>task fabric</span>
+                <strong>ASYNC MISSIONS</strong>
+              </div>
+              <div class="meta-strip">
+                <span>evidence posture</span>
+                <strong>REPORT-FIRST</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-visual__frame">
+              <div class="hero-visual__top">
+                <div class="hero-visual__labels">
+                  <span>official tactical entry / product universe gate</span>
+                  <strong id="heroVector">TARGET GRID / 024.110 / 121.470</strong>
+                </div>
+
+                <div class="hero-status-badge">
+                  <span>threat posture</span>
+                  <strong id="heroThreatLabel">MONITORED</strong>
+                  <span id="heroPulse">LOW</span>
+                </div>
+              </div>
+
+              <div class="hero-display">
+                <div class="hero-display__glow" aria-hidden="true"></div>
+                <div class="hero-display__grid" aria-hidden="true"></div>
+
+                <div class="core-visual" aria-hidden="true">
+                  <div class="core-visual__scope">
+                    <div class="core-visual__grid"></div>
+                    <div class="core-visual__ring core-visual__ring--outer"></div>
+                    <div class="core-visual__ring core-visual__ring--mid"></div>
+                    <div class="core-visual__ring core-visual__ring--inner"></div>
+                    <div class="core-visual__axis core-visual__axis--x"></div>
+                    <div class="core-visual__axis core-visual__axis--y"></div>
+                    <div class="core-visual__axis core-visual__axis--diag-a"></div>
+                    <div class="core-visual__axis core-visual__axis--diag-b"></div>
+                    <div class="core-visual__sweep"></div>
+                  </div>
+
+                  <div class="core-node core-node--a"><i></i><span>dns</span></div>
+                  <div class="core-node core-node--b"><i></i><span>web</span></div>
+                  <div class="core-node core-node--c"><i></i><span>service</span></div>
+                  <div class="core-node core-node--d"><i></i><span>risk</span></div>
+                </div>
+
+                <article class="hero-center-card">
+                  <span>portal directive</span>
+                  <strong id="heroCoreState">TARGET READY</strong>
+                  <p id="heroCoreNote">进入扫描工作台后即可挂载模块、发起异步任务并回收证据链。</p>
+                </article>
+
+                <article class="hero-feed hero-feed--floating">
+                  <div class="hero-feed__head">
+                    <span class="eyebrow">Portal Feed</span>
+                    <strong id="heroGateStatus">Scanner Ready</strong>
+                  </div>
+                  <div class="hero-feed__body" id="heroFeed">
+                    <div>portal boot completed / waiting for operator input...</div>
+                  </div>
+                </article>
+
+                <div class="hero-floating hero-floating--north">
+                  <article class="readout-card readout-card--accent">
+                    <span>packet stream</span>
+                    <strong id="heroPacket">682 KB/S</strong>
+                    <p>入口层信号维持在线，适配异步任务回执与状态轮询。</p>
+                  </article>
+                </div>
+
+                <div class="hero-floating hero-floating--west">
+                  <article class="readout-card">
+                    <span>node sync</span>
+                    <strong id="heroNodeSync">128 / 128</strong>
+                    <p>门户层同步任务、模块、结果与报告模型。</p>
+                  </article>
+                </div>
+
+                <div class="hero-floating hero-floating--south">
+                  <article class="readout-card">
+                    <span>pulse profile</span>
+                    <strong id="heroPulseMirror">LOW</strong>
+                    <p>当前入口处于待命状态，可直接切入侦察工作台。</p>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="value-section reveal" id="doctrine">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Platform Doctrine / System Declaration</p>
+            <h2>不是普通互联网产品首页，而是安全扫描系统的官方入口层。</h2>
+          </div>
+          <p>
+            首页承担平台世界观、能力总览与入口调度的职责。它不直接执行扫描，但必须让用户在进入控制台前就感受到真实的侦察体系、模块编排逻辑与风险分析压迫感。
+          </p>
+        </div>
+
+        <div class="value-grid">
+          <article class="value-card value-card--raised">
+            <span class="value-card__icon">R-01</span>
+            <strong>Asset Recon First</strong>
+            <p>从目标输入开始统一处理域名、URL、IP 与附加网段，建立后续所有侦察链路的入口语义。</p>
+          </article>
+
+          <article class="value-card">
+            <span class="value-card__icon">R-02</span>
+            <strong>Async Mission Fabric</strong>
+            <p>任务以异步模型运行，入口、队列、执行状态、回执结构与结果归档共享同一条任务总线。</p>
+          </article>
+
+          <article class="value-card value-card--raised">
+            <span class="value-card__icon">R-03</span>
+            <strong>Evidence Over Vanity</strong>
+            <p>平台强调真实数据回收与证据视图，而不是空洞展示。报告、状态、模块返回与失败路径都被视为有效信息。</p>
+          </article>
+
+          <article class="value-card">
+            <span class="value-card__icon">R-04</span>
+            <strong>Risk Correlation Engine</strong>
+            <p>从开放端口到 Web 端点，从技术指纹到 CVE 与弱配置检查，最终形成可复盘、可留痕的攻击面模型。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="capability-section reveal" id="capabilities">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Capability Matrix / Module Mount</p>
+            <h2>平台能力不是普通功能列表，而是一组可挂载、可联动的侦察模块系统。</h2>
+          </div>
+          <p>每个模块都服务于同一条链路：目标接入、资产发现、攻击面展开、风险归并、报告生成与历史复盘。</p>
+        </div>
+
+        <div class="capability-stream">
+          <div class="capability-band">
+            <div class="capability-band__copy">
+              <p class="eyebrow">Module Rack / 01</p>
+              <h3>目标输入、任务注入与前置情报展开</h3>
+              <p>入口层负责接收目标、归一化结构、注入任务队列，并为 DNS、证书透明度、被动 DNS 与 ASN 扩展准备初始上下文。</p>
+              <ul class="capability-list">
+                <li>域名 / URL / IP / CIDR 统一入口</li>
+                <li>超时、端口模式、扫描引擎等前置参数控制</li>
+                <li>CT、被动 DNS、ASN 与网段扩展能力联动</li>
+              </ul>
+            </div>
+
+            <div class="capability-band__visual">
+              <article class="capability-panel">
+                <span>target acquisition stack</span>
+                <strong>Input / Normalize / Queue</strong>
+                <div class="capability-panel__rows">
+                  <div>domain / url / ip parsing</div>
+                  <div>async job injection</div>
+                  <div>network scope extension</div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="capability-band capability-band--reverse">
+            <div class="capability-band__copy">
+              <p class="eyebrow">Module Rack / 02</p>
+              <h3>资产发现、Web 枚举与服务暴露面回收</h3>
+              <p>围绕 DNS、WHOIS、技术栈、目录探测、JS 提取、敏感路径与端口探测展开侦察，把目标从一个地址扩展成一张攻击面网络。</p>
+              <ul class="capability-list">
+                <li>DNS / WHOIS / 技术栈识别</li>
+                <li>站内爬取、接口提取、敏感路径与目录探测</li>
+                <li>IP / Port 扫描与服务清单回收</li>
+              </ul>
+            </div>
+
+            <div class="capability-band__visual">
+              <article class="capability-panel">
+                <span>surface enumeration fabric</span>
+                <strong>Web / Service / Asset Expansion</strong>
+                <div class="capability-panel__stack">
+                  <div>dns / whois / tech stack</div>
+                  <div>crawler / js extraction / dir probe</div>
+                  <div>ip ports / service banners / endpoint union</div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="capability-band">
+            <div class="capability-band__copy">
+              <p class="eyebrow">Module Rack / 03</p>
+              <h3>风险关联、证据聚合与报告归档</h3>
+              <p>平台不是停在发现层，而是继续把服务清单、CPE、CVE、弱配置检查与导出结果编排到同一份报告模型中。</p>
+              <ul class="capability-list">
+                <li>CVE 关联与弱配置检查</li>
+                <li>风险命中统计与证据视图重组</li>
+                <li>JSON 报告导出、离线导入与历史任务复盘</li>
+              </ul>
+            </div>
+
+            <div class="capability-band__visual">
+              <article class="capability-panel">
+                <span>threat correlation output</span>
+                <strong>Risk / Evidence / Archive</strong>
+                <div class="capability-panel__ledger">
+                  <div><span>service risk</span><strong>cpe + cve mapping</strong></div>
+                  <div><span>weak checks</span><strong>config exposure audit</strong></div>
+                  <div><span>report export</span><strong>json evidence package</strong></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workflow-section reveal" id="workflow">
+        <div class="section-heading">
+          <p class="eyebrow">Operation Chain / Recon Workflow</p>
+          <h2>平台链路从目标接入开始，不是 PPT 流程图，而是任务与证据的推进轨迹。</h2>
+        </div>
+
+        <div class="workflow-rail" aria-hidden="true"></div>
+
+        <div class="workflow-grid workflow-grid--six">
+          <article class="workflow-step">
+            <span class="workflow-step__index">01</span>
+            <strong>Target Intake</strong>
+            <p>域名、URL、IP 与扩展网段被规范化为统一任务输入。</p>
+          </article>
+
+          <article class="workflow-step">
+            <span class="workflow-step__index">02</span>
+            <strong>Module Mount</strong>
+            <p>根据目标与参数决定启用 DNS、Web、服务与风险模块。</p>
+          </article>
+
+          <article class="workflow-step">
+            <span class="workflow-step__index">03</span>
+            <strong>Async Dispatch</strong>
+            <p>任务注入后端队列，门户和控制台共享同一状态视图。</p>
+          </article>
+
+          <article class="workflow-step">
+            <span class="workflow-step__index">04</span>
+            <strong>Surface Recovery</strong>
+            <p>回收端口、服务、Web 资产、接口线索与技术指纹。</p>
+          </article>
+
+          <article class="workflow-step">
+            <span class="workflow-step__index">05</span>
+            <strong>Risk Correlation</strong>
+            <p>将服务识别结果与弱配置、CVE、情报线索进行关联。</p>
+          </article>
+
+          <article class="workflow-step">
+            <span class="workflow-step__index">06</span>
+            <strong>Report Archive</strong>
+            <p>生成统一报告结构，并进入历史任务与离线复盘链路。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="snapshot-section reveal" id="command">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Command Overview / Portal Status</p>
+            <h2>作为官网首页，它仍然必须像真实系统入口，而不是普通宣传页。</h2>
+          </div>
+          <p>这里展示平台态势、最近任务摘要、模块覆盖与当前入口信号，用来强化“官方入口 / 指挥台”而不是“营销首页”的角色。</p>
+        </div>
+
+        <div class="snapshot-layout">
+          <article class="snapshot-feature">
+            <p class="eyebrow">Command State / Entry Posture</p>
+            <h3>门户层持续监听任务总线、入口信号与模块可用性。</h3>
+            <p>
+              首页不直接执行扫描，但它展示的是同一套产品宇宙中的实时态势。只要后端在线、任务存在、样例报告可读取，这里就会形成一个真实的“平台入口摘要”。
+            </p>
+
+            <div class="snapshot-feature__rail">
+              <div>
+                <span>threat posture</span>
+                <strong id="snapshotThreat">MONITORED</strong>
+              </div>
+              <div>
+                <span>online nodes</span>
+                <strong id="snapshotNodes">128</strong>
+              </div>
+              <div>
+                <span>signal integrity</span>
+                <strong id="snapshotSignal">99.1%</strong>
+              </div>
+              <div>
+                <span>module lattice</span>
+                <strong id="snapshotModules">08</strong>
+              </div>
+            </div>
+          </article>
+
+          <div class="snapshot-grid">
+            <article class="snapshot-card">
+              <span>recent tasks</span>
+              <strong id="portalMissionCount">00</strong>
+              <p>最近任务数量，用来反映平台入口的实时任务活跃度。</p>
+            </article>
+
+            <article class="snapshot-card">
+              <span>success ratio</span>
+              <strong id="portalSuccessRate">--%</strong>
+              <p>基于最近任务状态推导的完成率，强调任务执行体系的稳定性。</p>
+            </article>
+
+            <article class="snapshot-card">
+              <span>risk findings</span>
+              <strong id="portalRiskHits">--</strong>
+              <p>从最近可用报告中提取的风险命中数，作为风险压力指标。</p>
+            </article>
+
+            <article class="snapshot-card">
+              <span>coverage matrix</span>
+              <strong id="portalCoverage">--</strong>
+              <p>结合样例报告与模块结果推导的平台覆盖能力摘要。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="archive-section reveal" id="archive">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Archive Deck / Mission & Report Preview</p>
+            <h2>最近任务与报告预览必须像作战记录，而不是博客列表或营销样例。</h2>
+          </div>
+          <p>这一区域承担“真实系统感”职责，用日志、任务状态、目标记录和证据摘要来证明平台不是一张静态宣传页。</p>
+        </div>
+
+        <div class="archive-layout">
+          <article class="archive-panel">
+            <div class="archive-panel__head">
+              <div>
+                <p class="eyebrow">Recent Operations</p>
+                <h3>最近任务记录</h3>
+              </div>
+              <span class="briefing-tag">mission ledger</span>
+            </div>
+
+            <div class="ops-ledger" id="portalJobList">
+              <div class="ops-ledger__empty">任务记录载入中...</div>
+            </div>
+          </article>
+
+          <article class="archive-panel archive-panel--report">
+            <div class="archive-panel__head">
+              <div>
+                <p class="eyebrow">Report Preview</p>
+                <h3>证据样例与报告摘要</h3>
+              </div>
+              <span class="briefing-tag">evidence package</span>
+            </div>
+
+            <div class="report-deck">
+              <div class="report-deck__hero">
+                <span>active report target</span>
+                <strong id="reportTarget">等待载入样例报告</strong>
+                <p id="reportSummary">门户会尝试读取 `report.json`，用于展示平台的证据模型与模块输出结构。</p>
+              </div>
+
+              <div class="report-grid">
+                <div>
+                  <span>open ports</span>
+                  <strong id="reportPorts">-</strong>
+                </div>
+                <div>
+                  <span>risk hits</span>
+                  <strong id="reportRisks">-</strong>
+                </div>
+                <div>
+                  <span>tech prints</span>
+                  <strong id="reportTech">-</strong>
+                </div>
+                <div>
+                  <span>web endpoints</span>
+                  <strong id="reportEndpoints">-</strong>
+                </div>
+              </div>
+
+              <div class="report-modules" id="reportModules">
+                <span class="report-module">waiting for report feed...</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="trust-section reveal" id="protocols">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Platform Protocols / Usage Positioning</p>
+            <h2>平台价值表达采用系统声明口吻，而不是普通营销话术。</h2>
+          </div>
+          <p>它服务于扫描、侦察、分析、归档与复盘，不把自己包装成“漂亮的 SaaS 首页”，而是把入口、能力和结果结构都暴露得足够明确。</p>
+        </div>
+
+        <div class="trust-grid">
+          <article class="trust-card">
+            <span>01 / backend mapped</span>
+            <strong>官网首页与扫描工作台围绕真实后端能力构建</strong>
+            <p>任务状态、结果结构、报告模型、样例导入与风险关联不是装饰层，而是同一产品系统的一部分。</p>
+          </article>
+
+          <article class="trust-card">
+            <span>02 / operator ready</span>
+            <strong>入口页的职责是建立世界观，并把用户准确导入侦察系统</strong>
+            <p>因此首页必须承担平台介绍、任务总览、报告预览与系统入口收束，而不是只做视觉装饰。</p>
+          </article>
+
+          <article class="trust-card">
+            <span>03 / evidence first</span>
+            <strong>为资产发现、攻击面管理与风险分析提供统一入口</strong>
+            <p>无论从首页进入，还是从控制台执行，最终都回到同一个目标：让目标、模块、证据与风险形成可复盘的链路。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="transition-section reveal">
+        <div class="transition-shell">
+          <div class="transition-copy">
+            <p class="eyebrow">Final Gate / Console Transition</p>
+            <h2>切入扫描工作台，开始挂载模块、接管目标并回收证据。</h2>
+            <p>
+              门户页到这里结束，接下来进入实际操作层。你将获得目标输入、能力开关、异步任务追踪、报告导入和原始 JSON 视图等完整侦察操作面板。
+            </p>
+
+            <div class="transition-copy__notes">
+              <span>DNS / WEB / SERVICE / RISK</span>
+              <span>REPORT ARCHIVE</span>
+              <span>ASYNC JOB CONTROL</span>
+            </div>
+          </div>
+
+          <div class="transition-panel">
+            <div class="transition-panel__status">
+              <div>
+                <span>entry state</span>
+                <strong id="transitionState">READY FOR SCAN</strong>
+              </div>
+              <div>
+                <span>portal code</span>
+                <strong id="transitionCode">TKH-128-MONITORED</strong>
+              </div>
+              <div>
+                <span>launch vector</span>
+                <strong>./console.html</strong>
+              </div>
+            </div>
+
+            <div class="transition-panel__actions">
+              <a class="hero-button hero-button--primary" id="enterButton" href="./console.html">进入扫描工作台</a>
+              <a class="hero-button hero-button--ghost" href="#archive">先看任务和报告</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer reveal">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="gate-nav__brand gate-nav__brand--footer">
+              <span class="logo-mark" aria-hidden="true">
                 <svg viewBox="0 0 88 88" role="presentation" focusable="false">
                   <path
                     class="brand-logo__badge"
@@ -45,446 +612,45 @@
                   <path class="brand-logo__core" d="M44 38 50 44 44 50 38 44Z" />
                 </svg>
               </span>
-              <span class="brand-title" data-text="TOKI SCAN">TOKI SCAN</span>
-            </h1>
-            <p class="topbar__lead">
-              围绕异步扫描任务、能力编排、实时回执与证据视图重建的网络侦察控制台。页面保持现有后端逻辑不变，但视觉系统全面重构为安全作战终端。
-            </p>
+
+              <span class="brand-copy">
+                <span class="eyebrow">Official Entry Deck</span>
+                <strong>TOKI SCAN / Recon Portal</strong>
+                <span>网络侦察、资产发现、风险分析与证据归档平台入口。</span>
+              </span>
+            </div>
+
+            <p>门户页负责世界观建立、能力展示、平台总览与系统入口收束；控制台负责真实扫描、任务追踪与结果分析。</p>
+            <p class="footer-note">TOKI Scan Portal / Security Recon Platform / Official Gateway Layer</p>
           </div>
 
-          <div class="signal-strip" aria-hidden="true">
-            <div class="signal-chip">
-              <span>async jobs</span>
-              <strong>task queue</strong>
-            </div>
-            <div class="signal-chip">
-              <span>module fabric</span>
-              <strong>scan lanes</strong>
-            </div>
-            <div class="signal-chip">
-              <span>evidence mode</span>
-              <strong>live report</strong>
-            </div>
+          <div class="footer-column">
+            <p class="eyebrow">Navigation</p>
+            <a href="#entry">门户首页</a>
+            <a href="#capabilities">平台能力</a>
+            <a href="#workflow">作战链路</a>
+            <a href="#command">情报总览</a>
+          </div>
+
+          <div class="footer-column">
+            <p class="eyebrow">Operations</p>
+            <a href="#archive">任务记录</a>
+            <a href="#archive">报告样例</a>
+            <a href="./console.html">扫描工作台</a>
+            <a href="#protocols">使用说明</a>
+          </div>
+
+          <div class="footer-column">
+            <p class="eyebrow">System Scope</p>
+            <span>DNS / WHOIS / TECH / WEB</span>
+            <span>IP / PORT / SERVICE / CVE</span>
+            <span>JSON EXPORT / HISTORY / REVIEW</span>
+            <span>ASYNC JOBS / EVIDENCE MATRIX</span>
           </div>
         </div>
-
-        <div class="topbar__actions">
-          <div class="health-pill" id="healthPill" data-tone="neutral">
-            <span class="dot"></span>
-            <span id="healthText">检查 API 中</span>
-          </div>
-          <button class="button button--secondary" id="refreshJobsBtn" type="button">刷新任务</button>
-        </div>
-      </header>
-
-      <section class="hero-grid">
-        <article class="hero-card hero-card--highlight hud-panel">
-          <div class="hero-card__head">
-            <div>
-              <p class="eyebrow">Current Focus / Target Lock</p>
-              <h2 id="heroTarget">尚未锁定目标</h2>
-            </div>
-            <div class="hero-lock">
-              <span class="hero-lock__label">scan posture</span>
-              <strong>armed</strong>
-            </div>
-          </div>
-
-          <p class="hero-summary" id="heroSummary">先输入域名、URL 或 IP，再装配能力模块并发起任务。</p>
-
-          <div class="hero-metrics">
-            <div class="metric-tile">
-              <span>任务状态</span>
-              <strong id="heroStatus">Idle</strong>
-            </div>
-            <div class="metric-tile">
-              <span>已启用模块</span>
-              <strong id="heroModules">0</strong>
-            </div>
-            <div class="metric-tile">
-              <span>开放端口</span>
-              <strong id="heroPorts">-</strong>
-            </div>
-            <div class="metric-tile">
-              <span>风险条目</span>
-              <strong id="heroRisks">-</strong>
-            </div>
-          </div>
-        </article>
-
-        <article class="hero-card hero-card--briefing hud-panel">
-          <div class="hero-card__head">
-            <div>
-              <p class="eyebrow">Mission Brief / Task Model</p>
-              <h3>扫描任务如何运行</h3>
-            </div>
-            <span class="briefing-tag">backend-mapped</span>
-          </div>
-
-          <ul class="plain-list">
-            <li>创建任务后立即返回 `job_id`，前端通过轮询追踪任务状态。</li>
-            <li>状态真实存在 `queued / running / stopping / completed / failed / canceled`。</li>
-            <li>结果由 DNS、WHOIS、技术栈、IP、Web、风险等模块分段组成。</li>
-            <li>模块既可能完成，也可能未启用、跳过、失败、取消或返回空结果。</li>
-          </ul>
-        </article>
-      </section>
-
-      <main class="workspace-shell">
-        <section class="workspace-band workspace-band--control">
-          <section class="panel console-panel console-panel--scan">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Scan Intake / Parameter Injection</p>
-                <h2>发起扫描</h2>
-              </div>
-              <div class="panel-flags">
-                <span class="console-flag">task injection</span>
-              </div>
-            </div>
-
-            <form id="scanForm" class="scan-form">
-              <section class="subsection subsection--compact subsection--primary">
-                <div class="subsection__head">
-                  <div>
-                    <p class="eyebrow">Primary Inputs</p>
-                    <h3>基础配置</h3>
-                  </div>
-                  <span class="inline-stat">首屏常用</span>
-                </div>
-
-                <div class="stack">
-                  <label class="field">
-                    <span>目标</span>
-                    <input id="targetInput" name="target" type="text" placeholder="example.com / https://target.tld / 203.0.113.5" required />
-                  </label>
-
-                  <label class="field">
-                    <span>Backend API</span>
-                    <input id="apiUrlInput" name="apiUrl" type="url" placeholder="http://127.0.0.1:8000/api/scan" />
-                  </label>
-
-                  <div class="field-grid field-grid--two">
-                    <label class="field">
-                      <span>请求超时</span>
-                      <input id="timeoutInput" name="timeout" type="number" min="1" max="300" value="10" />
-                    </label>
-                    <label class="field">
-                      <span>端口超时</span>
-                      <input id="portTimeoutInput" name="portTimeout" type="number" min="0.05" max="60" step="0.05" value="0.8" />
-                    </label>
-                  </div>
-
-                  <div class="field-grid field-grid--two">
-                    <label class="field">
-                      <span>端口模式</span>
-                      <select id="scanModeInput" name="scanMode">
-                        <option value="common">常用端口</option>
-                        <option value="full" selected>全端口</option>
-                        <option value="custom">自定义</option>
-                      </select>
-                    </label>
-                    <label class="field">
-                      <span>扫描引擎</span>
-                      <select id="portScannerInput" name="portScanner">
-                        <option value="auto" selected>auto</option>
-                        <option value="nmap">nmap</option>
-                        <option value="builtin">builtin</option>
-                      </select>
-                    </label>
-                  </div>
-
-                  <label class="field" id="customPortsField" hidden>
-                    <span>自定义端口</span>
-                    <input id="customPortsInput" name="customPorts" type="text" placeholder="22,80,443,3306 或 1-1024" />
-                  </label>
-                </div>
-              </section>
-
-              <section class="subsection subsection--compact subsection--toggles">
-                <div class="subsection__head">
-                  <div>
-                    <p class="eyebrow">Quick Toggles</p>
-                    <h3>核心开关</h3>
-                  </div>
-                  <span class="inline-stat"><strong id="moduleCount">0</strong> 个启用</span>
-                </div>
-
-                <div class="toggle-grid">
-                  <label class="toggle">
-                    <input id="tcpScanInput" type="checkbox" checked />
-                    <span>TCP 扫描</span>
-                  </label>
-                  <label class="toggle">
-                    <input id="udpScanInput" type="checkbox" checked />
-                    <span>UDP 扫描</span>
-                  </label>
-                  <label class="toggle">
-                    <input id="allowPrivateIpInput" type="checkbox" />
-                    <span>允许私网 IP</span>
-                  </label>
-                  <label class="toggle">
-                    <input id="vtScanInput" type="checkbox" />
-                    <span>VirusTotal</span>
-                  </label>
-                </div>
-
-                <div class="toki-sigil" aria-hidden="true">
-                  <svg viewBox="0 0 240 240" role="presentation" focusable="false">
-                    <path
-                      class="brand-logo__badge"
-                      d="M120 28 170 48 198 98v32L170 180 120 200 70 180 42 130V98L70 48Z"
-                    />
-                    <path
-                      class="brand-logo__badge-inner"
-                      d="M120 52 152 66 174 104v20L152 162 120 176 88 162 66 124V104L88 66Z"
-                    />
-                    <path
-                      class="brand-logo__monogram brand-logo__monogram--top"
-                      d="M78 84h84"
-                    />
-                    <path
-                      class="brand-logo__monogram brand-logo__monogram--stem"
-                      d="M100 84v74"
-                    />
-                    <path
-                      class="brand-logo__accent"
-                      d="M108 120 154 86"
-                    />
-                    <path class="brand-logo__accent" d="M108 120 158 156" />
-                    <path class="brand-logo__core" d="M120 106 132 118 120 130 108 118Z" />
-                  </svg>
-                </div>
-              </section>
-
-              <details class="subsection accordion subsection--advanced">
-                <summary class="accordion__summary">
-                  <div>
-                    <p class="eyebrow">Advanced Network</p>
-                    <h3>高级输入项</h3>
-                  </div>
-                  <span class="accordion__hint">CIDR / API Key</span>
-                </summary>
-
-                <div class="accordion__body stack">
-                  <label class="field">
-                    <span>附加 CIDR 目标</span>
-                    <textarea id="cidrTargetsInput" rows="2" placeholder="192.168.1.0/24,10.0.0.0/24"></textarea>
-                  </label>
-
-                  <div class="field-grid field-grid--two">
-                    <label class="field">
-                      <span>VirusTotal API Key</span>
-                      <input id="vtApiKeyInput" type="password" placeholder="仅在启用 VirusTotal 时需要" />
-                    </label>
-                    <label class="field">
-                      <span>NVD API Key</span>
-                      <input id="nvdApiKeyInput" type="password" placeholder="仅在启用 CVE 关联时需要" />
-                    </label>
-                  </div>
-                </div>
-              </details>
-
-              <section class="subsection subsection--modules">
-                <div class="subsection__head">
-                  <div>
-                    <p class="eyebrow">Module Matrix</p>
-                    <h3>能力挂载区</h3>
-                  </div>
-                  <span class="inline-stat">按需展开</span>
-                </div>
-
-                <div class="module-groups">
-                  <details class="module-group accordion">
-                    <summary class="accordion__summary accordion__summary--small">
-                      <div>
-                        <h4>基础增强</h4>
-                        <p class="hint">CT、被动 DNS、ASN</p>
-                      </div>
-                    </summary>
-                    <div class="accordion__body module-group__body">
-                      <label class="toggle"><input id="ctScanInput" type="checkbox" /> <span>证书透明度</span></label>
-                      <label class="toggle"><input id="passiveDnsInput" type="checkbox" /> <span>被动 DNS</span></label>
-                      <label class="toggle"><input id="asnScanInput" type="checkbox" /> <span>ASN 情报</span></label>
-                      <label class="toggle"><input id="asnExpandInput" type="checkbox" /> <span>同 C 段扩展</span></label>
-                    </div>
-                  </details>
-
-                  <details class="module-group accordion">
-                    <summary class="accordion__summary accordion__summary--small">
-                      <div>
-                        <h4>Web 资产枚举</h4>
-                        <p class="hint">爬取、JS、敏感路径、目录探测</p>
-                      </div>
-                    </summary>
-                    <div class="accordion__body module-group__body">
-                      <label class="toggle"><input id="webAssetScanInput" type="checkbox" checked /> <span>启用 Web 枚举</span></label>
-                      <label class="toggle"><input id="webCrawlerInput" type="checkbox" checked /> <span>站内爬取</span></label>
-                      <label class="toggle"><input id="webJsExtractInput" type="checkbox" checked /> <span>JS 接口提取</span></label>
-                      <label class="toggle"><input id="webSensitiveInput" type="checkbox" checked /> <span>敏感路径提取</span></label>
-                      <label class="toggle"><input id="webDirScanInput" type="checkbox" checked /> <span>目录探测</span></label>
-                      <label class="toggle"><input id="webDirFfufInput" type="checkbox" /> <span>优先 ffuf</span></label>
-                    </div>
-                  </details>
-
-                  <details class="module-group accordion" open>
-                    <summary class="accordion__summary accordion__summary--small">
-                      <div>
-                        <h4>服务风险</h4>
-                        <p class="hint">服务清单、CVE、弱配置检查</p>
-                      </div>
-                    </summary>
-                    <div class="accordion__body module-group__body">
-                      <label class="toggle"><input id="serviceRiskInput" type="checkbox" checked /> <span>启用服务风险分析</span></label>
-                      <label class="toggle"><input id="cveLookupInput" type="checkbox" checked /> <span>CVE 关联</span></label>
-                      <label class="toggle"><input id="weakChecksInput" type="checkbox" checked /> <span>弱配置检查</span></label>
-                    </div>
-                  </details>
-                </div>
-              </section>
-
-              <div class="actions actions--form">
-                <button class="button button--primary" id="startScanBtn" type="submit">创建扫描任务</button>
-                <button class="button button--danger" id="stopScanBtn" type="button" disabled>停止当前任务</button>
-              </div>
-            </form>
-          </section>
-
-          <section class="panel status-panel console-panel">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Execution State / Live Console</p>
-                <h2>当前任务与后端状态</h2>
-              </div>
-              <div class="status-badges">
-                <span class="status-chip" id="statusChip">Idle</span>
-                <span class="status-chip status-chip--muted" id="jobIdChip">No Job</span>
-              </div>
-            </div>
-
-            <div class="status-grid">
-              <article class="stat-card">
-                <span>目标</span>
-                <strong id="currentTargetValue">-</strong>
-              </article>
-              <article class="stat-card">
-                <span>创建时间</span>
-                <strong id="createdAtValue">-</strong>
-              </article>
-              <article class="stat-card">
-                <span>运行时长</span>
-                <strong id="runtimeValue">-</strong>
-              </article>
-              <article class="stat-card">
-                <span>结果来源</span>
-                <strong id="sourceValue">-</strong>
-              </article>
-            </div>
-
-            <div class="progress-block">
-              <div class="progress-meta">
-                <span id="progressLabel">等待任务</span>
-                <strong id="progressValue">0%</strong>
-              </div>
-              <div class="progress-bar">
-                <div id="progressBar"></div>
-              </div>
-              <p class="hint console-log" id="statusMessage">状态会根据后端任务和报告结构自动推导。</p>
-            </div>
-          </section>
-        </section>
-
-        <section class="workspace-band workspace-band--support">
-          <section class="panel utility-panel">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Report Import / Evidence Load</p>
-                <h2>导入已有结果</h2>
-              </div>
-              <div class="panel-flags">
-                <span class="console-flag">offline review</span>
-              </div>
-            </div>
-
-            <div class="stack">
-              <input id="reportFileInput" type="file" accept=".json,application/json" />
-              <button class="button button--secondary" id="loadSampleBtn" type="button">载入样例报告</button>
-              <p class="hint console-log console-log--muted" id="importHint">可以直接加载 `report.json`，用于离线查看结果结构。</p>
-            </div>
-          </section>
-
-          <section class="panel utility-panel">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Job History / Ops Ledger</p>
-                <h2>历史任务</h2>
-              </div>
-              <div class="panel-flags">
-                <span class="console-flag">last missions</span>
-                <button class="button button--secondary button--compact" id="clearJobsBtn" type="button">清空历史</button>
-              </div>
-            </div>
-            <div id="jobsList" class="job-list empty-state">还没有可展示的任务。</div>
-          </section>
-        </section>
-
-        <section class="panel intelligence-panel">
-          <div class="section-head section-head--intelligence">
-            <div>
-              <p class="eyebrow">Intelligence Deck / Evidence Matrix</p>
-              <h2>分析结果与证据视图</h2>
-            </div>
-            <div class="panel-flags">
-              <span class="console-flag">report matrix</span>
-            </div>
-          </div>
-
-          <div class="tabs" id="resultTabs">
-            <button class="tab is-active" type="button" data-tab="overview">总览</button>
-            <button class="tab" type="button" data-tab="identity">基础情报</button>
-            <button class="tab" type="button" data-tab="infrastructure">网络与资产</button>
-            <button class="tab" type="button" data-tab="web">Web 枚举</button>
-            <button class="tab" type="button" data-tab="risk">风险分析</button>
-            <button class="tab" type="button" data-tab="raw">原始 JSON</button>
-          </div>
-
-          <div class="tab-panels">
-            <section class="tab-panel is-active" data-panel="overview">
-              <div id="overviewPanel"></div>
-            </section>
-            <section class="tab-panel" data-panel="identity">
-              <div id="identityPanel"></div>
-            </section>
-            <section class="tab-panel" data-panel="infrastructure">
-              <div id="infrastructurePanel"></div>
-            </section>
-            <section class="tab-panel" data-panel="web">
-              <div id="webPanel"></div>
-            </section>
-            <section class="tab-panel" data-panel="risk">
-              <div id="riskPanel"></div>
-            </section>
-            <section class="tab-panel" data-panel="raw">
-              <pre class="raw-view" id="rawJsonView">暂无数据</pre>
-            </section>
-          </div>
-        </section>
-      </main>
+      </footer>
     </div>
 
-    <template id="cardTemplate">
-      <article class="data-card">
-        <div class="data-card__head">
-          <div>
-            <p class="eyebrow"></p>
-            <h3></h3>
-          </div>
-          <span class="badge"></span>
-        </div>
-        <div class="data-card__body"></div>
-      </article>
-    </template>
-
-    <script src="./app.js"></script>
+    <script src="./landing.js"></script>
   </body>
 </html>

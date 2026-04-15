@@ -1,34 +1,492 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url=./?view=console#workspace" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting to NEOSCAN Console</title>
-    <style>
-      :root {
-        color-scheme: dark;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background: #04070f;
-        color: #dffcff;
-        font-family: sans-serif;
-      }
-
-      a {
-        color: #00f0ff;
-      }
-    </style>
-    <script>
-      window.location.replace("./?view=console#workspace");
-    </script>
+    <title>TOKI Scan Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./theme.css" />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <p>Redirecting to <a href="./?view=console#workspace">NEOSCAN Console</a>...</p>
+    <div class="scene scene--grid" aria-hidden="true"></div>
+    <div class="scene scene--scanlines" aria-hidden="true"></div>
+    <div class="scene scene--noise" aria-hidden="true"></div>
+    <div class="scene scene--aurora" aria-hidden="true"></div>
+    <div class="scene scene--beams" aria-hidden="true"></div>
+    <div class="scene scene--orbs" aria-hidden="true"></div>
+    <div class="scene scene--glow scene--glow-a" aria-hidden="true"></div>
+    <div class="scene scene--glow scene--glow-b" aria-hidden="true"></div>
+    <div class="scene scene--glow scene--glow-c" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="topbar hud-panel">
+        <div class="topbar__main">
+          <div class="brand-block">
+            <h1 class="brand-lockup">
+              <span class="brand-logo" aria-hidden="true">
+                <svg viewBox="0 0 88 88" role="presentation" focusable="false">
+                  <path
+                    class="brand-logo__badge"
+                    d="M44 6 66 15 79 37v14L66 73 44 82 22 73 9 51V37L22 15Z"
+                  />
+                  <path
+                    class="brand-logo__badge-inner"
+                    d="M44 16 58 22 68 38v12L58 66 44 72 30 66 20 50V38L30 22Z"
+                  />
+                  <path class="brand-logo__monogram brand-logo__monogram--top" d="M24 28h38" />
+                  <path class="brand-logo__monogram brand-logo__monogram--stem" d="M34 28v34" />
+                  <path class="brand-logo__accent" d="M38 44 59 29" />
+                  <path class="brand-logo__accent" d="M38 44 61 61" />
+                  <path class="brand-logo__core" d="M44 38 50 44 44 50 38 44Z" />
+                </svg>
+              </span>
+              <span class="brand-title" data-text="TOKI SCAN">TOKI SCAN</span>
+            </h1>
+            <p class="topbar__lead">
+              围绕异步扫描任务、能力编排、实时回执与证据视图重建的网络侦察控制台。页面保持现有后端逻辑不变，但视觉系统全面重构为安全作战终端。
+            </p>
+          </div>
+
+          <div class="signal-strip" aria-hidden="true">
+            <div class="signal-chip">
+              <span>async jobs</span>
+              <strong>task queue</strong>
+            </div>
+            <div class="signal-chip">
+              <span>module fabric</span>
+              <strong>scan lanes</strong>
+            </div>
+            <div class="signal-chip">
+              <span>evidence mode</span>
+              <strong>live report</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar__actions">
+          <a class="button button--secondary" href="./">门户首页</a>
+          <div class="health-pill" id="healthPill" data-tone="neutral">
+            <span class="dot"></span>
+            <span id="healthText">检查 API 中</span>
+          </div>
+          <button class="button button--secondary" id="refreshJobsBtn" type="button">刷新任务</button>
+        </div>
+      </header>
+
+      <section class="hero-grid">
+        <article class="hero-card hero-card--highlight hud-panel">
+          <div class="hero-card__head">
+            <div>
+              <p class="eyebrow">Current Focus / Target Lock</p>
+              <h2 id="heroTarget">尚未锁定目标</h2>
+            </div>
+            <div class="hero-lock">
+              <span class="hero-lock__label">scan posture</span>
+              <strong>armed</strong>
+            </div>
+          </div>
+
+          <p class="hero-summary" id="heroSummary">先输入域名、URL 或 IP，再装配能力模块并发起任务。</p>
+
+          <div class="hero-metrics">
+            <div class="metric-tile">
+              <span>任务状态</span>
+              <strong id="heroStatus">Idle</strong>
+            </div>
+            <div class="metric-tile">
+              <span>已启用模块</span>
+              <strong id="heroModules">0</strong>
+            </div>
+            <div class="metric-tile">
+              <span>开放端口</span>
+              <strong id="heroPorts">-</strong>
+            </div>
+            <div class="metric-tile">
+              <span>风险条目</span>
+              <strong id="heroRisks">-</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="hero-card hero-card--briefing hud-panel">
+          <div class="hero-card__head">
+            <div>
+              <p class="eyebrow">Mission Brief / Task Model</p>
+              <h3>扫描任务如何运行</h3>
+            </div>
+            <span class="briefing-tag">backend-mapped</span>
+          </div>
+
+          <ul class="plain-list">
+            <li>创建任务后立即返回 `job_id`，前端通过轮询追踪任务状态。</li>
+            <li>状态真实存在 `queued / running / stopping / completed / failed / canceled`。</li>
+            <li>结果由 DNS、WHOIS、技术栈、IP、Web、风险等模块分段组成。</li>
+            <li>模块既可能完成，也可能未启用、跳过、失败、取消或返回空结果。</li>
+          </ul>
+        </article>
+      </section>
+
+      <main class="workspace-shell" id="workspace">
+        <section class="workspace-band workspace-band--control">
+          <section class="panel console-panel console-panel--scan">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Scan Intake / Parameter Injection</p>
+                <h2>发起扫描</h2>
+              </div>
+              <div class="panel-flags">
+                <span class="console-flag">task injection</span>
+              </div>
+            </div>
+
+            <form id="scanForm" class="scan-form">
+              <section class="subsection subsection--compact subsection--primary">
+                <div class="subsection__head">
+                  <div>
+                    <p class="eyebrow">Primary Inputs</p>
+                    <h3>基础配置</h3>
+                  </div>
+                  <span class="inline-stat">首屏常用</span>
+                </div>
+
+                <div class="stack">
+                  <label class="field">
+                    <span>目标</span>
+                    <input id="targetInput" name="target" type="text" placeholder="example.com / https://target.tld / 203.0.113.5" required />
+                  </label>
+
+                  <label class="field">
+                    <span>Backend API</span>
+                    <input id="apiUrlInput" name="apiUrl" type="url" placeholder="http://127.0.0.1:8000/api/scan" />
+                  </label>
+
+                  <div class="field-grid field-grid--two">
+                    <label class="field">
+                      <span>请求超时</span>
+                      <input id="timeoutInput" name="timeout" type="number" min="1" max="300" value="10" />
+                    </label>
+                    <label class="field">
+                      <span>端口超时</span>
+                      <input id="portTimeoutInput" name="portTimeout" type="number" min="0.05" max="60" step="0.05" value="0.8" />
+                    </label>
+                  </div>
+
+                  <div class="field-grid field-grid--two">
+                    <label class="field">
+                      <span>端口模式</span>
+                      <select id="scanModeInput" name="scanMode">
+                        <option value="common">常用端口</option>
+                        <option value="full" selected>全端口</option>
+                        <option value="custom">自定义</option>
+                      </select>
+                    </label>
+                    <label class="field">
+                      <span>扫描引擎</span>
+                      <select id="portScannerInput" name="portScanner">
+                        <option value="auto" selected>auto</option>
+                        <option value="nmap">nmap</option>
+                        <option value="builtin">builtin</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <label class="field" id="customPortsField" hidden>
+                    <span>自定义端口</span>
+                    <input id="customPortsInput" name="customPorts" type="text" placeholder="22,80,443,3306 或 1-1024" />
+                  </label>
+                </div>
+              </section>
+
+              <section class="subsection subsection--compact subsection--toggles">
+                <div class="subsection__head">
+                  <div>
+                    <p class="eyebrow">Quick Toggles</p>
+                    <h3>核心开关</h3>
+                  </div>
+                  <span class="inline-stat"><strong id="moduleCount">0</strong> 个启用</span>
+                </div>
+
+                <div class="toggle-grid">
+                  <label class="toggle">
+                    <input id="tcpScanInput" type="checkbox" checked />
+                    <span>TCP 扫描</span>
+                  </label>
+                  <label class="toggle">
+                    <input id="udpScanInput" type="checkbox" checked />
+                    <span>UDP 扫描</span>
+                  </label>
+                  <label class="toggle">
+                    <input id="allowPrivateIpInput" type="checkbox" />
+                    <span>允许私网 IP</span>
+                  </label>
+                  <label class="toggle">
+                    <input id="vtScanInput" type="checkbox" />
+                    <span>VirusTotal</span>
+                  </label>
+                </div>
+
+                <div class="toki-sigil" aria-hidden="true">
+                  <svg viewBox="0 0 240 240" role="presentation" focusable="false">
+                    <path
+                      class="brand-logo__badge"
+                      d="M120 28 170 48 198 98v32L170 180 120 200 70 180 42 130V98L70 48Z"
+                    />
+                    <path
+                      class="brand-logo__badge-inner"
+                      d="M120 52 152 66 174 104v20L152 162 120 176 88 162 66 124V104L88 66Z"
+                    />
+                    <path
+                      class="brand-logo__monogram brand-logo__monogram--top"
+                      d="M78 84h84"
+                    />
+                    <path
+                      class="brand-logo__monogram brand-logo__monogram--stem"
+                      d="M100 84v74"
+                    />
+                    <path
+                      class="brand-logo__accent"
+                      d="M108 120 154 86"
+                    />
+                    <path class="brand-logo__accent" d="M108 120 158 156" />
+                    <path class="brand-logo__core" d="M120 106 132 118 120 130 108 118Z" />
+                  </svg>
+                </div>
+              </section>
+
+              <details class="subsection accordion subsection--advanced">
+                <summary class="accordion__summary">
+                  <div>
+                    <p class="eyebrow">Advanced Network</p>
+                    <h3>高级输入项</h3>
+                  </div>
+                  <span class="accordion__hint">CIDR / API Key</span>
+                </summary>
+
+                <div class="accordion__body stack">
+                  <label class="field">
+                    <span>附加 CIDR 目标</span>
+                    <textarea id="cidrTargetsInput" rows="2" placeholder="192.168.1.0/24,10.0.0.0/24"></textarea>
+                  </label>
+
+                  <div class="field-grid field-grid--two">
+                    <label class="field">
+                      <span>VirusTotal API Key</span>
+                      <input id="vtApiKeyInput" type="password" placeholder="仅在启用 VirusTotal 时需要" />
+                    </label>
+                    <label class="field">
+                      <span>NVD API Key</span>
+                      <input id="nvdApiKeyInput" type="password" placeholder="仅在启用 CVE 关联时需要" />
+                    </label>
+                  </div>
+                </div>
+              </details>
+
+              <section class="subsection subsection--modules">
+                <div class="subsection__head">
+                  <div>
+                    <p class="eyebrow">Module Matrix</p>
+                    <h3>能力挂载区</h3>
+                  </div>
+                  <span class="inline-stat">按需展开</span>
+                </div>
+
+                <div class="module-groups">
+                  <details class="module-group accordion">
+                    <summary class="accordion__summary accordion__summary--small">
+                      <div>
+                        <h4>基础增强</h4>
+                        <p class="hint">CT、被动 DNS、ASN</p>
+                      </div>
+                    </summary>
+                    <div class="accordion__body module-group__body">
+                      <label class="toggle"><input id="ctScanInput" type="checkbox" /> <span>证书透明度</span></label>
+                      <label class="toggle"><input id="passiveDnsInput" type="checkbox" /> <span>被动 DNS</span></label>
+                      <label class="toggle"><input id="asnScanInput" type="checkbox" /> <span>ASN 情报</span></label>
+                      <label class="toggle"><input id="asnExpandInput" type="checkbox" /> <span>同 C 段扩展</span></label>
+                    </div>
+                  </details>
+
+                  <details class="module-group accordion">
+                    <summary class="accordion__summary accordion__summary--small">
+                      <div>
+                        <h4>Web 资产枚举</h4>
+                        <p class="hint">爬取、JS、敏感路径、目录探测</p>
+                      </div>
+                    </summary>
+                    <div class="accordion__body module-group__body">
+                      <label class="toggle"><input id="webAssetScanInput" type="checkbox" checked /> <span>启用 Web 枚举</span></label>
+                      <label class="toggle"><input id="webCrawlerInput" type="checkbox" checked /> <span>站内爬取</span></label>
+                      <label class="toggle"><input id="webJsExtractInput" type="checkbox" checked /> <span>JS 接口提取</span></label>
+                      <label class="toggle"><input id="webSensitiveInput" type="checkbox" checked /> <span>敏感路径提取</span></label>
+                      <label class="toggle"><input id="webDirScanInput" type="checkbox" checked /> <span>目录探测</span></label>
+                      <label class="toggle"><input id="webDirFfufInput" type="checkbox" /> <span>优先 ffuf</span></label>
+                    </div>
+                  </details>
+
+                  <details class="module-group accordion" open>
+                    <summary class="accordion__summary accordion__summary--small">
+                      <div>
+                        <h4>服务风险</h4>
+                        <p class="hint">服务清单、CVE、弱配置检查</p>
+                      </div>
+                    </summary>
+                    <div class="accordion__body module-group__body">
+                      <label class="toggle"><input id="serviceRiskInput" type="checkbox" checked /> <span>启用服务风险分析</span></label>
+                      <label class="toggle"><input id="cveLookupInput" type="checkbox" checked /> <span>CVE 关联</span></label>
+                      <label class="toggle"><input id="weakChecksInput" type="checkbox" checked /> <span>弱配置检查</span></label>
+                    </div>
+                  </details>
+                </div>
+              </section>
+
+              <div class="actions actions--form">
+                <button class="button button--primary" id="startScanBtn" type="submit">创建扫描任务</button>
+                <button class="button button--danger" id="stopScanBtn" type="button" disabled>停止当前任务</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel status-panel console-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Execution State / Live Console</p>
+                <h2>当前任务与后端状态</h2>
+              </div>
+              <div class="status-badges">
+                <span class="status-chip" id="statusChip">Idle</span>
+                <span class="status-chip status-chip--muted" id="jobIdChip">No Job</span>
+              </div>
+            </div>
+
+            <div class="status-grid">
+              <article class="stat-card">
+                <span>目标</span>
+                <strong id="currentTargetValue">-</strong>
+              </article>
+              <article class="stat-card">
+                <span>创建时间</span>
+                <strong id="createdAtValue">-</strong>
+              </article>
+              <article class="stat-card">
+                <span>运行时长</span>
+                <strong id="runtimeValue">-</strong>
+              </article>
+              <article class="stat-card">
+                <span>结果来源</span>
+                <strong id="sourceValue">-</strong>
+              </article>
+            </div>
+
+            <div class="progress-block">
+              <div class="progress-meta">
+                <span id="progressLabel">等待任务</span>
+                <strong id="progressValue">0%</strong>
+              </div>
+              <div class="progress-bar">
+                <div id="progressBar"></div>
+              </div>
+              <p class="hint console-log" id="statusMessage">状态会根据后端任务和报告结构自动推导。</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="workspace-band workspace-band--support">
+          <section class="panel utility-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Report Import / Evidence Load</p>
+                <h2>导入已有结果</h2>
+              </div>
+              <div class="panel-flags">
+                <span class="console-flag">offline review</span>
+              </div>
+            </div>
+
+            <div class="stack">
+              <input id="reportFileInput" type="file" accept=".json,application/json" />
+              <button class="button button--secondary" id="loadSampleBtn" type="button">载入样例报告</button>
+              <p class="hint console-log console-log--muted" id="importHint">可以直接加载 `report.json`，用于离线查看结果结构。</p>
+            </div>
+          </section>
+
+          <section class="panel utility-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Job History / Ops Ledger</p>
+                <h2>历史任务</h2>
+              </div>
+              <div class="panel-flags">
+                <span class="console-flag">last missions</span>
+                <button class="button button--secondary button--compact" id="clearJobsBtn" type="button">清空历史</button>
+              </div>
+            </div>
+            <div id="jobsList" class="job-list empty-state">还没有可展示的任务。</div>
+          </section>
+        </section>
+
+        <section class="panel intelligence-panel">
+          <div class="section-head section-head--intelligence">
+            <div>
+              <p class="eyebrow">Intelligence Deck / Evidence Matrix</p>
+              <h2>分析结果与证据视图</h2>
+            </div>
+            <div class="panel-flags">
+              <span class="console-flag">report matrix</span>
+            </div>
+          </div>
+
+          <div class="tabs" id="resultTabs">
+            <button class="tab is-active" type="button" data-tab="overview">总览</button>
+            <button class="tab" type="button" data-tab="identity">基础情报</button>
+            <button class="tab" type="button" data-tab="infrastructure">网络与资产</button>
+            <button class="tab" type="button" data-tab="web">Web 枚举</button>
+            <button class="tab" type="button" data-tab="risk">风险分析</button>
+            <button class="tab" type="button" data-tab="raw">原始 JSON</button>
+          </div>
+
+          <div class="tab-panels">
+            <section class="tab-panel is-active" data-panel="overview">
+              <div id="overviewPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="identity">
+              <div id="identityPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="infrastructure">
+              <div id="infrastructurePanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="web">
+              <div id="webPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="risk">
+              <div id="riskPanel"></div>
+            </section>
+            <section class="tab-panel" data-panel="raw">
+              <pre class="raw-view" id="rawJsonView">暂无数据</pre>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="cardTemplate">
+      <article class="data-card">
+        <div class="data-card__head">
+          <div>
+            <p class="eyebrow"></p>
+            <h3></h3>
+          </div>
+          <span class="badge"></span>
+        </div>
+        <div class="data-card__body"></div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
   </body>
 </html>
