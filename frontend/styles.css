@@ -3,6 +3,8 @@
 
   --pointer-x: 62vw;
   --pointer-y: 22vh;
+  --panel-blur: 10px;
+  --panel-saturate: 130%;
 
   --font-display: "Orbitron", sans-serif;
   --font-body: "Rajdhani", sans-serif;
@@ -291,6 +293,7 @@ select {
   inset: 0;
   pointer-events: none;
   z-index: 1;
+  contain: paint;
 }
 
 .scene--grid {
@@ -391,11 +394,24 @@ select {
   border: 1px solid var(--line-dim);
   background: var(--bg-panel);
   box-shadow: var(--shadow-panel);
-  backdrop-filter: blur(24px) saturate(150%);
   transition:
     border-color var(--motion-fast) ease,
     box-shadow var(--motion-fast) ease,
     transform var(--motion-fast) ease;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .hud-panel,
+  .panel,
+  .subsection,
+  .data-card,
+  .job-item,
+  .stat-card,
+  .notice,
+  .metric-tile {
+    -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(var(--panel-saturate));
+    backdrop-filter: blur(var(--panel-blur)) saturate(var(--panel-saturate));
+  }
 }
 
 .hud-panel::before,
@@ -696,6 +712,8 @@ select {
 .hero-card {
   padding: 28px;
   min-height: 284px;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 320px;
 }
 
 .hero-card__head {
@@ -871,6 +889,8 @@ select {
 .workspace-band {
   display: grid;
   gap: 24px;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 760px;
 }
 
 .workspace-band--control {
@@ -884,6 +904,8 @@ select {
 
 .panel {
   padding: 24px 26px;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 360px;
 }
 
 .console-panel,
@@ -1782,7 +1804,13 @@ select {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  backdrop-filter: blur(18px) saturate(150%);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .health-pill {
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(8px) saturate(120%);
+  }
 }
 
 .status-chip--muted {
@@ -2296,6 +2324,101 @@ code {
   }
 }
 
+html.is-scrolling {
+  --panel-blur: 0px;
+  --panel-saturate: 100%;
+}
+
+html.is-scrolling body::before,
+html.is-scrolling body::after,
+html.is-scrolling .scene--aurora,
+html.is-scrolling .scene--beams,
+html.is-scrolling .scene--orbs,
+html.is-scrolling .scene--glow {
+  opacity: 0.08 !important;
+}
+
+html.is-scrolling body::before,
+html.is-scrolling .scene--aurora,
+html.is-scrolling .scene--orbs,
+html.is-scrolling .scene--glow {
+  filter: none !important;
+}
+
+html.is-scrolling body::after,
+html.is-scrolling .scene--aurora,
+html.is-scrolling .scene--beams {
+  mix-blend-mode: normal !important;
+}
+
+html.is-scrolling .scene--grid,
+html.is-scrolling .scene--scanlines,
+html.is-scrolling .scene--noise {
+  opacity: 0.05 !important;
+}
+
+html.is-scrolling *,
+html.is-scrolling *::before,
+html.is-scrolling *::after {
+  animation-play-state: paused !important;
+}
+
+html.perf-lite {
+  --panel-blur: 0px;
+  --panel-saturate: 100%;
+}
+
+html.perf-lite body::before,
+html.perf-lite body::after {
+  opacity: 0.12;
+}
+
+html.perf-lite .scene--aurora,
+html.perf-lite .scene--beams,
+html.perf-lite .scene--orbs,
+html.perf-lite .scene--glow {
+  opacity: 0.12;
+}
+
+html.perf-lite .scene--scanlines,
+html.perf-lite .scene--noise {
+  opacity: 0.04;
+}
+
+html.perf-lite body::before,
+html.perf-lite .scene--aurora,
+html.perf-lite .scene--orbs,
+html.perf-lite .scene--glow {
+  filter: none !important;
+}
+
+html.perf-lite body::after,
+html.perf-lite .scene--aurora,
+html.perf-lite .scene--beams {
+  mix-blend-mode: normal !important;
+}
+
+html.perf-lite .hud-panel,
+html.perf-lite .panel,
+html.perf-lite .subsection,
+html.perf-lite .data-card,
+html.perf-lite .job-item,
+html.perf-lite .stat-card,
+html.perf-lite .notice,
+html.perf-lite .metric-tile,
+html.perf-lite .health-pill {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html.perf-lite .button--primary,
+html.perf-lite #progressBar,
+html.perf-lite .brand-logo::before,
+html.perf-lite .brand-title,
+html.perf-lite .brand-title::after {
+  animation: none !important;
+}
+
 @media (max-width: 1440px) {
   .hero-grid,
   .workspace-band--support,
@@ -2328,6 +2451,11 @@ code {
 }
 
 @media (max-width: 1040px) {
+  :root {
+    --panel-blur: 4px;
+    --panel-saturate: 112%;
+  }
+
   .app-shell {
     width: min(100vw - 24px, 100%);
   }
@@ -2371,6 +2499,11 @@ code {
 }
 
 @media (max-width: 720px) {
+  :root {
+    --panel-blur: 0px;
+    --panel-saturate: 100%;
+  }
+
   .app-shell {
     padding-top: 14px;
   }

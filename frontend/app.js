@@ -78,8 +78,45 @@ const state = {
 
 const ACTIVE_JOB_STATUSES = new Set(["queued", "running", "stopping"]);
 
+function enablePerformanceMode() {
+  const root = document.documentElement;
+  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  const lowCoreCount = Number(navigator.hardwareConcurrency || 0) > 0 && Number(navigator.hardwareConcurrency) <= 6;
+  const lowMemory = Number(navigator.deviceMemory || 0) > 0 && Number(navigator.deviceMemory) <= 4;
+
+  if (prefersReducedMotion || coarsePointer || lowCoreCount || lowMemory) {
+    root.classList.add("perf-lite");
+  }
+}
+
+function initScrollPerformanceGuard() {
+  const root = document.documentElement;
+  let scrollTimer = 0;
+
+  const settle = () => {
+    root.classList.remove("is-scrolling");
+    scrollTimer = 0;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      root.classList.add("is-scrolling");
+      if (scrollTimer) {
+        window.clearTimeout(scrollTimer);
+      }
+      scrollTimer = window.setTimeout(settle, 140);
+    },
+    { passive: true }
+  );
+}
+
 function initAmbientGlow() {
-  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (
+    document.documentElement.classList.contains("perf-lite") ||
+    (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  ) {
     return;
   }
 
@@ -1091,6 +1128,8 @@ function bindTabs() {
 
 function init() {
   refs.apiUrlInput.value = inferDefaultApiUrl();
+  enablePerformanceMode();
+  initScrollPerformanceGuard();
   initAmbientGlow();
   bindTabs();
   syncFormDependencies();
