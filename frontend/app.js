@@ -78,6 +78,55 @@ const state = {
 
 const ACTIVE_JOB_STATUSES = new Set(["queued", "running", "stopping"]);
 
+function initAmbientGlow() {
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const root = document.documentElement;
+  let frameId = 0;
+  let nextX = window.innerWidth * 0.62;
+  let nextY = window.innerHeight * 0.22;
+
+  const flush = () => {
+    root.style.setProperty("--pointer-x", `${nextX}px`);
+    root.style.setProperty("--pointer-y", `${nextY}px`);
+    frameId = 0;
+  };
+
+  const schedule = (x, y) => {
+    nextX = x;
+    nextY = y;
+    if (!frameId) {
+      frameId = window.requestAnimationFrame(flush);
+    }
+  };
+
+  schedule(nextX, nextY);
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      if (event.pointerType === "touch") return;
+      schedule(event.clientX, event.clientY);
+    },
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "pointerdown",
+    (event) => {
+      if (event.pointerType === "touch") return;
+      schedule(event.clientX, event.clientY);
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("blur", () => {
+    schedule(window.innerWidth * 0.62, window.innerHeight * 0.22);
+  });
+}
+
 function inferDefaultApiUrl() {
   const { protocol, hostname, origin } = window.location;
   if (protocol === "file:") {
@@ -1042,6 +1091,7 @@ function bindTabs() {
 
 function init() {
   refs.apiUrlInput.value = inferDefaultApiUrl();
+  initAmbientGlow();
   bindTabs();
   syncFormDependencies();
   setImportMessage(refs.importHint.textContent, "neutral");
